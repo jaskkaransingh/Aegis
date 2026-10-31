@@ -10,7 +10,7 @@ Conventions:
 """
 
 from datetime import datetime, timezone, timedelta
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 import re
 
 from app.schemas.events import ClockOffsetEstimate, NormalizedEvent
@@ -27,7 +27,7 @@ def parse_iso_timestamp(ts: Union[str, datetime]) -> datetime:
             return ts.replace(tzinfo=timezone.utc)
         return ts.astimezone(timezone.utc)
 
-    ts_str = ts.strip()
+    ts_str = str(ts).strip()
     # Normalize 'Z' to '+00:00'
     if ts_str.endswith("Z") or ts_str.endswith("z"):
         ts_str = ts_str[:-1] + "+00:00"
@@ -45,6 +45,76 @@ def format_iso_timestamp(dt: datetime) -> str:
     """Format a UTC datetime into standardized ISO 8601 string."""
     utc_dt = dt.astimezone(timezone.utc)
     return utc_dt.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
+
+
+def apply_clock_skew(event_dict: Dict[str, Any], offset_seconds: int = 0) -> Dict[str, Any]:
+    """
+    Takes a raw event dictionary, subtracts the offset from its timestamp,
+    and returns a dictionary ready to be unpacked into a NormalizedEvent.
+    If the service is 'payment', hardcode a 120-second offset for this simulation.
+    """
+    service = str(event_dict.get("service", "")).lower()
+
+    # If the service is 'payment', hardcode a 120-second offset for this simulation
+    if service in ("payment", "payment-service") or service.startswith("payment"):
+        actual_offset = 120
+    else:
+        actual_offset = offset_seconds
+
+    # Extract and parse timestamp
+    raw_ts = (
+        event_dict.get("timestamp")
+        or event_dict.get("recorded_datetime")
+        or event_dict.get("original_timestamp")
+    )
+    if raw_ts is None:
+        raw_ts = datetime.now(timezone.utc)
+    ts_dt = parse_iso_timestamp(raw_ts)
+
+    # Subtract the offset from its timestamp
+    corrected_dt = ts_dt - timedelta(seconds=actual_offset)
+
+    # Timing uncertainty
+    unc_ms = int(event_dict.get("timestamp_uncertainty_ms", 0))
+    if unc_ms == 0 and "uncertainty_seconds" in event_dict:
+        try:
+            unc_ms = int(float(event_dict["uncertainty_seconds"]) * 1000)
+        except Exception:
+            unc_ms = 0
+
+    # Build result dictionary ready for NormalizedEvent unpacking
+    result = dict(event_dict)
+
+    event_id = str(event_dict.get("event_id") or event_dict.get("id") or "EVT-UNKNOWN")
+    level = str(event_dict.get("level") or event_dict.get("severity") or "INFO")
+    source = str(event_dict.get("source") or event_dict.get("service") or "")
+
+    result.update({
+        "event_id": event_id,
+        "id": event_id,
+        "service": event_dict.get("service", ""),
+        "timestamp": ts_dt,
+        "level": level,
+        "severity": level,
+        "event_type": event_dict.get("event_type", "GENERAL_LOG"),
+        "message": event_dict.get("message", ""),
+        "source": source,
+        "trace_id": event_dict.get("trace_id"),
+        "incident_id": event_dict.get("incident_id"),
+        "corrected_timestamp": corrected_dt,
+        "corrected_datetime": corrected_dt,
+        "timestamp_uncertainty_ms": unc_ms,
+        "uncertainty_seconds": float(unc_ms) / 1000.0,
+        "evidence_type": event_dict.get("evidence_type", "observed_fact"),
+        "recorded_datetime": ts_dt,
+        "original_timestamp": str(event_dict.get("timestamp") or ts_dt.isoformat()),
+        "time_interval_start": corrected_dt - timedelta(milliseconds=unc_ms),
+        "time_interval_end": corrected_dt + timedelta(milliseconds=unc_ms),
+        "clock_correction_applied": actual_offset != 0,
+        "offset_applied_seconds": float(actual_offset),
+    })
+
+    return result
 
 
 def calculate_corrected_interval(

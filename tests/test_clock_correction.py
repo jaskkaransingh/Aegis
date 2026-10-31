@@ -172,3 +172,42 @@ def test_identify_uncertain_orderings_bidirectional():
     assert "EVT-C" not in overlap_map["EVT-A"]
     assert "EVT-A" not in overlap_map["EVT-C"]
 
+
+def test_apply_clock_skew_generic_service():
+    from app.tools.clock_correction import apply_clock_skew
+
+    raw_event = {
+        "event_id": "EVT-TEST-1",
+        "service": "order-service",
+        "timestamp": "2026-10-31T14:02:00.000Z",
+        "level": "INFO",
+        "event_type": "ORDER_CREATED",
+        "message": "Order created",
+        "source": "order-service",
+    }
+    skewed = apply_clock_skew(raw_event, offset_seconds=30)
+    assert isinstance(skewed, dict)
+    norm_ev = NormalizedEvent(**skewed)
+    assert norm_ev.event_id == "EVT-TEST-1"
+    assert norm_ev.offset_applied_seconds == 30.0
+    assert norm_ev.corrected_timestamp.strftime("%H:%M:%S") == "14:01:30"
+
+
+def test_apply_clock_skew_payment_hardcoded_120():
+    from app.tools.clock_correction import apply_clock_skew
+
+    raw_event = {
+        "event_id": "EVT-PAY-TEST",
+        "service": "payment",
+        "timestamp": "2026-10-31T14:02:00.000Z",
+        "level": "WARN",
+        "event_type": "PAYMENT_HOLD",
+        "message": "Payment processing",
+        "source": "payment",
+    }
+    # Even if offset_seconds=0 is passed, payment service hardcodes 120s offset
+    skewed = apply_clock_skew(raw_event, offset_seconds=0)
+    norm_ev = NormalizedEvent(**skewed)
+    assert norm_ev.offset_applied_seconds == 120.0
+    assert norm_ev.corrected_timestamp.strftime("%H:%M:%S") == "14:00:00"
+

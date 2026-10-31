@@ -187,3 +187,46 @@ def test_source_provenance_preservation():
     assert ev.offset_applied_seconds == 42.0
     assert ev.corrected_datetime.strftime("%H:%M:%S") == "14:01:00"
 
+
+def test_normalize_logs_removes_duplicates_and_applies_clock_skew():
+    from app.tools.evidence_normalizer import normalize_logs
+
+    raw_logs = [
+        {
+            "event_id": "EVT-DUP-1",
+            "service": "auth-service",
+            "timestamp": "2026-10-31T14:00:10.000Z",
+            "level": "INFO",
+            "event_type": "LOGIN",
+            "message": "User login",
+            "source": "auth-service",
+            "offset_seconds": 10,
+        },
+        {
+            "event_id": "EVT-DUP-1",  # Duplicate event_id
+            "service": "auth-service",
+            "timestamp": "2026-10-31T14:00:10.000Z",
+            "level": "INFO",
+            "event_type": "LOGIN",
+            "message": "User login retransmission",
+            "source": "auth-service",
+        },
+        {
+            "event_id": "EVT-PAY-1",
+            "service": "payment",  # Payment service gets 120s hardcoded skew
+            "timestamp": "2026-10-31T14:05:00.000Z",
+            "level": "ERROR",
+            "event_type": "CHARGE_FAILED",
+            "message": "Gateway timeout",
+            "source": "payment",
+        },
+    ]
+
+    normalized = normalize_logs(raw_logs)
+    assert len(normalized) == 2
+    assert normalized[0].event_id == "EVT-DUP-1"
+    assert normalized[0].corrected_timestamp.strftime("%H:%M:%S") == "14:00:00"
+    assert normalized[1].event_id == "EVT-PAY-1"
+    assert normalized[1].offset_applied_seconds == 120.0
+    assert normalized[1].corrected_timestamp.strftime("%H:%M:%S") == "14:03:00"
+

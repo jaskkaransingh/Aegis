@@ -1,16 +1,18 @@
 """
 AEGIS REST API Routes.
-Exposes endpoints for health, logs, services catalog, and dependency graphs.
+Exposes endpoints for health, services catalog, raw logs, normalized logs,
+dependency graphs, timelines, and investigation previews.
 """
 
 from datetime import datetime, timezone
-from typing import Annotated, Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional
 from fastapi import APIRouter, HTTPException, Query, status
 from pydantic import BaseModel, Field
 
 from app.graph.service_graph import ServiceGraphManager
 from app.schemas.events import DataQualityWarning, NormalizedEvent
 from app.schemas.investigation import (
+    Claim,
     ClaimType,
     EvidenceReference,
     Hypothesis,
@@ -25,8 +27,12 @@ from app.tools.clock_correction import (
 from app.tools.data_loader import (
     get_normalized_incident_data,
     load_clock_metadata,
+    load_dependencies,
+    load_logs,
+    load_services,
     load_services_catalog,
 )
+from app.tools.evidence_normalizer import normalize_logs
 
 router = APIRouter(prefix="/api", tags=["AEGIS Core API"])
 
@@ -43,29 +49,16 @@ class HealthResponse(BaseModel):
     environment: str
 
 
-class LogsResponse(BaseModel):
-    total_count: int
-    returned_count: int
-    clock_correction_active: bool
-    applied_offsets: Dict[str, float]
-    warnings_count: int
-    data_quality_warnings: List[DataQualityWarning]
-    events: List[NormalizedEvent]
-
-
-class ServicesResponse(BaseModel):
-    system_name: str
-    environment: str
-    total_services: int
-    services: List[Dict[str, Any]]
-
-
 class DependenciesResponse(BaseModel):
     nodes: List[Dict[str, Any]]
     edges: List[Dict[str, Any]]
     total_nodes: int
     total_edges: int
     critical_services: List[str]
+
+
+class InvestigateRequest(BaseModel):
+    incident_id: str = Field(..., description="Target incident identifier for investigation")
 
 
 # ---------------------------------------------------------
@@ -90,101 +83,129 @@ def get_health() -> HealthResponse:
 
 
 @router.get(
-    "/logs",
-    response_model=LogsResponse,
-    summary="Normalized Incident Logs",
-    status_code=status.HTTP_200_OK,
-)
-def get_logs(
-    service: Annotated[Optional[str], Query(description="Filter logs by service name")] = None,
-    severity: Annotated[Optional[str], Query(description="Filter logs by severity (INFO, WARN, ERROR, CRITICAL)")] = None,
-    trace_id: Annotated[Optional[str], Query(description="Filter logs by distributed trace ID")] = None,
-    apply_clock_correction: Annotated[bool, Query(description="Whether to apply known clock skew corrections")] = True,
-) -> LogsResponse:
-    """
-    Returns validated and normalized incident logs with clock corrections applied.
-    Preserves raw timestamps and details all data quality warnings.
-    """
-    try:
-        events, warnings = get_normalized_incident_data(
-            apply_clock_correction=apply_clock_correction
-        )
-    except FileNotFoundError as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Log data source inaccessible: {str(e)}",
-        )
-
-    # Apply filters
-    filtered_events = events
-    if service:
-        filtered_events = [ev for ev in filtered_events if ev.service.lower() == service.lower()]
-    if severity:
-        filtered_events = [ev for ev in filtered_events if ev.severity.upper() == severity.upper()]
-    if trace_id:
-        filtered_events = [ev for ev in filtered_events if ev.trace_id == trace_id]
-
-    clock_offsets = load_clock_metadata() if apply_clock_correction else {}
-    applied_offsets = {k: v.offset_seconds for k, v in clock_offsets.items()}
-
-    return LogsResponse(
-        total_count=len(events),
-        returned_count=len(filtered_events),
-        clock_correction_active=apply_clock_correction,
-        applied_offsets=applied_offsets,
-        warnings_count=len(warnings),
-        data_quality_warnings=warnings,
-        events=filtered_events,
-    )
-
-
-@router.get(
     "/services",
-    response_model=ServicesResponse,
     summary="Services Catalog",
     status_code=status.HTTP_200_OK,
 )
-def get_services() -> ServicesResponse:
-    """Returns the registered microservice and infrastructure components."""
+async def get_services() -> Any:
+    """
+    Returns the parsed contents of services.json.
+    Includes exception handling for missing or unreadable files.
+    """
     try:
-        catalog = load_services_catalog()
+        return await load_services()
     except FileNotFoundError as e:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Services catalog not found: {str(e)}",
         )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to load services catalog: {str(e)}",
+        )
 
-    services_list = catalog.get("services", [])
-    return ServicesResponse(
-        system_name=catalog.get("system_name", "Unknown System"),
-        environment=catalog.get("environment", "production"),
-        total_services=len(services_list),
-        services=services_list,
-    )
+
+@router.get(
+    "/logs",
+    summary="Raw Incident Logs",
+    status_code=status.HTTP_200_OK,
+)
+async def get_logs(
+    service: Optional[str] = Query(None, description="Optional service name filter"),
+    severity: Optional[str] = Query(None, description="Optional severity/level filter"),
+) -> Any:
+    """
+    Returns the raw logs from logs.json.
+    Includes basic exception handling and optional query filtering.
+    """
+    try:
+        raw_logs = await load_logs()
+    except FileNotFoundError as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Logs data source not found: {str(e)}",
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to load logs: {str(e)}",
+        )
+
+    filtered = raw_logs
+    if service:
+        srv_lower = service.lower()
+        filtered = [
+            l for l in filtered
+            if str(l.get("service", "")).lower() == srv_lower
+            or str(l.get("service", "")).lower().replace("-service", "") == srv_lower.replace("-service", "")
+        ]
+    if severity:
+        sev_upper = severity.upper()
+        filtered = [
+            l for l in filtered
+            if str(l.get("level") or l.get("severity") or "").upper() == sev_upper
+        ]
+
+    return filtered
+
+
+@router.get(
+    "/logs/normalized",
+    response_model=List[NormalizedEvent],
+    summary="Normalized & Time-Corrected Logs",
+    status_code=status.HTTP_200_OK,
+)
+async def get_normalized_logs() -> List[NormalizedEvent]:
+    """
+    Loads raw logs, passes them through normalize_logs, and returns
+    the cleaned, deduplicated, and timestamp-corrected data.
+    """
+    try:
+        raw_logs = await load_logs()
+    except FileNotFoundError as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Logs data source not found: {str(e)}",
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to load raw logs: {str(e)}",
+        )
+
+    try:
+        normalized_events = normalize_logs(raw_logs)
+        return normalized_events
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to normalize logs: {str(e)}",
+        )
 
 
 @router.get(
     "/dependencies",
-    response_model=DependenciesResponse,
     summary="Service Dependency Graph",
     status_code=status.HTTP_200_OK,
 )
-def get_dependencies() -> DependenciesResponse:
+async def get_dependencies() -> Any:
     """
-    Returns the NetworkX-constructed directed service dependency graph serialized as JSON.
-    Associates incident events and severities to graph nodes.
-    Distinguishes static architectural dependencies from inferred causal links.
+    Loads and returns the contents of dependencies.json using the data_loader utility.
+    Includes exception handling for missing or unreadable files.
     """
     try:
-        events, _ = get_normalized_incident_data(apply_clock_correction=True)
-    except Exception:
-        events = []
-
-    graph_mgr = ServiceGraphManager()
-    graph_mgr.attach_events(events)
-    serialized = graph_mgr.to_dict()
-
-    return DependenciesResponse(**serialized)
+        return await load_dependencies()
+    except FileNotFoundError as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Dependencies file not found: {str(e)}",
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to load dependencies: {str(e)}",
+        )
 
 
 @router.get(
@@ -201,7 +222,6 @@ def get_timeline() -> List[TimelineEvent]:
     events, _ = get_normalized_incident_data(apply_clock_correction=True)
     overlap_map = identify_uncertain_orderings(events)
 
-    # Sort primarily by corrected timestamp
     sorted_events = sorted(events, key=lambda e: e.corrected_datetime)
 
     timeline: List[TimelineEvent] = []
@@ -241,7 +261,6 @@ def get_investigation_preview() -> InvestigationResult:
     events_by_id = {ev.id: ev for ev in events}
     overlap_map = identify_uncertain_orderings(events)
 
-    # Build timeline
     sorted_events = sorted(events, key=lambda e: e.corrected_datetime)
     timeline: List[TimelineEvent] = []
     for idx, ev in enumerate(sorted_events):
@@ -262,7 +281,7 @@ def get_investigation_preview() -> InvestigationResult:
             )
         )
 
-    # Hypothesis 1: Database Connection Pool Starvation
+    # Hypothesis 1: Database Connection Pool Starvation from Retry Policy
     hyp1_evidence_sup = []
     for eid in ["EVT-001", "EVT-002", "EVT-003", "EVT-004"]:
         if eid in events_by_id:
@@ -272,6 +291,8 @@ def get_investigation_preview() -> InvestigationResult:
                     evidence_id=f"EVID-{eid}-01",
                     event_id=ev.id,
                     source_service=ev.service,
+                    source=ev.service,
+                    role="PRIMARY_OBSERVATION",
                     support_type="PRIMARY_OBSERVATION",
                     excerpt=ev.message,
                     timestamp=format_iso_timestamp(ev.corrected_datetime),
@@ -281,23 +302,29 @@ def get_investigation_preview() -> InvestigationResult:
 
     hypothesis_1 = Hypothesis(
         id="HYP-001",
-        title="PostgreSQL Connection Pool Exhaustion from Archival Batch",
+        hypothesis_id="HYP-001",
+        title="PostgreSQL Connection Pool Exhaustion from Retry-Policy Configuration Change",
+        explanation=(
+            "A retry-policy configuration change with zero backoff caused archival queries to monopolize "
+            "and exhaust the database connection pool (100/100 connections). Downstream Appointment "
+            "and Payment services experienced cascading timeouts."
+        ),
         description=(
-            "An unindexed archival query acquired row locks and held worker connections "
-            "for 78+ seconds, saturating the database pool (100/100 connections). Downstream "
-            "Appointment Service and Hospital Records Service timed out on connection checkout."
+            "A retry-policy configuration change with zero backoff caused archival queries to monopolize "
+            "and exhaust the database connection pool (100/100 connections). Downstream Appointment "
+            "and Payment services experienced cascading timeouts."
         ),
         suspected_root_cause_service="postgresql-database",
         claim_type=ClaimType.HYPOTHESIS,
-        confidence_score=0.88,  # Epistemic limitation: < 1.00
+        confidence_score=0.88,
         supporting_evidence=hyp1_evidence_sup,
         contradicting_evidence=[],
         plausibility_reasoning=(
             "Chronologically earliest anomaly occurs at database (EVT-001 at 14:00:02Z). "
-            "Immediately preceded connection pool saturation (EVT-002 at 14:00:15Z), followed "
-            "by synchronous caller timeouts at 14:00:22Z and 14:00:24Z."
+            "Preceded connection pool saturation (EVT-002 at 14:00:15Z), followed by "
+            "synchronous caller timeouts at 14:00:22Z."
         ),
-        status="UNDER_EVALUATION",
+        status="under_investigation",
     )
 
     # Hypothesis 2: Authentication Service Token Cascade (Plausible distractor)
@@ -310,20 +337,9 @@ def get_investigation_preview() -> InvestigationResult:
                 evidence_id="EVID-EVT-009-01",
                 event_id=ev.id,
                 source_service=ev.service,
+                source=ev.service,
+                role="CORROBORATING",
                 support_type="CORROBORATING",
-                excerpt=ev.message,
-                timestamp=format_iso_timestamp(ev.corrected_datetime),
-                claim_type=ClaimType.OBSERVED_FACT,
-            )
-        )
-    if "EVT-016" in events_by_id:
-        ev = events_by_id["EVT-016"]
-        hyp2_contra.append(
-            EvidenceReference(
-                evidence_id="EVID-EVT-016-01",
-                event_id=ev.id,
-                source_service=ev.service,
-                support_type="CONTRADICTORY",
                 excerpt=ev.message,
                 timestamp=format_iso_timestamp(ev.corrected_datetime),
                 claim_type=ClaimType.OBSERVED_FACT,
@@ -332,10 +348,15 @@ def get_investigation_preview() -> InvestigationResult:
 
     hypothesis_2 = Hypothesis(
         id="HYP-002",
+        hypothesis_id="HYP-002",
         title="Authentication Token Revocation Cascade Failure",
+        explanation=(
+            "Auth Service experienced session revocation check timeouts against the database, "
+            "which was evaluated as a possible initiator of widespread access rejections."
+        ),
         description=(
             "Auth Service experienced session revocation check timeouts against the database, "
-            "which could plausibly reject downstream requests across all services."
+            "which was evaluated as a possible initiator of widespread access rejections."
         ),
         suspected_root_cause_service="auth-service",
         claim_type=ClaimType.HYPOTHESIS,
@@ -343,21 +364,20 @@ def get_investigation_preview() -> InvestigationResult:
         supporting_evidence=hyp2_sup,
         contradicting_evidence=hyp2_contra,
         plausibility_reasoning=(
-            "While Auth Service logged timeout warnings, token verification fell back to "
-            "cached entries (EVT-016 confirmed tokens continued to issue and validate). "
-            "Auth degradation was a symptom of DB latency rather than the initiating root cause."
+            "Auth Service session timeouts were a downstream symptom of DB exhaustion; "
+            "local JWT validation remained operational."
         ),
-        status="REFUTED",
+        status="refuted",
     )
 
-    # Graph summary
     graph_mgr = ServiceGraphManager()
     graph_mgr.attach_events(events)
     graph_summary = graph_mgr.to_dict()
 
     return InvestigationResult(
         investigation_id="INV-20261031-001",
-        incident_name="Metro Health Cross-Service Cascading Outage",
+        incident_id="INC-CIVICHEALTH-001",
+        incident_name="CivicHealth Cascading Outage",
         status="COMPLETED",
         generated_at=format_iso_timestamp(datetime.now(timezone.utc)),
         total_raw_events=len(events),
@@ -366,6 +386,75 @@ def get_investigation_preview() -> InvestigationResult:
         hypotheses=[hypothesis_1, hypothesis_2],
         timeline=timeline,
         warnings=warnings,
+        data_quality_issues=warnings,
         service_graph_summary=graph_summary,
     )
 
+
+@router.post(
+    "/investigate",
+    response_model=InvestigationResult,
+    summary="Trigger AI Investigation (Contract Stub)",
+    status_code=status.HTTP_200_OK,
+)
+def trigger_investigation(payload: InvestigateRequest) -> InvestigationResult:
+    """
+    Synchronously triggers an AI incident investigation.
+    Acts as a contract stub for the frontend interface. Returns a mock completed
+    investigation containing a dummy timeline event, a dummy hypothesis,
+    and a message indicating 'AI Integration Pending'.
+    """
+    now_iso = format_iso_timestamp(datetime.now(timezone.utc))
+
+    dummy_timeline_event = TimelineEvent(
+        timeline_id="TL-STUB-001",
+        event_id="EVT-001",
+        service="api-gateway",
+        corrected_timestamp=now_iso,
+        uncertainty_seconds=0.0,
+        interval_start=now_iso,
+        interval_end=now_iso,
+        severity="INFO",
+        summary="Simulated incident trigger received. AI integration pending.",
+        claim_type=ClaimType.DERIVED_RESULT,
+        correlated_trace_ids=["trace-stub-001"],
+        uncertain_ordering_with=[],
+    )
+
+    dummy_hypothesis = Hypothesis(
+        hypothesis_id="HYP-STUB-001",
+        title="AI Investigation Placeholder",
+        explanation="Automated root cause analysis pipeline pending AI integration.",
+        supporting_evidence_ids=["EVT-001"],
+        contradicting_evidence_ids=[],
+        unresolved_questions=["Awaiting full LLM investigation agent integration."],
+        status="under_investigation",
+        confidence_score=0.50,
+    )
+
+    dummy_claim = Claim(
+        claim_id="CLM-STUB-001",
+        text="AI Integration Pending",
+        claim_type=ClaimType.INFERENCE,
+        evidence_ids=["EVT-001"],
+        confidence=0.50,
+        confidence_basis="Mock contract stub response for frontend integration",
+    )
+
+    return InvestigationResult(
+        investigation_id="INV-STUB-001",
+        incident_id=payload.incident_id,
+        incident_name=f"Investigation for {payload.incident_id}",
+        status="completed",
+        message="AI Integration Pending",
+        generated_at=now_iso,
+        total_raw_events=1,
+        total_normalized_events=1,
+        data_quality_warnings_count=0,
+        timeline=[dummy_timeline_event],
+        hypotheses=[dummy_hypothesis],
+        claims=[dummy_claim],
+        data_quality_issues=[],
+        warnings=[],
+        service_graph_summary={},
+    )

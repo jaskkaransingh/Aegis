@@ -3,13 +3,21 @@
   "generated_at": "2026-10-31T14:30:00Z",
   "description": "NTP and PTP clock drift estimates collected from ingress telemetry and network synchronization monitors.",
   "services": {
+    "payment": {
+      "service": "payment",
+      "offset_seconds": 120.0,
+      "uncertainty_seconds": 2.0,
+      "method": "simulation_clock_skew",
+      "reference_clock": "UTC",
+      "notes": "Payment service clock is intentionally skewed 120 seconds ahead of reference time."
+    },
     "payment-service": {
       "service": "payment-service",
-      "offset_seconds": 42.0,
+      "offset_seconds": 120.0,
       "uncertainty_seconds": 2.0,
-      "method": "ntp_drift_estimate_ingress",
+      "method": "simulation_clock_skew",
       "reference_clock": "UTC",
-      "notes": "Payment service node running on un-synced legacy PCI-compliant enclave VM. Clock is drifted ahead of UTC reference by 42 seconds (+/- 2.0s)."
+      "notes": "Payment service clock is intentionally skewed 120 seconds ahead of reference time."
     },
     "postgresql-database": {
       "service": "postgresql-database",
