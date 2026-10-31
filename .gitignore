@@ -14,7 +14,8 @@ ENV/
 htmlcov/
 
 # Local Environment Variables
-.env
+*.env
+
 
 # Antigravity & OS metadata
 .DS_Store
