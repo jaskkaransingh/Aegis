@@ -30,11 +30,11 @@ const NAV_ITEMS: NavItem[] = [
   { name: "Command Center", href: "/", icon: Activity, isReady: true },
   { name: "Investigations", href: "/investigations", icon: Search, isReady: true },
   { name: "Timeline Explorer", href: "/timeline", icon: Layers, isReady: true },
-  { name: "Service Topology", href: "/topology", icon: GitBranch, isReady: false },
-  { name: "Evidence Explorer", href: "/evidence", icon: FileSearch, isReady: false },
-  { name: "Hypothesis Arena", href: "/hypotheses", icon: Lightbulb, isReady: false },
-  { name: "Counterfactual Lab", href: "/counterfactual", icon: FlaskConical, isReady: false },
-  { name: "Reports", href: "/reports", icon: FileText, isReady: false },
+  { name: "Service Topology", href: "/topology", icon: GitBranch, isReady: true },
+  { name: "Evidence Explorer", href: "/evidence", icon: FileSearch, isReady: true },
+  { name: "Hypothesis Arena", href: "/hypotheses", icon: Lightbulb, isReady: true },
+  { name: "Counterfactual Lab", href: "/counterfactual", icon: FlaskConical, isReady: true },
+  { name: "Reports", href: "/reports", icon: FileText, isReady: true },
 ];
 
 export function Sidebar() {

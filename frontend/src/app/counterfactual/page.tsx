@@ -1,25 +1,21 @@
-import React from "react";
-import { ModulePlaceholder } from "@/components/ui/module-placeholder";
+import React, { Suspense } from "react";
+import { CounterfactualClient } from "./counterfactual-client";
 
 export const metadata = {
   title: "Counterfactual Lab | AEGIS",
-  description: "What-if simulations and cascade prevention interventions",
+  description: "Explore alternative incident scenarios and their potential impact.",
 };
 
 export default function CounterfactualPage() {
   return (
-    <ModulePlaceholder
-      title="Counterfactual Lab"
-      phase="Phase 5"
-      description="Simulation sandbox to test 'what-if' interventions against historical failure cascades and verify proposed mitigations."
-      plannedCapabilities={[
-        "Interactive node intervention toggles (e.g. circuit breakers, rate limits)",
-        "Counterfactual replay showing how failure propagation would have changed",
-        "Resilience score impact estimates before deployment",
-        "Comparative side-by-side timeline of actual vs. simulated cascade",
-        "Exportable runbook recommendations based on simulated outcomes",
-      ]}
-    />
+    <Suspense
+      fallback={
+        <div className="flex h-96 w-full items-center justify-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-violet-500 border-t-transparent" />
+        </div>
+      }
+    >
+      <CounterfactualClient />
+    </Suspense>
   );
 }
-

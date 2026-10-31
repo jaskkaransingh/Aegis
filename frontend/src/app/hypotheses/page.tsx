@@ -1,25 +1,21 @@
-import React from "react";
-import { ModulePlaceholder } from "@/components/ui/module-placeholder";
+import React, { Suspense } from "react";
+import { HypothesesClient } from "./hypotheses-client";
 
 export const metadata = {
   title: "Hypothesis Arena | AEGIS",
-  description: "Autonomous root-cause hypothesis generation and evidence-backed scoring",
+  description: "Compare competing explanations against available evidence.",
 };
 
 export default function HypothesesPage() {
   return (
-    <ModulePlaceholder
-      title="Hypothesis Arena"
-      phase="Phase 4"
-      description="Competitive evaluation arena where multi-agent hypotheses are weighed against deterministic evidence with confidence scores and falsification checks."
-      plannedCapabilities={[
-        "Candidate root-cause hypothesis comparison matrix",
-        "Deterministic evidence citation cards supporting or refuting each hypothesis",
-        "Confidence score breakdown distinguishing observed facts from agent inferences",
-        "Alternative hypothesis falsification tracking",
-        "One-click validation against backend investigation engine",
-      ]}
-    />
+    <Suspense
+      fallback={
+        <div className="flex h-96 w-full items-center justify-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-violet-500 border-t-transparent" />
+        </div>
+      }
+    >
+      <HypothesesClient />
+    </Suspense>
   );
 }
-

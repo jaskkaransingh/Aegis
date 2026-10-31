@@ -11,6 +11,10 @@
 export interface HealthResponse {
   status: string;
   service: string;
+
+
+
+
   version: string;
   timestamp: string;
   environment: string;
@@ -39,7 +43,13 @@ export interface DataQualityWarning {
 export interface NormalizedEvent {
   id: string;
   raw_id: string;
+  event_id?: string;
+  incident_id?: string | null;
   service: string;
+
+
+
+
   original_timestamp: string;
   recorded_datetime: string;
   corrected_datetime: string;
@@ -140,6 +150,10 @@ export interface TimelineEvent {
   timeline_id: string;
   event_id: string;
   service: string;
+
+
+
+
   corrected_timestamp: string;
   uncertainty_seconds: number;
   interval_start: string;

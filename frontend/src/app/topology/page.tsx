@@ -1,5 +1,5 @@
-import React from "react";
-import { ModulePlaceholder } from "@/components/ui/module-placeholder";
+import React, { Suspense } from "react";
+import { TopologyClient } from "./topology-client";
 
 export const metadata = {
   title: "Service Topology | AEGIS",
@@ -8,18 +8,14 @@ export const metadata = {
 
 export default function TopologyPage() {
   return (
-    <ModulePlaceholder
-      title="Service Topology"
-      phase="Phase 4"
-      description="Visual dependency graph powered by NetworkX analysis, distinguishing static architectural contracts from dynamic failure propagation routes."
-      plannedCapabilities={[
-        "Interactive directed graph of monitored infrastructure services",
-        "Known dependency edges vs. inferred anomalous cross-service propagation",
-        "Blast radius calculation and upstream/downstream impact analysis",
-        "Node status overlays with live health indicators and error rates",
-        "Filter topology view by trace ID or incident context",
-      ]}
-    />
+    <Suspense
+      fallback={
+        <div className="flex h-96 w-full items-center justify-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-violet-500 border-t-transparent" />
+        </div>
+      }
+    >
+      <TopologyClient />
+    </Suspense>
   );
 }
-

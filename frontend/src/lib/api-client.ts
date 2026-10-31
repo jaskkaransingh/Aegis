@@ -11,6 +11,7 @@ import type {
   InvestigationResult,
   LogsFilterParams,
   LogsResponse,
+  NormalizedEvent,
   ServicesResponse,
   TimelineEvent,
 } from "../types";
@@ -129,6 +130,13 @@ export const apiClient = {
   /**
    * Fetches the registered microservice and infrastructure components.
    */
+  /**
+   * Retrieves cleaned, deduplicated, and timestamp-corrected logs directly from /api/logs/normalized.
+   */
+  async getNormalizedLogs(): Promise<NormalizedEvent[]> {
+    return request<NormalizedEvent[]>("api/logs/normalized");
+  },
+
   async getServices(): Promise<ServicesResponse> {
     return request<ServicesResponse>("api/services");
   },
