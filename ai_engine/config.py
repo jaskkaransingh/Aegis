@@ -70,6 +70,28 @@ class AIEngineConfig(BaseModel):
         default=True,
         description="When True, raises an exception on fabricated references; when False, flags them in results."
     )
+    timeline_error_burst_window_seconds: float = Field(
+        default=10.0,
+        ge=0.1,
+        le=3600.0,
+        description="Time window in seconds to detect dense error bursts (>= 2 errors)."
+    )
+    timeline_cluster_window_seconds: float = Field(
+        default=15.0,
+        ge=0.1,
+        le=3600.0,
+        description="Time window in seconds to detect service and cross-service temporal clusters."
+    )
+    timeline_gap_threshold_seconds: float = Field(
+        default=30.0,
+        ge=1.0,
+        le=86400.0,
+        description="Threshold in seconds between events to report as a timeline observation gap."
+    )
+    enable_llm_timeline_summary: bool = Field(
+        default=True,
+        description="Whether to generate an LLM-synthesized narrative summary of deterministic timeline findings."
+    )
 
     @field_validator("ollama_base_url")
     @classmethod
@@ -127,6 +149,18 @@ def get_config() -> AIEngineConfig:
     strict_raw = os.getenv("AEGIS_ANALYST_STRICT_MODE")
     analyst_strict_mode = strict_raw.lower() not in ("0", "false", "no") if strict_raw else True
 
+    burst_raw = os.getenv("AEGIS_TIMELINE_BURST_WINDOW")
+    timeline_error_burst = float(burst_raw) if burst_raw else 10.0
+
+    cluster_raw = os.getenv("AEGIS_TIMELINE_CLUSTER_WINDOW")
+    timeline_cluster = float(cluster_raw) if cluster_raw else 15.0
+
+    gap_raw = os.getenv("AEGIS_TIMELINE_GAP_THRESHOLD")
+    timeline_gap = float(gap_raw) if gap_raw else 30.0
+
+    llm_summary_raw = os.getenv("AEGIS_ENABLE_LLM_TIMELINE_SUMMARY")
+    enable_llm_summary = llm_summary_raw.lower() not in ("0", "false", "no") if llm_summary_raw else True
+
     return AIEngineConfig(
         ollama_base_url=base_url,
         ollama_model=model,
@@ -137,5 +171,9 @@ def get_config() -> AIEngineConfig:
         max_evidence_count=max_evidence_count,
         max_payload_bytes=max_payload_bytes,
         analyst_strict_mode=analyst_strict_mode,
+        timeline_error_burst_window_seconds=timeline_error_burst,
+        timeline_cluster_window_seconds=timeline_cluster,
+        timeline_gap_threshold_seconds=timeline_gap,
+        enable_llm_timeline_summary=enable_llm_summary,
     )
 

@@ -10,6 +10,9 @@ from .evidence_analyst import (
     InvalidEvidenceReferenceError,
     OllamaInvocationError,
 )
+from .timeline_correlator import (
+    TimelineCorrelatorAgent,
+)
 
 __all__ = [
     "EvidenceAnalystAgent",
@@ -17,5 +20,6 @@ __all__ = [
     "EvidenceValidationError",
     "InvalidEvidenceReferenceError",
     "OllamaInvocationError",
+    "TimelineCorrelatorAgent",
 ]
 

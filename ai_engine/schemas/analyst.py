@@ -40,12 +40,49 @@ class EvidenceInputRecord(BaseModel):
         default="",
         description="Original log line or event message text."
     )
+    # Temporal & Clock Correction Fields
+    raw_timestamp: Optional[str] = Field(
+        default=None,
+        description="Preserved raw recorded timestamp string from originating service."
+    )
+    corrected_timestamp: Optional[str] = Field(
+        default=None,
+        description="UTC timestamp after clock offset correction has been applied."
+    )
+    uncertainty_seconds: Optional[float] = Field(
+        default=None,
+        description="Half-width uncertainty interval in seconds (+/- delta)."
+    )
+    time_interval_start: Optional[str] = Field(
+        default=None,
+        description="Earliest plausible timestamp boundary string."
+    )
+    time_interval_end: Optional[str] = Field(
+        default=None,
+        description="Latest plausible timestamp boundary string."
+    )
+    clock_offset_seconds: Optional[float] = Field(
+        default=None,
+        description="Estimated clock offset in seconds."
+    )
+    clock_correction_applied: Optional[bool] = Field(
+        default=None,
+        description="Whether clock offset correction was applied."
+    )
     metadata: Dict[str, Any] = Field(
         default_factory=dict,
         description="Supplemental tracing or payload metadata."
     )
 
     model_config = ConfigDict(extra="ignore")
+
+    @model_validator(mode="after")
+    def _sync_timestamps(self) -> "EvidenceInputRecord":
+        if self.raw_timestamp is None and self.timestamp is not None:
+            self.raw_timestamp = self.timestamp
+        if self.timestamp is None and self.raw_timestamp is not None:
+            self.timestamp = self.raw_timestamp
+        return self
 
     @field_validator("evidence_id")
     @classmethod

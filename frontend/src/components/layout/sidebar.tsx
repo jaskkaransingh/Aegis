@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -16,158 +16,200 @@ import {
   CheckCircle2,
   XCircle,
   RefreshCw,
+  Sparkles,
+  ChevronLeft,
+  ChevronRight,
+  Eye,
 } from "lucide-react";
 import { useBackend } from "@/lib/backend-context";
 
 interface NavItem {
   name: string;
+  shortName: string;
   href: string;
   icon: React.ComponentType<{ className?: string }>;
-  isReady: boolean;
+  badge?: string;
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { name: "Command Center", href: "/", icon: Activity, isReady: true },
-  { name: "Investigations", href: "/investigations", icon: Search, isReady: true },
-  { name: "Timeline Explorer", href: "/timeline", icon: Layers, isReady: true },
-  { name: "Service Topology", href: "/topology", icon: GitBranch, isReady: true },
-  { name: "Evidence Explorer", href: "/evidence", icon: FileSearch, isReady: true },
-  { name: "Hypothesis Arena", href: "/hypotheses", icon: Lightbulb, isReady: true },
-  { name: "Counterfactual Lab", href: "/counterfactual", icon: FlaskConical, isReady: true },
-  { name: "Reports", href: "/reports", icon: FileText, isReady: true },
+  { name: "Command Center", shortName: "Command", href: "/command-center", icon: Activity },
+  { name: "Investigations", shortName: "Triage", href: "/investigations", icon: Search },
+  { name: "Timeline Explorer", shortName: "Timeline", href: "/timeline", icon: Layers },
+  { name: "Service Topology", shortName: "Topology", href: "/topology", icon: GitBranch },
+  { name: "Evidence Explorer", shortName: "Evidence", href: "/evidence", icon: FileSearch },
+  { name: "Hypothesis Arena", shortName: "Hypotheses", href: "/hypotheses", icon: Lightbulb },
+  { name: "Counterfactual Lab", shortName: "Lab", href: "/counterfactual", icon: FlaskConical },
+  { name: "Investigation Reports", shortName: "Reports", href: "/reports", icon: FileText },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
   const { status: backendStatus, refresh } = useBackend();
+  const [collapsed, setCollapsed] = useState<boolean>(false);
 
   return (
-    <aside className="w-64 border-r border-slate-800/80 bg-[#090d16] flex flex-col shrink-0 min-h-screen">
+    <aside
+      className={`border-r border-white/10 bg-[#07090f]/95 backdrop-blur-xl flex flex-col shrink-0 min-h-screen transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] z-30 select-none ${
+        collapsed ? "w-[72px]" : "w-60"
+      }`}
+    >
       {/* Brand Header */}
-      <div className="p-5 border-b border-slate-800/80">
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="h-9 w-9 rounded-lg bg-violet-950/70 border border-violet-600/40 flex items-center justify-center text-violet-400 shadow-sm shadow-violet-950/80 group-hover:border-violet-500 transition">
-            <Shield className="h-5 w-5" />
+      <div className="p-4 border-b border-white/10 flex items-center justify-between">
+        <Link
+          href="/command-center"
+          className="flex items-center gap-3 group overflow-hidden"
+          title="AEGIS Workstation"
+        >
+          <div className="h-8 w-8 rounded-lg bg-white/5 border border-white/15 flex items-center justify-center text-white shadow-[0_0_12px_rgba(152,117,255,0.25)] group-hover:border-[#9875ff]/50 transition-colors shrink-0">
+            <Shield className="h-4 w-4 text-[#b29aff]" />
           </div>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className="font-bold tracking-wider text-base text-slate-100 font-mono">
-                AEGIS
-              </span>
-              <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-violet-950/80 text-violet-300 border border-violet-800/50 font-semibold">
-                v0.1
-              </span>
+          {!collapsed && (
+            <div className="flex flex-col min-w-0">
+              <div className="flex items-center gap-1.5">
+                <span className="font-mono font-bold tracking-wider text-sm text-white">
+                  AEGIS
+                </span>
+                <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-white/10 text-white/70 border border-white/15">
+                  v0.1
+                </span>
+              </div>
+              <p className="text-[10px] text-white/50 truncate font-mono">
+                Incident Intelligence
+              </p>
             </div>
-            <p className="text-[10px] text-slate-400 font-sans tracking-tight">
-              Incident Intelligence
-            </p>
-          </div>
+          )}
         </Link>
+
+        {/* Collapse / Expand Toggle Button */}
+        <button
+          type="button"
+          onClick={() => setCollapsed(!collapsed)}
+          className="p-1 rounded text-white/40 hover:text-white hover:bg-white/5 transition"
+          title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          {collapsed ? (
+            <ChevronRight className="h-3.5 w-3.5" />
+          ) : (
+            <ChevronLeft className="h-3.5 w-3.5" />
+          )}
+        </button>
       </div>
 
       {/* Navigation Links */}
-      <div className="flex-1 px-3 py-4 space-y-1">
-        <div className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400 font-mono">
-          Workstation Navigation
-        </div>
+      <div className="flex-1 px-2.5 py-4 space-y-1 overflow-y-auto">
+        {!collapsed && (
+          <div className="px-2.5 pb-2 text-[10px] font-mono uppercase tracking-widest text-white/40">
+            Workstation
+          </div>
+        )}
         <nav className="space-y-1">
           {NAV_ITEMS.map((item) => {
             const Icon = item.icon;
             const isActive =
-              item.href === "/"
-                ? pathname === "/"
+              item.href === "/command-center"
+                ? pathname === "/command-center"
                 : pathname === item.href || pathname.startsWith(`${item.href}/`);
 
-            if (item.isReady) {
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition ${
-                    isActive
-                      ? "bg-violet-600/20 text-violet-200 border border-violet-500/40 shadow-sm shadow-violet-950/50"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-900/60"
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Icon
-                      className={`h-4 w-4 ${
-                        isActive ? "text-violet-400" : "text-slate-500"
-                      }`}
-                    />
-                    <span>{item.name}</span>
-                  </div>
-                  {isActive && (
-                    <span className="h-1.5 w-1.5 rounded-full bg-violet-400" />
-                  )}
-                </Link>
-              );
-            }
-
-            // Placeholder route with clear status indicator
             return (
               <Link
                 key={item.name}
                 href={item.href}
-                className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition ${
+                title={collapsed ? item.name : undefined}
+                className={`w-full flex items-center ${
+                  collapsed ? "justify-center px-0 py-2.5" : "justify-between px-3 py-2"
+                } rounded-lg text-xs font-medium transition-all group relative ${
                   isActive
-                    ? "bg-slate-800 text-slate-200 border border-slate-700"
-                    : "text-slate-400 hover:text-slate-300 hover:bg-slate-900/40"
+                    ? "bg-white/10 text-white border border-white/20 shadow-sm shadow-purple-950/40"
+                    : "text-white/60 hover:text-white hover:bg-white/5 border border-transparent"
                 }`}
               >
-                <div className="flex items-center gap-2.5">
-                  <Icon className="h-4 w-4 text-slate-400" />
-                  <span>{item.name}</span>
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <Icon
+                    className={`h-4 w-4 shrink-0 transition-colors ${
+                      isActive ? "text-[#7adcf5]" : "text-white/50 group-hover:text-white"
+                    }`}
+                  />
+                  {!collapsed && (
+                    <span className="truncate">{item.name}</span>
+                  )}
                 </div>
-                <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-slate-800/80 text-slate-400 border border-slate-700/50">
-                  Phase 4+
-                </span>
+
+                {isActive && !collapsed && (
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#7adcf5] shadow-[0_0_6px_#7adcf5]" />
+                )}
               </Link>
             );
           })}
         </nav>
+
+        {/* Secondary Navigation */}
+        <div className="pt-3 mt-3 border-t border-white/10 space-y-1">
+          <Link
+            href="/"
+            title={collapsed ? "Landing Experience" : undefined}
+            className={`w-full flex items-center ${
+              collapsed ? "justify-center px-0 py-2" : "justify-between px-3 py-1.5"
+            } rounded-lg text-xs transition text-white/50 hover:text-white hover:bg-white/5`}
+          >
+            <div className="flex items-center gap-2.5">
+              <Eye className="h-3.5 w-3.5 text-[#7adcf5]" />
+              {!collapsed && <span className="font-mono text-[11px]">Landing Intro</span>}
+            </div>
+            {!collapsed && (
+              <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-white/10 text-white/70">
+                3D
+              </span>
+            )}
+          </Link>
+
+          <Link
+            href="/design-system"
+            title={collapsed ? "Design System" : undefined}
+            className={`w-full flex items-center ${
+              collapsed ? "justify-center px-0 py-2" : "justify-between px-3 py-1.5"
+            } rounded-lg text-xs transition text-white/50 hover:text-white hover:bg-white/5`}
+          >
+            <div className="flex items-center gap-2.5">
+              <Sparkles className="h-3.5 w-3.5 text-[#b29aff]" />
+              {!collapsed && <span className="font-mono text-[11px]">Design System</span>}
+            </div>
+            {!collapsed && (
+              <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-white/10 text-white/70">
+                SPEC
+              </span>
+            )}
+          </Link>
+        </div>
       </div>
 
-      {/* Bottom Section: Environment & Live Connectivity */}
-      <div className="p-4 border-t border-slate-800/80 bg-[#070a12] space-y-3">
-        {/* Environment Tag */}
-        <div className="text-[10px] font-mono p-2 rounded bg-slate-950 border border-slate-800/80 text-slate-400">
-          <div className="text-slate-400 uppercase tracking-wider text-[9px]">
-            Active Environment
-          </div>
-          <div className="text-slate-300 font-semibold truncate mt-0.5">
-            CivicHealth Public Services
-          </div>
-        </div>
-
-        {/* Live Backend Connection Status */}
-        <div className="flex items-center justify-between text-[11px] pt-1">
-          <span className="font-mono text-slate-400 text-[10px]">Backend Link</span>
-
+      {/* Bottom Connectivity Strip */}
+      <div className="p-3 border-t border-white/10 bg-black/60">
+        <div className={`flex items-center ${collapsed ? "justify-center" : "justify-between"} text-[10px] font-mono`}>
+          {!collapsed && <span className="text-white/40">Backend</span>}
           <div className="flex items-center gap-1.5">
             {backendStatus === "connected" && (
-              <span className="inline-flex items-center gap-1 text-emerald-400 font-mono text-[10px]">
+              <span className="inline-flex items-center gap-1 text-[#76d6a4]" title="FastAPI live">
                 <CheckCircle2 className="h-3 w-3" />
-                Connected
+                {!collapsed && "Live"}
               </span>
             )}
             {backendStatus === "disconnected" && (
-              <span className="inline-flex items-center gap-1 text-amber-400 font-mono text-[10px]" title="FastAPI server offline; running demo mode">
+              <span className="inline-flex items-center gap-1 text-[#f2c66d]" title="Demo offline mode">
                 <XCircle className="h-3 w-3" />
-                Demo Mode
+                {!collapsed && "Demo"}
               </span>
             )}
             {backendStatus === "checking" && (
-              <span className="inline-flex items-center gap-1 text-slate-400 font-mono text-[10px]">
+              <span className="inline-flex items-center gap-1 text-white/40">
                 <RefreshCw className="h-3 w-3 animate-spin" />
-                Probing...
               </span>
             )}
             <button
               type="button"
               onClick={() => refresh()}
-              title="Refresh connection status"
-              className="p-1 rounded text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition"
+              title="Refresh connection"
+              className="p-1 rounded text-white/40 hover:text-white hover:bg-white/10 transition"
             >
               <RefreshCw className="h-2.5 w-2.5" />
             </button>

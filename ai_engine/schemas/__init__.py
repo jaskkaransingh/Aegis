@@ -1,6 +1,6 @@
 """
 AEGIS AI Engine Data Schemas.
-Exports typed contracts for evidence references, claims, hypotheses, and analyst models.
+Exports typed contracts for evidence references, claims, hypotheses, analyst models, and timeline models.
 """
 
 from .common import ClaimType, EvidenceRole, InvestigationStatus, AnalysisStatus
@@ -13,6 +13,13 @@ from .analyst import (
     AnalystExplanation,
     EvidenceAnalystLLMPayload,
     EvidenceAnalystResult,
+)
+from .timeline import (
+    TemporalRelation,
+    TimelineEntry,
+    TemporalRelationshipRecord,
+    TemporalPatternRecord,
+    TimelineAnalysisResult,
 )
 
 __all__ = [
@@ -29,4 +36,9 @@ __all__ = [
     "AnalystExplanation",
     "EvidenceAnalystLLMPayload",
     "EvidenceAnalystResult",
+    "TemporalRelation",
+    "TimelineEntry",
+    "TemporalRelationshipRecord",
+    "TemporalPatternRecord",
+    "TimelineAnalysisResult",
 ]

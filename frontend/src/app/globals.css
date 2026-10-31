@@ -3,24 +3,116 @@
 @tailwind utilities;
 
 :root {
-  --background: #07090e;
-  --foreground: #f1f5f9;
-  --surface: #0e131f;
-  --surface-subtle: #141b2d;
-  --surface-card: #101626;
-  --border: #1e293b;
-  --accent: #8b5cf6;
-  --accent-subtle: rgba(139, 92, 246, 0.12);
-  --accent-glow: rgba(139, 92, 246, 0.25);
+  /* =========================================================================
+     AEGIS MASTER DESIGN SYSTEM TOKENS
+     Obsidian Tactile Workstation & Forensic Evidence Environment
+     ========================================================================= */
+
+  /* Surface Depths & Obsidian Foundations */
+  --aegis-bg: #07090f;
+  --aegis-bg-elevated: #0b0e17;
+  --aegis-surface: #101522;
+  --aegis-surface-raised: #151b2a;
+  --aegis-surface-hover: #1a2233;
+  --aegis-surface-glass: rgba(16, 21, 34, 0.82);
+
+  /* Hairline Borders & Dividers */
+  --aegis-border: #252d40;
+  --aegis-border-subtle: #1b2232;
+  --aegis-border-strong: #36415b;
+  --aegis-border-focus: #9875ff;
+
+  /* Typography & Foreground Contrast */
+  --aegis-text-primary: #f1f4fb;
+  --aegis-text-secondary: #a3adc2;
+  --aegis-text-muted: #727f98;
+  --aegis-text-inverse: #07090f;
+
+  /* Restrained Functional Accents */
+  /* Violet: Agentic AI Reasoning, Deep Inferences, Orchestration */
+  --aegis-violet: #9875ff;
+  --aegis-violet-bright: #b29aff;
+  --aegis-violet-surface: #21173c;
+  --aegis-violet-subtle: rgba(152, 117, 255, 0.12);
+  --aegis-violet-border: rgba(152, 117, 255, 0.35);
+
+  /* Ice Cyan: Verified Evidence, Telemetry, Clock Synchronization */
+  --aegis-cyan: #7adcf5;
+  --aegis-cyan-surface: #102833;
+  --aegis-cyan-subtle: rgba(122, 220, 245, 0.12);
+  --aegis-cyan-border: rgba(122, 220, 245, 0.35);
+
+  /* Warning / Amber: Latency Degradation, Divergences, Clock Skew */
+  --aegis-warning: #f2c66d;
+  --aegis-warning-surface: #332711;
+  --aegis-warning-subtle: rgba(242, 198, 109, 0.12);
+  --aegis-warning-border: rgba(242, 198, 109, 0.35);
+
+  /* Danger / Rose: Critical Anomalies, Circuit Trips, Service Outages */
+  --aegis-danger: #f27886;
+  --aegis-danger-surface: #33151a;
+  --aegis-danger-subtle: rgba(242, 120, 134, 0.12);
+  --aegis-danger-border: rgba(242, 120, 134, 0.35);
+
+  /* Success / Emerald: Healthy Invariants, Verified Truth, Resilient State */
+  --aegis-success: #76d6a4;
+  --aegis-success-surface: #112b20;
+  --aegis-success-subtle: rgba(118, 214, 164, 0.12);
+  --aegis-success-border: rgba(118, 214, 164, 0.35);
+
+  /* Neutral / Slate: Structural Wireframe, Dormant Components */
+  --aegis-neutral: #8d9ab1;
+  --aegis-neutral-surface: #1b2232;
+
+  /* Tactical Shadows & Depth Gradients */
+  --aegis-shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--aegis-border-subtle);
+  --aegis-shadow-elevated: 0 8px 32px -4px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--aegis-border);
+  --aegis-glow-violet: 0 0 28px -4px rgba(152, 117, 255, 0.28);
+  --aegis-glow-cyan: 0 0 28px -4px rgba(122, 220, 245, 0.28);
+
+  /* Motion Curves & Durations */
+  --aegis-ease-standard: cubic-bezier(0.2, 0.0, 0.0, 1.0);
+  --aegis-ease-decelerate: cubic-bezier(0.0, 0.0, 0.2, 1.0);
+  --aegis-ease-accelerate: cubic-bezier(0.3, 0.0, 1.0, 1.0);
+  --aegis-duration-micro: 150ms;
+  --aegis-duration-hover: 200ms;
+  --aegis-duration-panel: 300ms;
+  --aegis-duration-drawer: 450ms;
+
+  /* =========================================================================
+     BACKWARD-COMPATIBLE ALIASES
+     Maintains flawless compatibility with pre-Phase-1 pages & components
+     ========================================================================= */
+  --background: var(--aegis-bg);
+  --foreground: var(--aegis-text-primary);
+  --surface: var(--aegis-bg-elevated);
+  --surface-subtle: var(--aegis-surface);
+  --surface-card: var(--aegis-surface-raised);
+  --border: var(--aegis-border);
+  --accent: var(--aegis-violet);
+  --accent-subtle: var(--aegis-violet-subtle);
+  --accent-glow: rgba(152, 117, 255, 0.25);
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: var(--aegis-bg);
+  color: var(--aegis-text-primary);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Crisp high-contrast selection */
+::selection {
+  background-color: rgba(152, 117, 255, 0.35);
+  color: #ffffff;
+}
+
+/* Accessible high-visibility focus ring */
+:focus-visible {
+  outline: 2px solid var(--aegis-border-focus);
+  outline-offset: 2px;
 }
 
 /* Custom subtle scrollbar */
@@ -30,20 +122,34 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #07090e;
+  background: var(--aegis-bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: var(--aegis-border);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: var(--aegis-border-strong);
 }
 
+/* Motion Accessibility: Honor prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
 
-/* Print Styles for AEGIS Investigation Reports */
+/* =========================================================================
+   Print Styles for AEGIS Investigation Reports
+   Preserved for export fidelity
+   ========================================================================= */
 @media print {
   @page {
     margin: 1.5cm;

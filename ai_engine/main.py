@@ -145,6 +145,42 @@ async def run_analyst_smoke_cli() -> None:
         sys.exit(1)
 
 
+async def run_timeline_smoke_cli() -> None:
+    from ai_engine.agents.timeline_correlator import TimelineCorrelatorAgent
+    from ai_engine.tests.fixtures.synthetic_evidence import SYNTHETIC_TEST_EVIDENCE
+
+    config = get_config()
+    print("=" * 60)
+    print("AEGIS Timeline Correlator Agent -- Live Smoke Test")
+    print("=" * 60)
+    print(f"Target Model:       {config.ollama_model}")
+    print(f"Input Evidence:     {len(SYNTHETIC_TEST_EVIDENCE)} synthetic records")
+    print("-" * 60)
+
+    agent = TimelineCorrelatorAgent(config=config)
+    try:
+        result = await agent.correlate(SYNTHETIC_TEST_EVIDENCE)
+        print(f"Correlation Status: {result.status.value.upper()}")
+        print(f"Timeline Entries:   {len(result.timeline_entries)}")
+        for entry in result.timeline_entries:
+            unc_flag = " (UNCERTAIN)" if entry.is_concurrent_or_uncertain else ""
+            print(f"  - [{entry.corrected_timestamp or entry.raw_timestamp}] {entry.event_id} ({entry.service}): {entry.summary[:40]}{unc_flag}")
+        print(f"Relationships:      {len(result.temporal_relationships)}")
+        for r in result.temporal_relationships[:4]:
+            print(f"  - {r.event_a_id} {r.relationship.value} {r.event_b_id}")
+        print(f"Patterns:           {len(result.temporal_patterns)}")
+        for p in result.temporal_patterns:
+            print(f"  - {p.pattern_name}: {p.pattern_type}")
+        print(f"Summary:            {result.timeline_summary[:120]}...")
+        print(f"Causality Notice:   {result.causality_disclaimer}")
+        print(f"Execution Time:     {result.metadata.get('execution_time_ms', 'N/A')}ms")
+        print("=" * 60)
+        print("STATUS: TIMELINE CORRELATOR SMOKE TEST PASSED [OK]")
+    except Exception as e:
+        print(f"STATUS: TIMELINE CORRELATOR SMOKE TEST FAILED [FAIL]: {e}")
+        sys.exit(1)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="AEGIS AI Engine — Autonomous Evidence-Grounded Investigation System"
@@ -174,6 +210,11 @@ def main() -> None:
         action="store_true",
         help="Run a live smoke test of the Evidence Analyst on synthetic evidence",
     )
+    parser.add_argument(
+        "--smoke-timeline",
+        action="store_true",
+        help="Run a live smoke test of the Timeline Correlator on synthetic evidence",
+    )
 
     args = parser.parse_args()
 
@@ -187,12 +228,15 @@ def main() -> None:
         sys.exit(0 if success else 1)
     elif args.smoke_analyst:
         asyncio.run(run_analyst_smoke_cli())
+    elif args.smoke_timeline:
+        asyncio.run(run_timeline_smoke_cli())
     else:
         print(f"AEGIS AI Engine v{__version__}")
         print("Run with --check to verify Ollama environment.")
         print("Run with --validate-schemas to verify data contracts.")
         print("Run with --list-models to view installed Ollama models.")
         print("Run with --smoke-analyst to run live Evidence Analyst smoke test.")
+        print("Run with --smoke-timeline to run live Timeline Correlator smoke test.")
 
 
 if __name__ == "__main__":

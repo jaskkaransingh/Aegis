@@ -3,12 +3,10 @@
 import React, { Suspense, useState, useEffect, useMemo, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { TimelineHeader } from "@/components/timeline/timeline-header";
-import {
-  TimelineFilters,
-  type TimelineFilterState,
-} from "@/components/timeline/timeline-filters";
+import { TimelineFilters, type TimelineFilterState } from "@/components/timeline/timeline-filters";
 import { TimelineEventList } from "@/components/timeline/timeline-event-list";
 import { TimelineEventDetails } from "@/components/timeline/timeline-event-details";
+import { VisualServiceLanes } from "@/components/timeline/visual-service-lanes";
 import type { TimestampMode } from "@/components/timeline/timestamp-mode-toggle";
 import { apiClient } from "@/lib/api-client";
 import { useBackend } from "@/lib/backend-context";
@@ -206,6 +204,15 @@ function TimelineExplorerContent() {
         availableEventTypes={availableEventTypes}
         totalCount={events.length}
         filteredCount={filteredEvents.length}
+      />
+
+      {/* Primary Visual: Service Chronology Lanes */}
+      <VisualServiceLanes
+        events={filteredEvents}
+        timelineMap={timelineMap}
+        timestampMode={timestampMode}
+        selectedEventId={selectedEvent?.id || null}
+        onSelectEvent={(ev) => setSelectedEvent(ev)}
       />
 
       {/* Event List */}

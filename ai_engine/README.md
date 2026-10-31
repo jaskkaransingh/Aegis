@@ -185,35 +185,89 @@ python ai_engine/main.py --validate-schemas
 
 ### Live Smoke Test on Synthetic Evidence:
 ```powershell
+# Evidence Analyst smoke test
 python ai_engine/main.py --smoke-analyst
+
+# Timeline Correlator smoke test
+python ai_engine/main.py --smoke-timeline
 ```
 
 ---
 
-## 9. Implemented Agents: Evidence Analyst Agent
+## 9. Implemented Agents
 
-The **Evidence Analyst Agent** ([`ai_engine/agents/evidence_analyst.py`](ai_engine/agents/evidence_analyst.py)) is the first functional autonomous agent in the AEGIS workflow.
+### A. Evidence Analyst Agent (Phase 11)
+Located in [`ai_engine/agents/evidence_analyst.py`](ai_engine/agents/evidence_analyst.py).
+- Consumes verified evidence records and identifies factual observations (`OBSERVED_FACT`) and inferences (`INFERENCE`).
+- Deterministically validates all model-cited evidence IDs.
+- Cites exact canonical event IDs; rejects ungrounded claims.
 
-### Responsibilities
-- Analyzes an explicit list of `EvidenceInputRecord` items.
-- Identifies factual observations (`OBSERVED_FACT`) and preliminary inferences (`INFERENCE`).
-- Groups cross-service recurring anomalies into structured `AnalystPattern` records.
-- Formulates preliminary candidate explanations with explicit assumptions and unresolved questions.
-- Strictly refrains from declaring a definitive root cause.
+### B. Timeline Correlator Agent (Phase 12)
+Located in [`ai_engine/agents/timeline_correlator.py`](ai_engine/agents/timeline_correlator.py) with deterministic interval calculation in [`ai_engine/core/temporal_analysis.py`](ai_engine/core/temporal_analysis.py).
 
-### Epistemic Validation & Rejection
-- **Zero Fabrication**: Validates all model-cited evidence IDs against the exact set of input canonical IDs. Any unknown or hallucinated reference triggers an immediate deterministic error (`InvalidEvidenceReferenceError`).
-- **Factual Grounding**: Rejects any observation claiming to be an `OBSERVED_FACT` without citing at least one verified evidence ID.
-- **Bounded Input**: Rejects duplicate event IDs, payload sizes exceeding limit (`128 KB`), or record counts exceeding limit (`50`).
-- **Prompt Injection Defense**: All log messages and payload text are treated as untrusted data enclosed inside `<evidence_dataset>` blocks with explicit instructions forbidding the model from executing embedded directives.
+#### Responsibilities & Capabilities
+- **Deterministic First**: Pairwise interval comparisons, ordering classifications, and pattern detection are computed in pure Python without LLM dependency.
+- **Timestamp & Interval Interpretation**:
+  - Handles raw vs. corrected timestamps and preserves both in timeline entries.
+  - Normalizes timezone-aware timestamps to UTC. Flags timezone-naive comparisons as ambiguous when mixed.
+  - Accounts for uncertainty intervals $[t - \Delta, t + \Delta]$. Rejects intervals where start occurs after end.
+- **Temporal Relationships**:
+  - `DEFINITELY_BEFORE`: Event A's latest plausible time strictly precedes Event B's earliest plausible time ($A_{end} < B_{start}$).
+  - `DEFINITELY_AFTER`: Event A's earliest plausible time strictly succeeds Event B's latest plausible time ($B_{end} < A_{start}$).
+  - `POSSIBLY_BEFORE` / `POSSIBLY_AFTER`: Uncertainty intervals intersect, but estimated instants differ; exact order is ambiguous.
+  - `OVERLAPPING`: Uncertainty intervals intersect with equal or indeterminate estimated times; exact order cannot be determined.
+  - `SAME_TIME_OR_INDETERMINATE`: Events occur at identical timestamps or intervals.
+  - `UNKNOWN`: Missing, unparseable, or mixed naive/aware timestamps prevent comparison.
+- **No Forced Total Ordering**: Overlapping events are flagged with `is_concurrent_or_uncertain = True` and list all overlapping counterpart IDs in `uncertain_ordering_with`.
+- **Temporal Pattern Detection**:
+  - **Error Bursts**: Dense clusters of `>= 2` ERROR/CRITICAL events within `timeline_error_burst_window_seconds` (default 10s).
+  - **Cross-Service Clusters**: Events spanning `>= 2` distinct services occurring within `timeline_cluster_window_seconds` (default 15s).
+  - **Timeline Gaps**: Elapsed time between consecutive events exceeding `timeline_gap_threshold_seconds` (default 30s).
+  - **Ambiguous Clusters**: Groups of `>= 2` events whose uncertainty intervals mutually intersect.
+- **Optional Ollama Summarization**:
+  - If Ollama is available, synthesizes a readable narrative of deterministic findings.
+  - Validates that every event ID in the LLM summary exists in the input set. Unknown IDs trigger `InvalidEvidenceReferenceError`.
+  - If Ollama is offline or times out, falls back cleanly to the deterministic timeline summary without failing the pipeline.
+- **Explicit Epistemic Humility**:
+  - **Causality Disclaimer**: *"Temporal correlation does not establish causation. An event occurring before another event does not prove it caused the later event."*
+
+#### Synthetic Example
+```python
+from ai_engine.agents.timeline_correlator import TimelineCorrelatorAgent
+from ai_engine.schemas.analyst import EvidenceInputRecord
+
+records = [
+    EvidenceInputRecord(
+        evidence_id="TEST-EVT-001",
+        service="database",
+        timestamp="2026-10-31T14:00:00Z",
+        uncertainty_seconds=1.0,
+        message="Connection pool exhausted.",
+    ),
+    EvidenceInputRecord(
+        evidence_id="TEST-EVT-002",
+        service="api-gateway",
+        timestamp="2026-10-31T14:00:05Z",
+        uncertainty_seconds=1.0,
+        message="HTTP 504 Gateway Timeout.",
+    ),
+]
+
+agent = TimelineCorrelatorAgent()
+result = await agent.correlate(records)
+
+print(result.status)  # AnalysisStatus.SUCCESS
+for entry in result.timeline_entries:
+    print(entry.event_id, entry.corrected_timestamp, entry.is_concurrent_or_uncertain)
+```
 
 ---
 
 ## 10. Current Limitations
 
-1. **Standalone Evidence Analysis**: The Evidence Analyst operates directly on provided evidence records. Multi-agent graph orchestration (e.g. connecting to the Timeline Correlator) will be introduced in subsequent phases.
-2. **Bounded Window**: Configured for up to 50 records / 128 KB payload per analyst call to ensure fast, deterministic local inference without exceeding context boundaries.
-3. **Local Latency**: Inference on `llama3.2:3b` takes approximately 4-7 seconds on the local workstation.
+1. **Standalone Correlation**: The Timeline Correlator operates directly on provided evidence records. Connecting output from the Evidence Analyst into the Timeline Correlator as an integrated multi-agent graph will be introduced in subsequent phases.
+2. **Bounded Window**: Configured for up to 50 records / 128 KB payload per correlation call to ensure fast, deterministic local inference without exceeding context boundaries.
+3. **Local Latency**: LLM summarization with `llama3.2:3b` takes approximately 4-6 seconds locally. Deterministic analysis alone executes in under 5 milliseconds.
 
 ---
 
@@ -222,7 +276,7 @@ The **Evidence Analyst Agent** ([`ai_engine/agents/evidence_analyst.py`](ai_engi
 In upcoming phases, the engine will implement a specialized multi-agent forensic workflow:
 
 1. **Evidence Analyst** (Implemented): Ingests normalized log events, extracts timing intervals, identifies anomalies, and filters telemetry noise.
-2. **Timeline Correlator**: Reconstructs cross-service chronological event ordering, accounting for clock offset uncertainty intervals (+/- delta t).
+2. **Timeline Correlator** (Implemented): Reconstructs cross-service chronological event ordering, accounting for clock offset uncertainty intervals (+/- delta t).
 3. **Hypothesis Engine**: Formulates competing explanations for the failure cascade (e.g., query lock exhaustion vs. upstream client retry storms).
 4. **Adversarial Critic**: Systematically probes each hypothesis against contradicting telemetry, challenging ungrounded claims and confirmation bias.
 5. **Evidence Auditor**: Re-checks that every asserted claim cites verified canonical event IDs (`EVT-xxx`) and rejects unsupported factual assertions.
