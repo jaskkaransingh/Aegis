@@ -8,7 +8,7 @@
     "level": "WARN",
     "severity": "WARN",
     "event_type": "CONFIG_CHANGE",
-    "message": "Configuration update applied: retry-policy aggressive retry with zero backoff applied to archival batch workers.",
+    "message": "Configuration update applied: aggressive worker batching with zero backoff applied to archival queries.",
     "source": "postgresql-database",
     "trace_id": null
   },

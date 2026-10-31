@@ -72,6 +72,7 @@ def test_api_routes_do_not_expose_ground_truth():
         "HIDDEN_EVALUATION_GROUND_TRUTH",
         "deliberate_traps_and_evaluation_criteria",
         "expected_chronological_ordering",
+        "retry-policy",
     ]
 
     for ep in endpoints:
