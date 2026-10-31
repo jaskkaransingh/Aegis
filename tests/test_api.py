@@ -24,11 +24,8 @@ def test_health_endpoint():
     assert response.status_code == 200
 
     data = response.json()
-    assert data["status"] == "healthy"
-    assert data["service"] == "AEGIS Backend Engine"
-    assert "version" in data
-    assert "timestamp" in data
-    assert data["environment"] == "development"
+    assert data["status"] == "ok"
+    assert data["environment"] == "simulation"
 
 
 def test_cors_headers_for_nextjs():

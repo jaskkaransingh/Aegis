@@ -66,6 +66,18 @@ def test_ground_truth_not_in_services_or_dependencies():
         assert "retry-policy" not in resp.text.lower()
 
 
+def test_ground_truth_not_in_any_investigation_response():
+    responses = [
+        client.get("/api/timeline"),
+        client.get("/api/investigation/preview"),
+        client.post("/api/investigate", json={"incident_id": "INC-CIVICHEALTH-001"}),
+    ]
+
+    for response in responses:
+        assert response.status_code == 200
+        assert "retry-policy" not in response.text.lower()
+
+
 def test_runtime_codebase_isolation():
     """
     Static audit ensuring runtime app files do not reference the ground truth file name.

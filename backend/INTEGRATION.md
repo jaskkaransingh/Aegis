@@ -43,7 +43,7 @@ The server will initialize on `http://127.0.0.1:8000` and automatically reload w
 
 | Method | Endpoint | Description |
 |---|---|---|
-| `GET` | `/api/health` | Backend service health, version, and server timestamp |
+| `GET` | `/api/health` | Simulation health status and environment |
 | `GET` | `/api/services` | Catalog of 7 CivicHealth microservices and their operational states |
 | `GET` | `/api/logs` | Raw, uncorrected incident log events (supports `?service=` and `?severity=` filters) |
 | `GET` | `/api/logs/normalized` | Deduplicated, time-corrected log stream with uncertainty intervals |

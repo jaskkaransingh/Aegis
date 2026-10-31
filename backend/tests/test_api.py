@@ -20,10 +20,7 @@ def test_get_health():
     assert response.status_code == 200, f"Expected 200 OK, got {response.status_code}"
 
     data = response.json()
-    assert isinstance(data, dict), "Response payload must be a valid JSON object"
-    assert data.get("status") in ("healthy", "ok"), f"Unexpected health status: {data.get('status')}"
-    assert "service" in data, "Response JSON missing 'service' field"
-    assert "version" in data, "Response JSON missing 'version' field"
+    assert data == {"status": "ok", "environment": "simulation"}
 
 
 def test_get_services():
@@ -48,6 +45,24 @@ def test_get_services():
     assert "postgresql-database" in service_ids
 
 
+def test_raw_logs_keep_duplicate_and_future_payment_timestamps():
+    response = client.get("/api/logs")
+    assert response.status_code == 200
+
+    logs = response.json()
+    event_ids = [entry["event_id"] for entry in logs]
+    assert len(logs) == 15
+    assert event_ids.count("EVT-010") == 2
+
+    payment_times = [
+        entry["timestamp"]
+        for entry in logs
+        if entry["service"] == "payment-service"
+    ]
+    assert payment_times
+    assert max(payment_times) > "2026-10-31T14:02:10.000Z"
+
+
 def test_get_logs_normalized():
     """
     Verifies that GET /api/logs/normalized returns HTTP 200 and valid JSON
@@ -59,6 +74,8 @@ def test_get_logs_normalized():
     logs = response.json()
     assert isinstance(logs, list), "Response payload must be a valid JSON array"
     assert len(logs) > 0, "Normalized logs array must not be empty"
+    assert len(logs) == 14
+    assert len({entry["event_id"] for entry in logs}) == len(logs)
 
     for entry in logs:
         assert isinstance(entry, dict), "Log entry must be a JSON object"

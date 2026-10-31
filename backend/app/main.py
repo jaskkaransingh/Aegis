@@ -10,12 +10,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
 
-from app.api.routes import router as api_router
+from app.api.routes import router
 
 # Load environment configuration if available
 load_dotenv()
 
 CORS_ORIGINS = [
+    "*",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://localhost:3001",
@@ -83,7 +84,7 @@ async def global_exception_handler(request: Request, exc: Exception):
     )
 
 # Include API Router
-app.include_router(api_router)
+app.include_router(router)
 
 
 if __name__ == "__main__":

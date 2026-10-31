@@ -53,17 +53,18 @@ def apply_clock_skew(event_dict: Dict[str, Any], offset_seconds: int = 0) -> Dic
     and returns a dictionary ready to be unpacked into a NormalizedEvent.
     If the service is 'payment', hardcode a 120-second offset for this simulation.
     """
-    service = str(event_dict.get("service", "")).lower()
+    service = str(event_dict.get("service", ""))
 
-    # If the service is 'payment', hardcode a 120-second offset for this simulation
-    if service in ("payment", "payment-service") or service.startswith("payment"):
+    # The simulation also uses the explicit payment-service catalog ID.
+    if service in {"payment", "Payment", "payment-service"}:
         actual_offset = 120
     else:
         actual_offset = offset_seconds
 
     # Extract and parse timestamp
     raw_ts = (
-        event_dict.get("timestamp")
+        event_dict.get("raw_timestamp")
+        or event_dict.get("timestamp")
         or event_dict.get("recorded_datetime")
         or event_dict.get("original_timestamp")
     )
@@ -94,6 +95,7 @@ def apply_clock_skew(event_dict: Dict[str, Any], offset_seconds: int = 0) -> Dic
         "id": event_id,
         "service": event_dict.get("service", ""),
         "timestamp": ts_dt,
+        "raw_timestamp": ts_dt,
         "level": level,
         "severity": level,
         "event_type": event_dict.get("event_type", "GENERAL_LOG"),
@@ -121,7 +123,7 @@ def calculate_corrected_interval(
     recorded_time: Union[str, datetime],
     offset_seconds: float = 0.0,
     uncertainty_seconds: float = 0.0,
-) -> Tuple[datetime, datetime, datetime, float]:
+) -> Tuple[datetime, datetime, datetime, datetime]:
     """
     Calculates corrected reference time and uncertainty intervals.
 

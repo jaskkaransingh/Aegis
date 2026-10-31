@@ -42,10 +42,7 @@ router = APIRouter(prefix="/api", tags=["AEGIS Core API"])
 # ---------------------------------------------------------
 
 class HealthResponse(BaseModel):
-    status: str = Field(..., json_schema_extra={"example": "healthy"})
-    service: str = Field(..., json_schema_extra={"example": "AEGIS Backend Engine"})
-    version: str = Field(..., json_schema_extra={"example": "0.1.0"})
-    timestamp: str
+    status: str = Field(..., json_schema_extra={"example": "ok"})
     environment: str
 
 
@@ -74,11 +71,8 @@ class InvestigateRequest(BaseModel):
 def get_health() -> HealthResponse:
     """Returns the operational status of the AEGIS backend."""
     return HealthResponse(
-        status="healthy",
-        service="AEGIS Backend Engine",
-        version="0.1.0",
-        timestamp=format_iso_timestamp(datetime.now(timezone.utc)),
-        environment="development",
+        status="ok",
+        environment="simulation",
     )
 
 
@@ -281,7 +275,7 @@ def get_investigation_preview() -> InvestigationResult:
             )
         )
 
-    # Hypothesis 1: Database Connection Pool Starvation from Retry Policy
+    # Hypothesis 1: Database Connection Pool Exhaustion
     hyp1_evidence_sup = []
     for eid in ["EVT-001", "EVT-002", "EVT-003", "EVT-004"]:
         if eid in events_by_id:
@@ -303,16 +297,16 @@ def get_investigation_preview() -> InvestigationResult:
     hypothesis_1 = Hypothesis(
         id="HYP-001",
         hypothesis_id="HYP-001",
-        title="PostgreSQL Connection Pool Exhaustion from Retry-Policy Configuration Change",
+        title="PostgreSQL Connection Pool Exhaustion Following Configuration Change",
         explanation=(
-            "A retry-policy configuration change with zero backoff caused archival queries to monopolize "
-            "and exhaust the database connection pool (100/100 connections). Downstream Appointment "
-            "and Payment services experienced cascading timeouts."
+            "A database configuration update was followed by connection-pool exhaustion (100/100 "
+            "connections) and downstream service timeouts. The available log evidence establishes the "
+            "sequence but does not independently establish the full cause of the configuration change."
         ),
         description=(
-            "A retry-policy configuration change with zero backoff caused archival queries to monopolize "
-            "and exhaust the database connection pool (100/100 connections). Downstream Appointment "
-            "and Payment services experienced cascading timeouts."
+            "A database configuration update was followed by connection-pool exhaustion (100/100 "
+            "connections) and downstream service timeouts. The available log evidence establishes the "
+            "sequence but does not independently establish the full cause of the configuration change."
         ),
         suspected_root_cause_service="postgresql-database",
         claim_type=ClaimType.HYPOTHESIS,

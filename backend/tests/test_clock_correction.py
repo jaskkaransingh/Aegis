@@ -40,6 +40,19 @@ def test_payment_service_clock_skew_120_seconds():
     assert corrected_timestamp == raw_timestamp - timedelta(seconds=120)
 
 
+def test_capitalized_payment_service_clock_skew_120_seconds():
+    raw_timestamp = datetime(2026, 10, 31, 14, 2, 0, tzinfo=timezone.utc)
+    normalized = apply_clock_skew(
+        {
+            "event_id": "EVT-PAY-MOCK-003",
+            "service": "Payment",
+            "timestamp": raw_timestamp,
+        }
+    )
+
+    assert normalized["corrected_timestamp"] == raw_timestamp - timedelta(seconds=120)
+
+
 def test_payment_service_variant_name_clock_skew():
     """
     Verifies that 'payment-service' also receives the deterministic 120-second skew offset.
