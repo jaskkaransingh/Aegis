@@ -2,7 +2,7 @@
 AEGIS Deterministic Data Loader.
 
 Safely loads synthetic logs, services catalog, and clock metadata.
-Enforces strict isolation: NEVER loads ground_truth.json into memory.
+Enforces strict isolation: NEVER loads evaluation ground truth into memory.
 """
 
 from pathlib import Path
@@ -62,4 +62,3 @@ def get_normalized_incident_data(
     normalizer = EvidenceNormalizer(clock_offsets=clock_offsets)
     raw_logs = load_raw_logs()
     return normalizer.normalize_stream(raw_logs)
-

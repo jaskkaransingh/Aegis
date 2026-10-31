@@ -54,7 +54,7 @@ class RawEvent(BaseModel):
     """
     RawEvent represents an unprocessed log event ingested from an originating service.
     """
-    event_id: str = Field(..., description="Unique event identifier")
+    event_id: str = Field(..., description="Unique event identifier across the entire dataset")
     incident_id: Optional[str] = Field(default=None, description="Optional incident correlation ID")
     service: str = Field(..., description="Originating service name")
     timestamp: datetime = Field(..., description="Timestamp of the event as datetime")
@@ -63,7 +63,7 @@ class RawEvent(BaseModel):
     message: str = Field(default="", description="Human-readable event message or log line")
     source: str = Field(default="", description="Source system, collector, or file")
     trace_id: Optional[str] = Field(default=None, description="Distributed tracing correlation ID")
-    metadata: Dict[str, Any] = Field(default_factory=dict, description=" supplemental metadata payload")
+    metadata: Dict[str, Any] = Field(default_factory=dict, description="Supplemental metadata payload")
 
     # Backward compatibility fields
     id: Optional[str] = Field(default=None, description="Alias for event_id")
@@ -79,12 +79,19 @@ class RawEvent(BaseModel):
         # Handle aliased event ID (e.g. 'id' -> 'event_id')
         if "event_id" not in data and "id" in data:
             data["event_id"] = str(data["id"])
+        if "id" not in data and "event_id" in data:
+            data["id"] = str(data["event_id"])
         # Handle severity -> level
         if "level" not in data and "severity" in data:
             data["level"] = str(data["severity"])
+        if "severity" not in data and "level" in data:
+            data["severity"] = str(data["level"])
         # Default source to service if empty
         if not data.get("source"):
             data["source"] = str(data.get("service", ""))
+        # Handle timestamp from recorded_datetime
+        if "timestamp" not in data and "recorded_datetime" in data:
+            data["timestamp"] = data["recorded_datetime"]
         # Parse timestamp string to datetime if provided as string
         ts = data.get("timestamp")
         if isinstance(ts, str):
@@ -142,3 +149,53 @@ class NormalizedEvent(RawEvent):
     offset_applied_seconds: float = Field(default=0.0, description="Offset in seconds subtracted from recorded time")
 
     model_config = ConfigDict(extra="ignore")
+
+    @model_validator(mode="before")
+    @classmethod
+    def _normalize_normalized_inputs(cls, data: Any) -> Any:
+        if not isinstance(data, dict):
+            return data
+        # Handle corrected_timestamp <-> corrected_datetime
+        if "corrected_timestamp" not in data and "corrected_datetime" in data:
+            data["corrected_timestamp"] = data["corrected_datetime"]
+        if "corrected_datetime" not in data and "corrected_timestamp" in data:
+            data["corrected_datetime"] = data["corrected_timestamp"]
+        # Handle timestamp <-> recorded_datetime
+        if "timestamp" not in data and "recorded_datetime" in data:
+            data["timestamp"] = data["recorded_datetime"]
+        if "recorded_datetime" not in data and "timestamp" in data:
+            data["recorded_datetime"] = data["timestamp"]
+        # Handle uncertainty_seconds <-> timestamp_uncertainty_ms
+        if "timestamp_uncertainty_ms" not in data and data.get("uncertainty_seconds") is not None:
+            data["timestamp_uncertainty_ms"] = int(float(data["uncertainty_seconds"]) * 1000)
+        elif data.get("timestamp_uncertainty_ms") is not None and "uncertainty_seconds" not in data:
+            data["uncertainty_seconds"] = float(data["timestamp_uncertainty_ms"]) / 1000.0
+        # Parse corrected_timestamp if string
+        ct = data.get("corrected_timestamp")
+        if isinstance(ct, str):
+            try:
+                clean_ct = ct.replace("Z", "+00:00")
+                data["corrected_timestamp"] = datetime.fromisoformat(clean_ct)
+                data["corrected_datetime"] = data["corrected_timestamp"]
+            except Exception:
+                data["corrected_timestamp"] = datetime.now(timezone.utc)
+                data["corrected_datetime"] = data["corrected_timestamp"]
+        # Auto-compute time_interval_start and time_interval_end if missing
+        cd = data.get("corrected_datetime") or data.get("corrected_timestamp")
+        if cd and isinstance(cd, datetime):
+            unc = float(data.get("uncertainty_seconds") or 0.0)
+            if "time_interval_start" not in data:
+                data["time_interval_start"] = cd - timedelta(seconds=unc)
+            if "time_interval_end" not in data:
+                data["time_interval_end"] = cd + timedelta(seconds=unc)
+        return data
+
+    @model_validator(mode="after")
+    def _sync_normalized_fields(self) -> "NormalizedEvent":
+        if self.corrected_datetime is None:
+            self.corrected_datetime = self.corrected_timestamp
+        if self.recorded_datetime is None:
+            self.recorded_datetime = self.timestamp
+        if self.raw_id is None:
+            self.raw_id = self.event_id
+        return self
