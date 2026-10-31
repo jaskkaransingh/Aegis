@@ -92,3 +92,4 @@ def test_direct_access_to_evaluation_path_returns_404():
     assert client.get("/api/evaluation").status_code == 404
     assert client.get("/api/ground_truth").status_code == 404
     assert client.get("/api/evaluation/ground_truth.json").status_code == 404
+

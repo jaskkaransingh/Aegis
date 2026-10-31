@@ -175,3 +175,4 @@ def test_investigation_preview_endpoint():
             assert ev_ref["event_id"] is not None
             assert ev_ref["excerpt"] is not None
             assert ev_ref["timestamp"] is not None
+

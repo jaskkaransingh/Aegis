@@ -144,3 +144,4 @@ class InvestigationResult(BaseModel):
     )
 
     model_config = ConfigDict(extra="ignore")
+

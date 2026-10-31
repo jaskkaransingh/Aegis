@@ -106,3 +106,4 @@ class NormalizedEvent(BaseModel):
     offset_applied_seconds: float = Field(default=0.0, description="Offset in seconds subtracted from recorded time")
 
     model_config = ConfigDict(extra="ignore")
+

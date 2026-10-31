@@ -4,7 +4,7 @@ Exposes endpoints for health, logs, services catalog, and dependency graphs.
 """
 
 from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional
+from typing import Annotated, Any, Dict, List, Optional
 from fastapi import APIRouter, HTTPException, Query, status
 from pydantic import BaseModel, Field
 
@@ -36,9 +36,9 @@ router = APIRouter(prefix="/api", tags=["AEGIS Core API"])
 # ---------------------------------------------------------
 
 class HealthResponse(BaseModel):
-    status: str = Field(..., example="healthy")
-    service: str = Field(..., example="AEGIS Backend Engine")
-    version: str = Field(..., example="0.1.0")
+    status: str = Field(..., json_schema_extra={"example": "healthy"})
+    service: str = Field(..., json_schema_extra={"example": "AEGIS Backend Engine"})
+    version: str = Field(..., json_schema_extra={"example": "0.1.0"})
     timestamp: str
     environment: str
 
@@ -96,10 +96,10 @@ def get_health() -> HealthResponse:
     status_code=status.HTTP_200_OK,
 )
 def get_logs(
-    service: Optional[str] = Query(None, description="Filter logs by service name"),
-    severity: Optional[str] = Query(None, description="Filter logs by severity (INFO, WARN, ERROR, CRITICAL)"),
-    trace_id: Optional[str] = Query(None, description="Filter logs by distributed trace ID"),
-    apply_clock_correction: bool = Query(True, description="Whether to apply known clock skew corrections"),
+    service: Annotated[Optional[str], Query(description="Filter logs by service name")] = None,
+    severity: Annotated[Optional[str], Query(description="Filter logs by severity (INFO, WARN, ERROR, CRITICAL)")] = None,
+    trace_id: Annotated[Optional[str], Query(description="Filter logs by distributed trace ID")] = None,
+    apply_clock_correction: Annotated[bool, Query(description="Whether to apply known clock skew corrections")] = True,
 ) -> LogsResponse:
     """
     Returns validated and normalized incident logs with clock corrections applied.
@@ -368,3 +368,4 @@ def get_investigation_preview() -> InvestigationResult:
         warnings=warnings,
         service_graph_summary=graph_summary,
     )
+

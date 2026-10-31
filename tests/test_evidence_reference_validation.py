@@ -132,3 +132,4 @@ def test_epistemic_claim_types():
     }
     actual_types = {ct.value for ct in ClaimType}
     assert expected_types == actual_types
+

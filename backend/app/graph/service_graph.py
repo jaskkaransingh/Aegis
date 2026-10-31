@@ -225,3 +225,4 @@ class ServiceGraphManager:
             "total_edges": len(edges),
             "critical_services": [n["id"] for n in nodes if n["highest_severity"] == "CRITICAL"],
         }
+

@@ -139,3 +139,4 @@ def test_graph_serialization_structure():
         assert "tier" in node
         assert "event_count" in node
         assert "highest_severity" in node
+
