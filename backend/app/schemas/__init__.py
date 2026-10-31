@@ -9,6 +9,7 @@ from app.schemas.events import (
     RawEvent,
 )
 from app.schemas.investigation import (
+    Claim,
     ClaimType,
     EvidenceReference,
     Hypothesis,
@@ -22,6 +23,7 @@ __all__ = [
     "DataQualityWarning",
     "NormalizedEvent",
     "RawEvent",
+    "Claim",
     "ClaimType",
     "EvidenceReference",
     "Hypothesis",

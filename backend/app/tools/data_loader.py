@@ -2,7 +2,7 @@
 AEGIS Deterministic Data Loader.
 
 Safely loads synthetic logs, services catalog, and clock metadata.
-Enforces strict isolation: NEVER loads evaluation ground truth into memory.
+Enforces strict isolation: NEVER loads ground_truth.json into memory.
 """
 
 from pathlib import Path
