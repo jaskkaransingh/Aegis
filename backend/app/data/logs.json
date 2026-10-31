@@ -1,0 +1,252 @@
+[
+  {
+    "id": "EVT-000",
+    "service": "postgresql-database",
+    "timestamp": "2026-10-31T13:58:30.000Z",
+    "severity": "INFO",
+    "event_type": "METRICS_HEARTBEAT",
+    "message": "Routine health check: active connections 14/100, replication lag 0ms, CPU utilization 8%.",
+    "trace_id": null,
+    "metadata": {"active_connections": 14, "max_connections": 100}
+  },
+  {
+    "id": "EVT-001",
+    "service": "postgresql-database",
+    "timestamp": "2026-10-31T14:00:02.100Z",
+    "severity": "WARN",
+    "event_type": "SLOW_QUERY_EXECUTION",
+    "message": "Scheduled archival job initiated: 'SELECT * FROM patient_admissions_archive WHERE archived_at < NOW() - INTERVAL '90 days' FOR UPDATE'. Sequential scan on unindexed column, duration 18420ms.",
+    "trace_id": null,
+    "metadata": {"query_id": "archival_batch_90d", "rows_scanned": 4500000, "lock_mode": "RowShareLock"}
+  },
+  {
+    "id": "EVT-002",
+    "service": "postgresql-database",
+    "timestamp": "2026-10-31T14:00:15.340Z",
+    "severity": "CRITICAL",
+    "event_type": "CONNECTION_POOL_EXHAUSTED",
+    "message": "Max connections reached: 100/100 connections allocated. 42 client queries currently queued in backlog.",
+    "trace_id": null,
+    "metadata": {"active_connections": 100, "waiting_clients": 42, "pool_utilization_pct": 100.0}
+  },
+  {
+    "id": "EVT-003",
+    "service": "appointment-service",
+    "timestamp": "2026-10-31T14:00:22.050Z",
+    "severity": "ERROR",
+    "event_type": "DATABASE_CONNECTION_TIMEOUT",
+    "message": "Failed to acquire database connection from pool after 5000ms timeout for appointment booking query.",
+    "trace_id": "trace-booking-99120",
+    "metadata": {"action": "reserve_slot", "clinic_id": "metro-central-oncology"}
+  },
+  {
+    "id": "EVT-004",
+    "service": "hospital-records-service",
+    "timestamp": "2026-10-31T14:00:24.110Z",
+    "severity": "ERROR",
+    "event_type": "DATABASE_WRITE_FAILURE",
+    "message": "Could not persist patient triage admission record: connection pool timeout waiting for available connection.",
+    "trace_id": "trace-triage-4401",
+    "metadata": {"patient_id": "PT-90412", "ward": "emergency_triage"}
+  },
+  {
+    "id": "EVT-005",
+    "service": "appointment-service",
+    "timestamp": "2026-10-31T14:00:25.800Z",
+    "severity": "WARN",
+    "event_type": "WORKER_POOL_SATURATION",
+    "message": "Thread pool saturation: 48 of 50 worker threads blocked on database I/O.",
+    "trace_id": null,
+    "metadata": {"active_workers": 48, "max_workers": 50}
+  },
+  {
+    "id": "EVT-006",
+    "service": "api-gateway",
+    "timestamp": "2026-10-31T14:00:26.500Z",
+    "severity": "WARN",
+    "event_type": "LATENCY_SPIKE",
+    "message": "Upstream service response latency for /api/v1/appointments exceeded 3000ms threshold (measured: 5120ms).",
+    "trace_id": "trace-booking-99120",
+    "metadata": {"upstream_uri": "http://appointment-service:8080/api/v1/appointments"}
+  },
+  {
+    "id": "EVT-007",
+    "service": "appointment-service",
+    "timestamp": "2026-10-31T14:00:27.150Z",
+    "severity": "CRITICAL",
+    "event_type": "SERVICE_DEGRADED",
+    "message": "Appointment Service entering degraded circuit breaker state. Shedding 70% of new booking requests.",
+    "trace_id": "trace-booking-99125",
+    "metadata": {"circuit_breaker_state": "OPEN"}
+  },
+  {
+    "id": "EVT-008",
+    "service": "appointment-service",
+    "timestamp": "2026-10-31T14:00:27.900Z",
+    "severity": "ERROR",
+    "event_type": "UPSTREAM_CALL_TIMEOUT",
+    "message": "Appointment Service timed out calling Payment Service co-pay pre-auth validation.",
+    "trace_id": "trace-booking-99130",
+    "metadata": {"target_endpoint": "/api/v1/copay/authorize"}
+  },
+  {
+    "id": "EVT-008",
+    "service": "hospital-records-service",
+    "timestamp": "2026-10-31T14:00:29.200Z",
+    "severity": "ERROR",
+    "event_type": "RETRY_QUEUE_OVERFLOW",
+    "message": "Duplicate ID scenario: Emergency admission retry queue reached maximum capacity (500 items).",
+    "trace_id": "trace-triage-4409",
+    "metadata": {"queue_name": "ehr_admission_retry_dlq"}
+  },
+  {
+    "id": "EVT-009",
+    "service": "auth-service",
+    "timestamp": "2026-10-31T14:00:28.400Z",
+    "severity": "WARN",
+    "event_type": "SESSION_REVOCATION_CHECK_TIMEOUT",
+    "message": "Session revocation cache check against PostgreSQL timed out after 5000ms. Degraded auth mode active; allowing unrevoked cached tokens.",
+    "trace_id": "trace-auth-7721",
+    "metadata": {"cache_status": "STALE_FALLBACK", "db_query_time_ms": 5002}
+  },
+  {
+    "id": "EVT-010",
+    "service": "api-gateway",
+    "timestamp": "2026-10-31T14:00:32.400Z",
+    "severity": "ERROR",
+    "event_type": "HTTP_504_GATEWAY_TIMEOUT",
+    "message": "Gateway timeout (HTTP 504) returned to mobile client on /api/v1/appointments/book.",
+    "trace_id": "trace-booking-99120",
+    "metadata": {"http_status": 504, "client_ip": "10.24.12.8"}
+  },
+  {
+    "id": "EVT-011",
+    "service": "notification-service",
+    "timestamp": "2026-10-31T14:00:35.000Z",
+    "severity": "WARN",
+    "event_type": "PUBLISH_CHANNEL_IDLE",
+    "message": "Zero booking confirmation events received on message bus for 60 seconds; expected rate 35/sec.",
+    "trace_id": null,
+    "metadata": {"queue_inflow_rate": 0.0}
+  },
+  {
+    "id": "EVT-012",
+    "service": "hospital-records-service",
+    "timestamp": "2026-10-31T14:00:36.100Z",
+    "severity": "CRITICAL",
+    "event_type": "EHR_ADMISSION_OFFLINE",
+    "message": "Electronic Health Record admission intake offline. Diverting walk-in admissions to paper fallback.",
+    "trace_id": null,
+    "metadata": {"consecutive_failures": 65}
+  },
+  {
+    "id": "EVT-013",
+    "service": "payment-service",
+    "timestamp": "2026-10-31T14:01:10.120Z",
+    "severity": "ERROR",
+    "event_type": "PAYMENT_TRANSACTION_FAILED",
+    "message": "Payment processing aborted: could not resolve booking reference against Appointment Service.",
+    "trace_id": "trace-booking-99130",
+    "metadata": {"transaction_id": "TX-55102", "copay_cents": 2500, "clock_note": "Recorded under +42s offset; reference time is 14:00:28.120Z"}
+  },
+  {
+    "id": "EVT-014",
+    "service": "payment-service",
+    "timestamp": "2026-10-31T14:01:18.450Z",
+    "severity": "WARN",
+    "event_type": "LEDGER_FLUSH_DELAY",
+    "message": "Payment ledger journal flush to PostgreSQL delayed due to socket write timeout.",
+    "trace_id": "trace-pay-9981",
+    "metadata": {"retry_count": 3}
+  },
+  {
+    "id": "EVT-014",
+    "service": "payment-service",
+    "timestamp": "2026-10-31T14:01:18.450Z",
+    "severity": "WARN",
+    "event_type": "LEDGER_FLUSH_DELAY",
+    "message": "Payment ledger journal flush to PostgreSQL delayed due to socket write timeout.",
+    "trace_id": "trace-pay-9981",
+    "metadata": {"retry_count": 3, "duplicate_transmission": true}
+  },
+  {
+    "id": "EVT-015",
+    "service": "api-gateway",
+    "timestamp": "2026-10-31T14:00:45.300Z",
+    "severity": "ERROR",
+    "event_type": "HTTP_502_BAD_GATEWAY",
+    "message": "Upstream connection refused on /api/v1/records/admissions.",
+    "trace_id": "trace-triage-4415",
+    "metadata": {"http_status": 502, "service_target": "hospital-records-service"}
+  },
+  {
+    "id": "EVT-016",
+    "service": "auth-service",
+    "timestamp": "2026-10-31T14:01:05.100Z",
+    "severity": "INFO",
+    "event_type": "AUTH_TOKEN_ISSUED",
+    "message": "Nurse practitioner session token refreshed successfully via local Redis token cache.",
+    "trace_id": "trace-auth-7735",
+    "metadata": {"user_id": "nurse_lee_99", "cached": true}
+  },
+  {
+    "id": "EVT-017",
+    "service": "postgresql-database",
+    "timestamp": "2026-10-31T14:01:20.550Z",
+    "severity": "WARN",
+    "event_type": "QUERY_TERMINATED",
+    "message": "Statement timeout: query 'SELECT * FROM patient_admissions_archive ... FOR UPDATE' cancelled by statement_timeout after 78450ms.",
+    "trace_id": null,
+    "metadata": {"pid": 4182, "elapsed_ms": 78450}
+  },
+  {
+    "id": "EVT-018",
+    "service": "postgresql-database",
+    "timestamp": "2026-10-31T14:01:35.000Z",
+    "severity": "INFO",
+    "event_type": "CONNECTION_POOL_RECOVERING",
+    "message": "Database connection pool returning to nominal range: active connections 38/100, waiting clients 0.",
+    "trace_id": null,
+    "metadata": {"active_connections": 38, "waiting_clients": 0}
+  },
+  {
+    "id": "EVT-019",
+    "service": "appointment-service",
+    "timestamp": "2026-10-31T14:02:10.000Z",
+    "severity": "INFO",
+    "event_type": "SERVICE_RECOVERED",
+    "message": "Appointment Service circuit breaker transitioned from OPEN to HALF_OPEN. Resuming booking processing.",
+    "trace_id": null,
+    "metadata": {"circuit_breaker_state": "HALF_OPEN"}
+  },
+  {
+    "id": "EVT-020",
+    "service": "notification-service",
+    "timestamp": "2026-10-31T14:02:15.800Z",
+    "severity": "WARN",
+    "event_type": "CHANNEL_RECONNECTED",
+    "message": "RabbitMQ broker channel connection restored. Dispatching queued reminder backlog.",
+    "trace_id": null,
+    "metadata": {"backlog_count": 14}
+  },
+  {
+    "id": "",
+    "service": "notification-service",
+    "timestamp": "2026-10-31T14:02:22.000Z",
+    "severity": "INVALID_CRASH_LEVEL",
+    "event_type": "SMS_DISPATCH_COMPLETED",
+    "message": "Dispatched emergency appointment reschedule alert SMS to 41 registered patients.",
+    "trace_id": null,
+    "metadata": {"sms_count": 41}
+  },
+  {
+    "id": "EVT-022",
+    "service": "hospital-records-service",
+    "timestamp": "2026-10-31T14:03:00.000Z",
+    "severity": "INFO",
+    "event_type": "EHR_ADMISSION_RESTORED",
+    "message": "Electronic Health Record admission intake nominal. Processing buffered emergency room admissions.",
+    "trace_id": null,
+    "metadata": {"buffered_processed": 39}
+  }
+]

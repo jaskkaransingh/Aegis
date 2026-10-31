@@ -1,0 +1,63 @@
+{
+  "reference_standard": "UTC",
+  "generated_at": "2026-10-31T14:30:00Z",
+  "description": "NTP and PTP clock drift estimates collected from ingress telemetry and network synchronization monitors.",
+  "services": {
+    "payment-service": {
+      "service": "payment-service",
+      "offset_seconds": 42.0,
+      "uncertainty_seconds": 2.0,
+      "method": "ntp_drift_estimate_ingress",
+      "reference_clock": "UTC",
+      "notes": "Payment service node running on un-synced legacy PCI-compliant enclave VM. Clock is drifted ahead of UTC reference by 42 seconds (+/- 2.0s)."
+    },
+    "postgresql-database": {
+      "service": "postgresql-database",
+      "offset_seconds": 0.0,
+      "uncertainty_seconds": 0.1,
+      "method": "ptp_hardware_clock",
+      "reference_clock": "UTC",
+      "notes": "Bare-metal database cluster synchronized via Precision Time Protocol (PTP)."
+    },
+    "api-gateway": {
+      "service": "api-gateway",
+      "offset_seconds": 0.0,
+      "uncertainty_seconds": 0.2,
+      "method": "chrony_synchronized",
+      "reference_clock": "UTC",
+      "notes": "Edge ingress fleet managed with Chrony NTP daemon."
+    },
+    "auth-service": {
+      "service": "auth-service",
+      "offset_seconds": 0.0,
+      "uncertainty_seconds": 0.3,
+      "method": "chrony_synchronized",
+      "reference_clock": "UTC",
+      "notes": "Synchronized via cluster internal NTP."
+    },
+    "appointment-service": {
+      "service": "appointment-service",
+      "offset_seconds": 0.0,
+      "uncertainty_seconds": 0.5,
+      "method": "chrony_synchronized",
+      "reference_clock": "UTC",
+      "notes": "Containerized Kubernetes pods with node-level NTP sync."
+    },
+    "hospital-records-service": {
+      "service": "hospital-records-service",
+      "offset_seconds": 0.0,
+      "uncertainty_seconds": 0.5,
+      "method": "chrony_synchronized",
+      "reference_clock": "UTC",
+      "notes": "Containerized Kubernetes pods with node-level NTP sync."
+    },
+    "notification-service": {
+      "service": "notification-service",
+      "offset_seconds": 0.0,
+      "uncertainty_seconds": 1.0,
+      "method": "chrony_synchronized",
+      "reference_clock": "UTC",
+      "notes": "Background worker deployment."
+    }
+  }
+}
