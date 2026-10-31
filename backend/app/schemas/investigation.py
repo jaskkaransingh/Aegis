@@ -250,7 +250,8 @@ class InvestigationResult(BaseModel):
         description="Data quality issues or warnings encountered during normalization"
     )
 
-    # Backward compatibility fields
+    # Informational message and metadata
+    message: Optional[str] = Field(default=None, description="Informational message or status note")
     incident_name: Optional[str] = Field(default=None, description="Human-readable incident title")
     generated_at: Optional[str] = Field(default=None, description="ISO 8601 timestamp of report generation")
     total_raw_events: int = Field(default=0, description="Count of raw ingested log entries")

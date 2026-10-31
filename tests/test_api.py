@@ -44,50 +44,58 @@ def test_cors_headers_for_nextjs():
     assert response.headers.get("access-control-allow-origin") == "http://localhost:3000"
 
 
-def test_logs_endpoint_with_clock_correction():
-    """Validates /api/logs returns normalized events, applied offsets, and data quality warnings."""
-    response = client.get("/api/logs?apply_clock_correction=true")
+def test_raw_logs_endpoint():
+    """Validates /api/logs returns raw logs from logs.json."""
+    response = client.get("/api/logs")
     assert response.status_code == 200
 
     data = response.json()
-    assert data["clock_correction_active"] is True
-    assert "payment-service" in data["applied_offsets"]
-    assert data["applied_offsets"]["payment-service"] == 42.0
+    assert isinstance(data, list)
+    assert len(data) == 15
 
-    # Ensure events are present
-    events = data["events"]
-    assert len(events) >= 20
+    # Check first record fields
+    first = data[0]
+    assert "event_id" in first
+    assert "service" in first
+    assert "timestamp" in first
+    assert "level" in first
 
-    # Locate Payment Service event and confirm offset was applied
-    pay_events = [e for e in events if e["service"] == "payment-service"]
+
+def test_normalized_logs_endpoint():
+    """Validates /api/logs/normalized returns deduplicated, time-corrected events."""
+    response = client.get("/api/logs/normalized")
+    assert response.status_code == 200
+
+    data = response.json()
+    assert isinstance(data, list)
+    assert len(data) == 14  # 1 duplicate removed from 15
+
+    # Check payment events have clock correction applied
+    pay_events = [e for e in data if "payment" in e["service"]]
     assert len(pay_events) > 0
     for pe in pay_events:
         assert pe["clock_correction_applied"] is True
-        assert pe["offset_applied_seconds"] == 42.0
-        assert pe["original_timestamp"] is not None
-
-    # Check that data quality warnings are returned
-    assert data["warnings_count"] > 0
-    warning_codes = [w["code"] for w in data["data_quality_warnings"]]
-    assert "DUPLICATE_EVENT_ID" in warning_codes or "DUPLICATE_CONTENT_DETECTED" in warning_codes
-    assert "CLOCK_OFFSET_APPLIED" in warning_codes
+        assert pe["offset_applied_seconds"] == 120.0
+        assert pe["corrected_timestamp"] is not None
 
 
 def test_logs_endpoint_filtering():
-    """Tests log filtering by service and severity."""
+    """Tests raw log filtering by service and severity."""
     # Filter by service
     resp_srv = client.get("/api/logs?service=postgresql-database")
     assert resp_srv.status_code == 200
     data_srv = resp_srv.json()
-    for ev in data_srv["events"]:
+    assert len(data_srv) > 0
+    for ev in data_srv:
         assert ev["service"] == "postgresql-database"
 
     # Filter by severity
     resp_sev = client.get("/api/logs?severity=CRITICAL")
     assert resp_sev.status_code == 200
     data_sev = resp_sev.json()
-    for ev in data_sev["events"]:
-        assert ev["severity"] == "CRITICAL"
+    assert len(data_sev) > 0
+    for ev in data_sev:
+        assert (ev.get("level") or ev.get("severity")) == "CRITICAL"
 
 
 def test_services_endpoint():
@@ -96,8 +104,9 @@ def test_services_endpoint():
     assert response.status_code == 200
 
     data = response.json()
-    assert data["total_services"] == 7
-    service_ids = {s["id"] for s in data["services"]}
+    assert isinstance(data, list)
+    assert len(data) == 7
+    service_ids = {s["id"] for s in data}
 
     expected = {
         "api-gateway",
@@ -112,28 +121,18 @@ def test_services_endpoint():
 
 
 def test_dependencies_endpoint():
-    """Validates /api/dependencies returns NetworkX serialized graph with nodes and edges."""
+    """Validates /api/dependencies returns communication edges from dependencies.json."""
     response = client.get("/api/dependencies")
     assert response.status_code == 200
 
     data = response.json()
-    assert "nodes" in data
     assert "edges" in data
-    assert data["total_nodes"] >= 7
-    assert data["total_edges"] >= 10
+    assert len(data["edges"]) >= 10
 
-    # Ensure nodes carry incident severity metrics
-    node_map = {n["id"]: n for n in data["nodes"]}
-    assert "postgresql-database" in node_map
-    assert node_map["postgresql-database"]["highest_severity"] == "CRITICAL"
-    assert node_map["postgresql-database"]["event_count"] > 0
-
-    # Ensure edges have edge_type
+    # Ensure each edge has valid source and target
     for edge in data["edges"]:
         assert "source" in edge
         assert "target" in edge
-        assert "edge_type" in edge
-        assert edge["edge_type"] in ["KNOWN_DEPENDENCY", "INFERRED_CAUSAL"]
 
 
 def test_timeline_endpoint():
@@ -142,7 +141,7 @@ def test_timeline_endpoint():
     assert response.status_code == 200
 
     timeline = response.json()
-    assert len(timeline) >= 20
+    assert len(timeline) >= 15
 
     # Check attributes of timeline events
     for item in timeline:
@@ -175,3 +174,53 @@ def test_investigation_preview_endpoint():
             assert ev_ref["event_id"] is not None
             assert ev_ref["excerpt"] is not None
             assert ev_ref["timestamp"] is not None
+
+
+def test_missing_files_error_handling(monkeypatch):
+    """Ensures endpoints return 404 when underlying JSON files are missing."""
+    from app.tools import data_loader
+
+    monkeypatch.setattr(data_loader, "DATA_DIR", data_loader.Path("/non/existent/directory"))
+
+    resp_services = client.get("/api/services")
+    assert resp_services.status_code == 404
+
+    resp_logs = client.get("/api/logs")
+    assert resp_logs.status_code == 404
+
+    resp_norm = client.get("/api/logs/normalized")
+    assert resp_norm.status_code == 404
+
+    resp_dep = client.get("/api/dependencies")
+    assert resp_dep.status_code == 404
+
+
+def test_investigate_stub_endpoint():
+    """Validates the POST /api/investigate stub endpoint contract."""
+    payload = {"incident_id": "INC-CIVICHEALTH-001"}
+    response = client.post("/api/investigate", json=payload)
+    assert response.status_code == 200
+
+    data = response.json()
+    assert data["incident_id"] == "INC-CIVICHEALTH-001"
+    assert data["status"] == "completed"
+    assert data["message"] == "AI Integration Pending"
+
+    # Dummy timeline event
+    assert len(data["timeline"]) >= 1
+    t_ev = data["timeline"][0]
+    assert t_ev["timeline_id"] == "TL-STUB-001"
+    assert "corrected_timestamp" in t_ev
+
+    # Dummy hypothesis
+    assert len(data["hypotheses"]) >= 1
+    hyp = data["hypotheses"][0]
+    assert hyp["hypothesis_id"] == "HYP-STUB-001"
+    assert hyp["status"] == "under_investigation"
+
+    # Epistemic claim check
+    assert len(data["claims"]) >= 1
+    claim = data["claims"][0]
+    assert claim["text"] == "AI Integration Pending"
+
+

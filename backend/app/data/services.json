@@ -1,62 +1,37 @@
-{
-  "system_name": "Metro Health Public Infrastructure",
-  "environment": "production",
-  "services": [
-    {
-      "id": "api-gateway",
-      "name": "API Gateway",
-      "tier": "edge",
-      "technology": "Kong / OpenResty",
-      "criticality": "TIER_1",
-      "description": "Public entrance gateway handling patient portal and mobile clinic requests."
-    },
-    {
-      "id": "auth-service",
-      "name": "Authentication Service",
-      "tier": "security",
-      "technology": "Go / OAuth2",
-      "criticality": "TIER_1",
-      "description": "Federated identity provider and session revocation service for clinical staff and patients."
-    },
-    {
-      "id": "appointment-service",
-      "name": "Appointment Service",
-      "tier": "core_business",
-      "technology": "Node.js / Express",
-      "criticality": "TIER_1",
-      "description": "Clinic scheduling, triage slot allocation, and doctor timetable service."
-    },
-    {
-      "id": "payment-service",
-      "name": "Payment Service",
-      "tier": "core_business",
-      "technology": "Java / Spring Boot",
-      "criticality": "TIER_2",
-      "description": "Co-pay processing and insurance verification gateway."
-    },
-    {
-      "id": "hospital-records-service",
-      "name": "Hospital Records Service",
-      "tier": "core_business",
-      "technology": "Python / FastAPI",
-      "criticality": "TIER_1",
-      "description": "Electronic Health Record (EHR) query and admission logging system."
-    },
-    {
-      "id": "notification-service",
-      "name": "Notification Service",
-      "tier": "integration",
-      "technology": "Python / Celery",
-      "criticality": "TIER_3",
-      "description": "SMS and push notifications for appointment updates and emergency alerts."
-    },
-    {
-      "id": "postgresql-database",
-      "name": "PostgreSQL Database",
-      "tier": "data_persistence",
-      "technology": "PostgreSQL 16 High-Availability Cluster",
-      "criticality": "TIER_0",
-      "description": "Shared primary relational database holding appointment, patient, and billing state."
-    }
-  ]
-}
+[
+  {
+    "id": "api-gateway",
+    "name": "API Gateway",
+    "status": "degraded"
+  },
+  {
+    "id": "auth-service",
+    "name": "Authentication",
+    "status": "healthy"
+  },
+  {
+    "id": "appointment-service",
+    "name": "Appointment",
+    "status": "degraded"
+  },
+  {
+    "id": "payment-service",
+    "name": "Payment",
+    "status": "degraded"
+  },
+  {
+    "id": "hospital-records-service",
+    "name": "Hospital Records",
+    "status": "healthy"
+  },
+  {
+    "id": "notification-service",
+    "name": "Notification",
+    "status": "healthy"
+  },
+  {
+    "id": "postgresql-database",
+    "name": "PostgreSQL Database",
+    "status": "degraded"
+  }
+]

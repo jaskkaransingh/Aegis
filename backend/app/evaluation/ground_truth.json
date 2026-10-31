@@ -1,59 +1,27 @@
 {
-  "incident_id": "INC-20261031-METROHEALTH-CASCADE",
-  "incident_title": "PostgreSQL Connection Starvation Cascading Outage",
+  "incident_id": "INC-CIVICHEALTH-001",
+  "incident_title": "CivicHealth Cascading Failure Incident",
+  "system_name": "CivicHealth",
   "confidentiality": "HIDDEN_EVALUATION_GROUND_TRUTH_DO_NOT_EXPOSE_TO_AGENTS_OR_API",
+  "true_root_cause": "retry-policy configuration change",
+  "root_cause_summary": "A retry-policy configuration change introduced aggressive retries with zero backoff on database archival batch jobs. This rapidly exhausted the PostgreSQL connection pool (100/100 connections), starving the Appointment Service and causing cascading HTTP 504 gateway timeouts and delayed Payment processing.",
   "initiating_event": {
     "event_id": "EVT-001",
     "service": "postgresql-database",
-    "reference_timestamp": "2026-10-31T14:00:02.100Z",
-    "root_cause_type": "DATABASE_RESOURCE_STARVATION",
-    "mechanism": "Unindexed table scan with RowShareLock inside transaction block during scheduled patient archival batch. Query ran for 78+ seconds holding connection slot."
+    "reference_timestamp": "2026-10-31T14:00:02.000Z",
+    "root_cause_type": "retry-policy configuration change",
+    "mechanism": "A retry-policy configuration change deployed to archival batch workers initiated aggressive retries with zero backoff, leading directly to connection pool exhaustion."
   },
-  "immediate_failure": {
-    "event_id": "EVT-002",
-    "service": "postgresql-database",
-    "reference_timestamp": "2026-10-31T14:00:15.340Z",
-    "mechanism": "Database server hit max_connections limit (100/100). Incoming client acquisition requests queued and timed out after 5000ms."
+  "cascade_summary": {
+    "primary_failure": "PostgreSQL database connection pool exhaustion (EVT-002, 100/100 connections held).",
+    "downstream_impacts": [
+      "Appointment Service database connection pool checkout timeouts (EVT-003, EVT-005).",
+      "Hospital Records Service emergency triage admission persist failures (EVT-004).",
+      "API Gateway HTTP 504 Gateway Timeouts returned to booking clients (EVT-006).",
+      "Appointment Service circuit breaker opening on database dependency (EVT-007).",
+      "Payment Service transaction timeouts and co-pay capture delays (EVT-010, EVT-011, EVT-012)."
+    ]
   },
-  "downstream_cascade_chain": [
-    {
-      "step": 1,
-      "service": "appointment-service",
-      "first_failure_event_id": "EVT-003",
-      "reference_timestamp": "2026-10-31T14:00:22.050Z",
-      "symptom": "Database pool checkout timeout (5000ms). Worker thread pool depleted, leading to circuit breaker trip."
-    },
-    {
-      "step": 2,
-      "service": "hospital-records-service",
-      "first_failure_event_id": "EVT-004",
-      "reference_timestamp": "2026-10-31T14:00:24.110Z",
-      "symptom": "Emergency triage admission write failed due to DB pool exhaustion. Retries overwhelmed buffer, forced paper fallback."
-    },
-    {
-      "step": 3,
-      "service": "payment-service",
-      "first_failure_event_id": "EVT-013",
-      "raw_recorded_timestamp": "2026-10-31T14:01:10.120Z",
-      "reference_timestamp": "2026-10-31T14:00:28.120Z",
-      "clock_skew_drift_seconds": 42.0,
-      "symptom": "Payment pre-authorization timed out attempting to communicate with degraded Appointment Service and database ledger."
-    },
-    {
-      "step": 4,
-      "service": "api-gateway",
-      "first_failure_event_id": "EVT-010",
-      "reference_timestamp": "2026-10-31T14:00:32.400Z",
-      "symptom": "Upstream timeout HTTP 504 returned to external clients attempting appointment bookings."
-    },
-    {
-      "step": 5,
-      "service": "notification-service",
-      "first_failure_event_id": "EVT-011",
-      "reference_timestamp": "2026-10-31T14:00:35.000Z",
-      "symptom": "Inflow message starvation caused by upstream Appointment Service circuit breaking."
-    }
-  ],
   "expected_chronological_ordering": [
     "EVT-001",
     "EVT-002",
@@ -62,40 +30,28 @@
     "EVT-005",
     "EVT-006",
     "EVT-007",
+    "EVT-008",
     "EVT-009",
-    "EVT-013",
     "EVT-010",
     "EVT-011",
     "EVT-012",
-    "EVT-014",
-    "EVT-015",
-    "EVT-017",
-    "EVT-018",
-    "EVT-019",
-    "EVT-020",
-    "EVT-022"
+    "EVT-013",
+    "EVT-014"
   ],
   "deliberate_traps_and_evaluation_criteria": {
     "clock_skew_trap": {
-      "target_service": "payment-service",
-      "raw_time": "14:01:10.120Z",
-      "corrected_time": "14:00:28.120Z",
-      "criterion": "Investigation system must adjust Payment Service timestamps by -42.0s. If raw time is used, Payment Service appears to fail AFTER Gateway 504 and Notification starvation."
+      "target_service": "payment",
+      "raw_time_offset_seconds": 120,
+      "criterion": "Payment service logs are emitted with timestamps exactly 120 seconds in the future (e.g. EVT-010 recorded at 14:03:00Z instead of real reference time 14:01:00Z). The investigation engine must apply deterministic clock skew correction to avoid misordering Payment delays after the subsequent recovery events."
     },
-    "uncertain_interval_handling": {
-      "events": ["EVT-003", "EVT-004"],
-      "criterion": "Appointment Service (14:00:22 +/-0.5s) and Hospital Records Service (14:00:24 +/-0.5s) both fail almost concurrently. The system must not assert a causal dependency between Appointment Service and Hospital Records Service."
+    "duplicate_detection_trap": {
+      "duplicate_event_id": "EVT-010",
+      "criterion": "The raw log array contains 1 exact duplicate entry for EVT-010 at the end of the array. The normalization tool must identify and deduplicate this record without silent loss."
     },
-    "conflicting_symptom_distractor": {
-      "event_id": "EVT-009",
-      "service": "auth-service",
-      "criterion": "Auth Service logged DB revocation timeout, but core authentication tokens continued to function via local cache (EVT-016). System must refute Auth Service as the root cause."
-    },
-    "data_quality_anomalies": {
-      "duplicate_ids": ["EVT-008", "EVT-014"],
-      "missing_id_record": "SYNTH-ID-0024 (originally empty string)",
-      "invalid_severity": "INVALID_CRASH_LEVEL on SMS dispatch record",
-      "criterion": "System must flag these in data quality warnings without discarding records."
+    "root_cause_identification": {
+      "expected_root_cause": "retry-policy configuration change",
+      "initiating_event_id": "EVT-001",
+      "criterion": "The investigation system must classify the retry-policy configuration change on the database archival workers as the root cause rather than downstream appointment timeouts or auth warnings."
     }
   }
 }

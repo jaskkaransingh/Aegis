@@ -17,6 +17,7 @@ from app.schemas.events import (
     RawEvent,
 )
 from app.tools.clock_correction import (
+    apply_clock_skew,
     calculate_corrected_interval,
     format_iso_timestamp,
     identify_uncertain_orderings,
@@ -280,3 +281,37 @@ class EvidenceNormalizer:
             all_warnings.extend(warnings)
 
         return normalized_events, all_warnings
+
+
+def normalize_logs(raw_logs: List[Dict[str, Any]]) -> List[NormalizedEvent]:
+    """
+    Normalizes a collection of raw log dictionaries into a list of NormalizedEvent models.
+
+    Operations:
+    1. Detects and removes duplicate event_ids.
+    2. Tracks how many duplicates were removed.
+    3. Passes unique logs through the apply_clock_skew clock correction function.
+    4. Returns the list of NormalizedEvent objects.
+    """
+    seen_ids: Set[str] = set()
+    unique_logs: List[Dict[str, Any]] = []
+    duplicates_removed_count: int = 0
+
+    for log in raw_logs:
+        eid = log.get("event_id") or log.get("id")
+        if eid:
+            eid_str = str(eid)
+            if eid_str in seen_ids:
+                duplicates_removed_count += 1
+                continue
+            seen_ids.add(eid_str)
+        unique_logs.append(log)
+
+    normalized_events: List[NormalizedEvent] = []
+    for log in unique_logs:
+        offset_seconds = int(log.get("offset_seconds", 0))
+        skewed_dict = apply_clock_skew(log, offset_seconds=offset_seconds)
+        normalized_events.append(NormalizedEvent(**skewed_dict))
+
+    return normalized_events
+

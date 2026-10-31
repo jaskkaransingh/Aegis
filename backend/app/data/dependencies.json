@@ -1,0 +1,60 @@
+{
+  "edges": [
+    {
+      "source": "api-gateway",
+      "target": "auth-service"
+    },
+    {
+      "source": "api-gateway",
+      "target": "appointment-service"
+    },
+    {
+      "source": "api-gateway",
+      "target": "payment-service"
+    },
+    {
+      "source": "api-gateway",
+      "target": "hospital-records-service"
+    },
+    {
+      "source": "appointment-service",
+      "target": "auth-service"
+    },
+    {
+      "source": "appointment-service",
+      "target": "postgresql-database"
+    },
+    {
+      "source": "appointment-service",
+      "target": "payment-service"
+    },
+    {
+      "source": "appointment-service",
+      "target": "notification-service"
+    },
+    {
+      "source": "payment-service",
+      "target": "auth-service"
+    },
+    {
+      "source": "payment-service",
+      "target": "postgresql-database"
+    },
+    {
+      "source": "hospital-records-service",
+      "target": "auth-service"
+    },
+    {
+      "source": "hospital-records-service",
+      "target": "postgresql-database"
+    },
+    {
+      "source": "notification-service",
+      "target": "auth-service"
+    },
+    {
+      "source": "auth-service",
+      "target": "postgresql-database"
+    }
+  ]
+}
