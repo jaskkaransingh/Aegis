@@ -37,15 +37,15 @@ export function TimelineEventList({
 
   if (sortedEvents.length === 0) {
     return (
-      <div className="rounded-xl border border-slate-800 bg-slate-900/30 p-12 text-center space-y-4">
-        <div className="h-12 w-12 rounded-xl bg-slate-800 text-slate-500 mx-auto flex items-center justify-center">
+      <div className="rounded-xl border border-white/10 bg-black/40/30 p-12 text-center space-y-4">
+        <div className="h-12 w-12 rounded-xl bg-slate-800 text-white/50 mx-auto flex items-center justify-center">
           <Layers className="h-6 w-6" />
         </div>
         <div>
-          <h3 className="text-sm font-semibold font-mono text-slate-200">
+          <h3 className="text-sm font-semibold font-mono text-white/90">
             No Incident Events Match Active Filters
           </h3>
-          <p className="text-xs text-slate-400 max-w-sm mx-auto mt-1">
+          <p className="text-xs text-white/60 max-w-sm mx-auto mt-1">
             Try adjusting your service, severity, event type, or search query to broaden the timeline scope.
           </p>
         </div>
@@ -53,7 +53,7 @@ export function TimelineEventList({
           <button
             type="button"
             onClick={onResetFilters}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-800 bg-slate-800 text-xs font-mono text-slate-300 hover:text-white transition"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/10 bg-slate-800 text-xs font-mono text-white/80 hover:text-white transition"
           >
             <RotateCcw className="h-3 w-3" />
             <span>Reset All Filters</span>

@@ -39,7 +39,7 @@ export const AegisButton = React.forwardRef<HTMLButtonElement, AegisButtonProps>
     const baseStyles =
       "inline-flex items-center justify-center font-medium font-mono text-center select-none rounded " +
       "transition-all duration-150 ease-[cubic-bezier(0.2,0.0,0.0,1.0)] " +
-      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9875ff] focus-visible:ring-offset-2 focus-visible:ring-offset-[#07090f] " +
+      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#07090f] " +
       "disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none active:scale-[0.98]";
 
     // Size mappings
@@ -71,28 +71,28 @@ export const AegisButton = React.forwardRef<HTMLButtonElement, AegisButtonProps>
     switch (variant) {
       case "primary":
         variantStyles =
-          "bg-[#9875ff] text-[#07090f] font-semibold hover:bg-[#b29aff] " +
-          "border border-[#b29aff]/60 shadow-[0_0_16px_-2px_rgba(152,117,255,0.4)]";
+          "bg-white text-black font-semibold hover:bg-slate-200 " +
+          "border border-white/80 shadow-[0_0_16px_-2px_rgba(255,255,255,0.35)]";
         break;
       case "secondary":
         variantStyles =
-          "bg-[#101522] text-[#f1f4fb] hover:bg-[#151b2a] hover:text-white " +
-          "border border-[#252d40] hover:border-[#36415b] shadow-sm";
+          "bg-white/[0.06] text-white hover:bg-white/[0.12] hover:text-white " +
+          "border border-white/15 hover:border-white/30 backdrop-blur-md shadow-sm";
         break;
       case "ghost":
         variantStyles =
-          "bg-transparent text-[#a3adc2] hover:text-[#f1f4fb] hover:bg-[#101522]/60 " +
-          "border border-transparent hover:border-[#252d40]";
+          "bg-transparent text-white/70 hover:text-white hover:bg-white/[0.08] " +
+          "border border-transparent hover:border-white/15 backdrop-blur-sm";
         break;
       case "danger":
         variantStyles =
-          "bg-[#33151a]/60 text-[#f27886] hover:bg-[#33151a] hover:text-rose-200 " +
-          "border border-[#f27886]/40 hover:border-[#f27886]/70 shadow-sm";
+          "bg-[#ef4444]/15 text-[#ef4444] hover:bg-[#ef4444]/25 hover:text-white " +
+          "border border-[#ef4444]/40 hover:border-[#ef4444]/80 backdrop-blur-md shadow-sm";
         break;
       case "subtle":
         variantStyles =
-          "bg-[#0b0e17] text-[#a3adc2] hover:text-[#f1f4fb] hover:bg-[#101522] " +
-          "border border-[#1b2232] hover:border-[#252d40]";
+          "bg-black/40 text-white/70 hover:text-white hover:bg-white/[0.06] " +
+          "border border-white/10 hover:border-white/20 backdrop-blur-md";
         break;
     }
 

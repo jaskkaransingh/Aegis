@@ -12,7 +12,7 @@ export default function ReportsPage() {
     <Suspense
       fallback={
         <div className="flex h-full min-h-[400px] items-center justify-center">
-          <Loader2 className="w-8 h-8 text-violet-500 animate-spin" />
+          <Loader2 className="w-8 h-8 text-white animate-spin" />
         </div>
       }
     >

@@ -36,12 +36,12 @@ export function EvidenceDetailsPanel({ record, onClose }: EvidenceDetailsPanelPr
 
   if (!record) {
     return (
-      <div className="w-full lg:w-96 shrink-0 rounded-2xl bg-slate-900/60 border border-slate-800 p-6 flex flex-col items-center justify-center text-center text-slate-400">
-        <div className="w-12 h-12 rounded-2xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-center mb-3">
-          <FileText className="w-6 h-6 text-slate-500" />
+      <div className="w-full lg:w-96 shrink-0 rounded-2xl bg-black/40 backdrop-blur-xl border border-white/10 p-6 flex flex-col items-center justify-center text-center text-white/60">
+        <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center mb-3">
+          <FileText className="w-6 h-6 text-white/50" />
         </div>
-        <h4 className="text-sm font-semibold text-slate-300 mb-1">No Evidence Record Selected</h4>
-        <p className="text-xs text-slate-400 max-w-xs">
+        <h4 className="text-sm font-semibold text-white/80 mb-1">No Evidence Record Selected</h4>
+        <p className="text-xs text-white/60 max-w-xs">
           Select any row from the evidence table to perform deep forensic inspection and trace timing provenance.
         </p>
       </div>
@@ -78,18 +78,18 @@ export function EvidenceDetailsPanel({ record, onClose }: EvidenceDetailsPanelPr
   );
 
   return (
-    <div className="w-full lg:w-96 shrink-0 flex flex-col rounded-2xl bg-slate-900/95 border border-slate-800 shadow-2xl backdrop-blur-md overflow-hidden text-xs text-slate-200 animate-in fade-in slide-in-from-right-4 duration-200 max-h-[calc(100vh-140px)]">
+    <div className="w-full lg:w-96 shrink-0 flex flex-col rounded-2xl bg-black/55 backdrop-blur-2xl border border-white/10 shadow-2xl overflow-hidden text-xs text-white/90 animate-in fade-in slide-in-from-right-4 duration-200 max-h-[calc(100vh-140px)]">
       {/* Header */}
-      <div className="flex items-start justify-between p-4 border-b border-slate-800/80 bg-slate-950/40">
+      <div className="flex items-start justify-between p-4 border-b border-white/10 bg-black/40">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="font-mono text-sm font-bold text-slate-100 flex items-center gap-1.5">
+            <span className="font-mono text-sm font-bold text-white flex items-center gap-1.5">
               {record.id}
             </span>
             <button
               type="button"
               onClick={() => copyToClipboard(record.id, "id")}
-              className="p-1 rounded text-slate-400 hover:text-slate-200 transition-colors"
+              className="p-1 rounded text-white/60 hover:text-white/90 transition-colors"
               title="Copy Canonical ID"
             >
               {copiedField === "id" ? (
@@ -106,21 +106,21 @@ export function EvidenceDetailsPanel({ record, onClose }: EvidenceDetailsPanelPr
                   ? "bg-rose-950/50 border-rose-500 text-rose-300"
                   : record.severity === "WARN" || record.severity === "WARNING"
                   ? "bg-amber-950/60 border-amber-600 text-amber-300"
-                  : "bg-blue-950/60 border-blue-600 text-blue-300"
+                  : "bg-white/[0.06] border-white/15 text-white/80"
               }`}
             >
               {record.severity}
             </span>
           </div>
-          <p className="text-[11px] text-slate-400 font-mono">
-            Service: <strong className="text-slate-200 font-sans">{record.service}</strong>
+          <p className="text-[11px] text-white/60 font-mono">
+            Service: <strong className="text-white/90 font-sans">{record.service}</strong>
           </p>
         </div>
 
         <button
           type="button"
           onClick={onClose}
-          className="p-1.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800 transition-colors"
+          className="p-1.5 rounded-lg text-white/60 hover:text-white hover:bg-slate-800 transition-colors"
           title="Close details panel"
         >
           <X className="w-4 h-4" />
@@ -130,10 +130,10 @@ export function EvidenceDetailsPanel({ record, onClose }: EvidenceDetailsPanelPr
       {/* Scrollable Forensic Content */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {/* Timestamp Analysis Section */}
-        <div className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800/80 space-y-2.5">
+        <div className="p-3.5 rounded-xl bg-black/40 border border-white/10 space-y-2.5">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5 text-violet-400" />
+            <span className="text-[10px] font-mono uppercase tracking-wider text-white/60 flex items-center gap-1.5">
+              <Clock className="w-3.5 h-3.5 text-white" />
               Timestamp Analysis
             </span>
             {record.clock_correction_applied && (
@@ -146,33 +146,33 @@ export function EvidenceDetailsPanel({ record, onClose }: EvidenceDetailsPanelPr
           <div className="space-y-2 text-[11px] font-mono">
             {/* Corrected UTC Timestamp */}
             <div>
-              <span className="text-slate-500 block text-[10px] uppercase font-sans">
+              <span className="text-white/50 block text-[10px] uppercase font-sans">
                 Corrected Reference Time (UTC)
               </span>
-              <span className="text-slate-200 font-medium">
+              <span className="text-white/90 font-medium">
                 {formatEvidenceTimestamp(record.corrected_datetime)}
               </span>
             </div>
 
             {/* Original Recorded Timestamp */}
             <div>
-              <span className="text-slate-500 block text-[10px] uppercase font-sans">
+              <span className="text-white/50 block text-[10px] uppercase font-sans">
                 Original Recorded Time (Source Clock)
               </span>
-              <span className="text-slate-400">
+              <span className="text-white/60">
                 {formatEvidenceTimestamp(record.original_timestamp)}
               </span>
             </div>
 
             {/* Uncertainty Interval */}
-            <div className="pt-2 border-t border-slate-800/60">
-              <div className="flex items-center justify-between text-[10px] text-slate-400 mb-1">
+            <div className="pt-2 border-t border-white/10">
+              <div className="flex items-center justify-between text-[10px] text-white/60 mb-1">
                 <span>Timing Uncertainty Bounds:</span>
-                <span className="text-slate-200 font-mono">
+                <span className="text-white/90 font-mono">
                   ±{(record.uncertainty_seconds * 1000).toFixed(0)} ms
                 </span>
               </div>
-              <div className="text-[10px] text-slate-500 truncate">
+              <div className="text-[10px] text-white/50 truncate">
                 [{formatEvidenceTimestamp(record.time_interval_start)} → {formatEvidenceTimestamp(record.time_interval_end)}]
               </div>
             </div>
@@ -182,13 +182,13 @@ export function EvidenceDetailsPanel({ record, onClose }: EvidenceDetailsPanelPr
         {/* Complete Event Message */}
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-white/60">
               Complete Event Message
             </span>
             <button
               type="button"
               onClick={() => copyToClipboard(record.message, "msg")}
-              className="flex items-center gap-1 text-[10px] text-slate-400 hover:text-slate-200 transition-colors"
+              className="flex items-center gap-1 text-[10px] text-white/60 hover:text-white/90 transition-colors"
             >
               {copiedField === "msg" ? (
                 <>
@@ -204,34 +204,34 @@ export function EvidenceDetailsPanel({ record, onClose }: EvidenceDetailsPanelPr
             </button>
           </div>
 
-          <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 font-mono text-xs text-slate-200 leading-relaxed break-words whitespace-pre-wrap max-h-48 overflow-y-auto">
+          <div className="p-3 rounded-xl bg-black/40 border border-white/10 font-mono text-xs text-white/90 leading-relaxed break-words whitespace-pre-wrap max-h-48 overflow-y-auto">
             {record.message}
           </div>
         </div>
 
         {/* Distributed Trace & Identification */}
-        <div className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800/80 space-y-2">
-          <span className="block text-[10px] font-mono uppercase tracking-wider text-slate-400">
+        <div className="p-3.5 rounded-xl bg-black/40 border border-white/10 space-y-2">
+          <span className="block text-[10px] font-mono uppercase tracking-wider text-white/60">
             Identification & Provenance
           </span>
           <div className="grid grid-cols-2 gap-2 text-[11px]">
             <div>
-              <span className="text-slate-500 block text-[10px]">Source Identifier</span>
-              <strong className="text-slate-300 font-mono text-[10px]">{record.source}</strong>
+              <span className="text-white/50 block text-[10px]">Source Identifier</span>
+              <strong className="text-white/80 font-mono text-[10px]">{record.source}</strong>
             </div>
             <div>
-              <span className="text-slate-500 block text-[10px]">Category</span>
-              <strong className="text-slate-300 font-mono text-[10px]">{record.event_type}</strong>
+              <span className="text-white/50 block text-[10px]">Category</span>
+              <strong className="text-white/80 font-mono text-[10px]">{record.event_type}</strong>
             </div>
             <div>
-              <span className="text-slate-500 block text-[10px]">Data Source</span>
+              <span className="text-white/50 block text-[10px]">Data Source</span>
               <strong className={record.dataSource === "live" ? "text-emerald-400" : "text-amber-400"}>
                 {record.dataSource === "live" ? "Live Backend" : "Demo Fixture"}
               </strong>
             </div>
             <div>
-              <span className="text-slate-500 block text-[10px]">Incident Correlation</span>
-              <strong className="text-slate-300 font-mono text-[10px]">
+              <span className="text-white/50 block text-[10px]">Incident Correlation</span>
+              <strong className="text-white/80 font-mono text-[10px]">
                 {record.incident_id || "Uncorrelated"}
               </strong>
             </div>
@@ -239,15 +239,15 @@ export function EvidenceDetailsPanel({ record, onClose }: EvidenceDetailsPanelPr
 
           {/* Trace ID */}
           {record.trace_id && (
-            <div className="pt-2 border-t border-slate-800/60 flex items-center justify-between">
+            <div className="pt-2 border-t border-white/10 flex items-center justify-between">
               <div>
-                <span className="text-slate-500 block text-[10px]">Trace ID</span>
-                <span className="font-mono text-cyan-400 text-[11px]">{record.trace_id}</span>
+                <span className="text-white/50 block text-[10px]">Trace ID</span>
+                <span className="font-mono text-white text-[11px]">{record.trace_id}</span>
               </div>
               <button
                 type="button"
                 onClick={() => copyToClipboard(record.trace_id!, "trace")}
-                className="p-1 rounded text-slate-400 hover:text-slate-200"
+                className="p-1 rounded text-white/60 hover:text-white/90"
                 title="Copy Trace ID"
               >
                 {copiedField === "trace" ? (
@@ -269,13 +269,13 @@ export function EvidenceDetailsPanel({ record, onClose }: EvidenceDetailsPanelPr
             </div>
             <div className="space-y-1.5">
               {record.data_quality_warnings.map((w, idx) => (
-                <div key={idx} className="p-2 rounded-lg bg-slate-950/80 border border-amber-900/40 text-[11px]">
+                <div key={idx} className="p-2 rounded-lg bg-black/40 border border-amber-900/40 text-[11px]">
                   <div className="flex items-center justify-between font-mono text-[10px] text-amber-400 mb-0.5">
                     <span>{w.code}</span>
                     <span className="uppercase">{w.severity}</span>
                   </div>
-                  <p className="text-slate-300">{w.message}</p>
-                  <p className="text-slate-500 text-[10px] mt-1">Action: {w.action_taken}</p>
+                  <p className="text-white/80">{w.message}</p>
+                  <p className="text-white/50 text-[10px] mt-1">Action: {w.action_taken}</p>
                 </div>
               ))}
             </div>
@@ -285,14 +285,14 @@ export function EvidenceDetailsPanel({ record, onClose }: EvidenceDetailsPanelPr
         {/* Raw Metadata & Payload Viewer */}
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 flex items-center gap-1">
-              <FileCode className="w-3.5 h-3.5 text-cyan-400" />
+            <span className="text-[10px] font-mono uppercase tracking-wider text-white/60 flex items-center gap-1">
+              <FileCode className="w-3.5 h-3.5 text-white" />
               Raw Metadata & Forensic Payload
             </span>
             <button
               type="button"
               onClick={() => copyToClipboard(rawJsonString, "json")}
-              className="flex items-center gap-1 text-[10px] text-slate-400 hover:text-slate-200 transition-colors"
+              className="flex items-center gap-1 text-[10px] text-white/60 hover:text-white/90 transition-colors"
             >
               {copiedField === "json" ? (
                 <>
@@ -308,14 +308,14 @@ export function EvidenceDetailsPanel({ record, onClose }: EvidenceDetailsPanelPr
             </button>
           </div>
 
-          <pre className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-[10px] font-mono text-slate-300 max-h-48 overflow-y-auto leading-relaxed">
+          <pre className="p-3 rounded-xl bg-black/40 border border-white/10 text-[10px] font-mono text-white/80 max-h-48 overflow-y-auto leading-relaxed">
             {rawJsonString}
           </pre>
         </div>
 
         {/* Epistemic Note */}
-        <div className="p-2.5 rounded-xl bg-slate-950/50 border border-slate-800/60 flex items-start gap-2 text-[10px] text-slate-400 leading-relaxed">
-          <HelpCircle className="w-3.5 h-3.5 text-violet-400 shrink-0 mt-0.5" />
+        <div className="p-2.5 rounded-xl bg-black/40/50 border border-white/10 flex items-start gap-2 text-[10px] text-white/60 leading-relaxed">
+          <HelpCircle className="w-3.5 h-3.5 text-white shrink-0 mt-0.5" />
           <span>
             <strong>Forensic Immutability:</strong> Original log records and timestamps are preserved in strict chronological sequence. AEGIS does not infer causality from temporal proximity alone.
           </span>
@@ -323,10 +323,10 @@ export function EvidenceDetailsPanel({ record, onClose }: EvidenceDetailsPanelPr
       </div>
 
       {/* Footer Navigation */}
-      <div className="p-3 border-t border-slate-800/80 bg-slate-950/60 flex items-center gap-2">
+      <div className="p-3 border-t border-white/10 bg-black/40/60 flex items-center gap-2">
         <Link
           href={`/timeline?service=${encodeURIComponent(record.service)}&event=${encodeURIComponent(record.id)}`}
-          className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-medium text-xs transition-colors shadow-md shadow-violet-600/20"
+          className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-white hover:bg-slate-200 text-black font-semibold text-xs transition-colors shadow-md"
         >
           <Clock className="w-3.5 h-3.5" />
           <span>Inspect in Timeline</span>
@@ -335,7 +335,7 @@ export function EvidenceDetailsPanel({ record, onClose }: EvidenceDetailsPanelPr
         <button
           type="button"
           onClick={onClose}
-          className="py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium text-xs border border-slate-700 transition-colors"
+          className="py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white/80 font-medium text-xs border border-white/20 transition-colors"
         >
           Close
         </button>

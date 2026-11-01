@@ -27,29 +27,27 @@ export function StatusBadge({
 
   switch (variant) {
     case "critical":
-      style = "bg-rose-950/60 text-rose-300 border-rose-800/60";
-      icon = <AlertCircle className="h-3 w-3 text-rose-400" />;
+      style = "bg-[#ef4444]/15 text-[#ef4444] border border-[#ef4444]/40";
+      icon = <AlertCircle className="h-3 w-3 text-[#ef4444]" />;
       break;
     case "warning":
-      style = "bg-amber-950/60 text-amber-300 border-amber-800/60";
-      icon = <AlertTriangle className="h-3 w-3 text-amber-400" />;
+      style = "bg-[#f59e0b]/15 text-[#f59e0b] border border-[#f59e0b]/40";
+      icon = <AlertTriangle className="h-3 w-3 text-[#f59e0b]" />;
       break;
     case "success":
-      style = "bg-emerald-950/60 text-emerald-300 border-emerald-800/60";
-      icon = <CheckCircle2 className="h-3 w-3 text-emerald-400" />;
+      style = "bg-[#22c55e]/15 text-[#22c55e] border border-[#22c55e]/40";
+      icon = <CheckCircle2 className="h-3 w-3 text-[#22c55e]" />;
       break;
     case "info":
-      style = "bg-cyan-950/60 text-cyan-300 border-cyan-800/60";
-      icon = <Info className="h-3 w-3 text-cyan-400" />;
-      break;
     case "violet":
-      style = "bg-violet-950/60 text-violet-300 border-violet-800/60";
-      icon = <Clock className="h-3 w-3 text-violet-400" />;
+      // Platinum Enterprise Accent (Replaces AI cyan and violet)
+      style = "bg-white/10 text-white border border-white/20";
+      icon = <Clock className="h-3 w-3 text-white/80" />;
       break;
     case "neutral":
     default:
-      style = "bg-slate-800/80 text-slate-300 border-slate-700/60";
-      icon = <Info className="h-3 w-3 text-slate-400" />;
+      style = "bg-white/[0.06] text-white/80 border border-white/15";
+      icon = <Info className="h-3 w-3 text-white/60" />;
       break;
   }
 

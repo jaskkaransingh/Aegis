@@ -20,55 +20,66 @@
   --aegis-border: #252d40;
   --aegis-border-subtle: #1b2232;
   --aegis-border-strong: #36415b;
-  --aegis-border-focus: #9875ff;
+  --aegis-border-focus: #ffffff;
 
-  /* Typography & Foreground Contrast */
-  --aegis-text-primary: #f1f4fb;
-  --aegis-text-secondary: #a3adc2;
-  --aegis-text-muted: #727f98;
+  /* Typography & Foreground Contrast (Platinum / Titanium / Slate) */
+  --aegis-text-primary: #f8fafc;
+  --aegis-text-secondary: #cbd5e1;
+  --aegis-text-muted: #8492a6;
   --aegis-text-inverse: #07090f;
 
-  /* Restrained Functional Accents */
-  /* Violet: Agentic AI Reasoning, Deep Inferences, Orchestration */
-  --aegis-violet: #9875ff;
-  --aegis-violet-bright: #b29aff;
-  --aegis-violet-surface: #21173c;
-  --aegis-violet-subtle: rgba(152, 117, 255, 0.12);
-  --aegis-violet-border: rgba(152, 117, 255, 0.35);
+  /* Platinum / Titanium Metallic Accents (Replaces purple/blue AI colors) */
+  --aegis-platinum: #f1f5f9;
+  --aegis-platinum-bright: #ffffff;
+  --aegis-platinum-surface: #1e293b;
+  --aegis-platinum-subtle: rgba(241, 245, 249, 0.08);
+  --aegis-platinum-border: rgba(241, 245, 249, 0.25);
 
-  /* Ice Cyan: Verified Evidence, Telemetry, Clock Synchronization */
-  --aegis-cyan: #7adcf5;
-  --aegis-cyan-surface: #102833;
-  --aegis-cyan-subtle: rgba(122, 220, 245, 0.12);
-  --aegis-cyan-border: rgba(122, 220, 245, 0.35);
+  /* Backward-compatible aliases: map violet & cyan to platinum */
+  --aegis-violet: #f1f5f9;
+  --aegis-violet-bright: #ffffff;
+  --aegis-violet-surface: #1e293b;
+  --aegis-violet-subtle: rgba(241, 245, 249, 0.08);
+  --aegis-violet-border: rgba(241, 245, 249, 0.25);
 
-  /* Warning / Amber: Latency Degradation, Divergences, Clock Skew */
-  --aegis-warning: #f2c66d;
-  --aegis-warning-surface: #332711;
-  --aegis-warning-subtle: rgba(242, 198, 109, 0.12);
-  --aegis-warning-border: rgba(242, 198, 109, 0.35);
+  --aegis-cyan: #e2e8f0;
+  --aegis-cyan-surface: #1e293b;
+  --aegis-cyan-subtle: rgba(226, 232, 240, 0.08);
+  --aegis-cyan-border: rgba(226, 232, 240, 0.25);
 
-  /* Danger / Rose: Critical Anomalies, Circuit Trips, Service Outages */
-  --aegis-danger: #f27886;
-  --aegis-danger-surface: #33151a;
-  --aegis-danger-subtle: rgba(242, 120, 134, 0.12);
-  --aegis-danger-border: rgba(242, 120, 134, 0.35);
+  /* Telemetric Enterprise Status Accents (Strictly Functional Green, Red, Amber) */
+  /* Green: Operational, UP, Nominal, Verified Truth, Clicked/Active State */
+  --aegis-success: #22c55e;
+  --aegis-success-bright: #4ade80;
+  --aegis-success-surface: #052e16;
+  --aegis-success-subtle: rgba(34, 197, 94, 0.12);
+  --aegis-success-border: rgba(34, 197, 94, 0.4);
 
-  /* Success / Emerald: Healthy Invariants, Verified Truth, Resilient State */
-  --aegis-success: #76d6a4;
-  --aegis-success-surface: #112b20;
-  --aegis-success-subtle: rgba(118, 214, 164, 0.12);
-  --aegis-success-border: rgba(118, 214, 164, 0.35);
+  /* Red: Critical Outages, SEV-1 Anomalies, 5xx Failures, Circuit Trips */
+  --aegis-danger: #ef4444;
+  --aegis-danger-bright: #f87171;
+  --aegis-danger-surface: #450a0a;
+  --aegis-danger-subtle: rgba(239, 68, 68, 0.14);
+  --aegis-danger-border: rgba(239, 68, 68, 0.45);
 
-  /* Neutral / Slate: Structural Wireframe, Dormant Components */
-  --aegis-neutral: #8d9ab1;
-  --aegis-neutral-surface: #1b2232;
+  /* Amber: Warnings, Degradations, Clock Skew */
+  --aegis-warning: #f59e0b;
+  --aegis-warning-surface: #451a03;
+  --aegis-warning-subtle: rgba(245, 158, 11, 0.12);
+  --aegis-warning-border: rgba(245, 158, 11, 0.4);
+
+  /* Neutral / Steel: Structural telemetry */
+  --aegis-neutral: #94a3b8;
+  --aegis-neutral-surface: #1e293b;
 
   /* Tactical Shadows & Depth Gradients */
   --aegis-shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--aegis-border-subtle);
   --aegis-shadow-elevated: 0 8px 32px -4px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--aegis-border);
-  --aegis-glow-violet: 0 0 28px -4px rgba(152, 117, 255, 0.28);
-  --aegis-glow-cyan: 0 0 28px -4px rgba(122, 220, 245, 0.28);
+  --aegis-glow-platinum: 0 0 24px -4px rgba(255, 255, 255, 0.25);
+  --aegis-glow-green: 0 0 24px -4px rgba(34, 197, 94, 0.35);
+  --aegis-glow-red: 0 0 24px -4px rgba(239, 68, 68, 0.35);
+  --aegis-glow-violet: 0 0 24px -4px rgba(255, 255, 255, 0.25);
+  --aegis-glow-cyan: 0 0 24px -4px rgba(255, 255, 255, 0.25);
 
   /* Motion Curves & Durations */
   --aegis-ease-standard: cubic-bezier(0.2, 0.0, 0.0, 1.0);
@@ -89,9 +100,9 @@
   --surface-subtle: var(--aegis-surface);
   --surface-card: var(--aegis-surface-raised);
   --border: var(--aegis-border);
-  --accent: var(--aegis-violet);
-  --accent-subtle: var(--aegis-violet-subtle);
-  --accent-glow: rgba(152, 117, 255, 0.25);
+  --accent: var(--aegis-platinum);
+  --accent-subtle: var(--aegis-platinum-subtle);
+  --accent-glow: rgba(255, 255, 255, 0.2);
 }
 
 body {
@@ -105,7 +116,7 @@ body {
 
 /* Crisp high-contrast selection */
 ::selection {
-  background-color: rgba(152, 117, 255, 0.35);
+  background-color: rgba(255, 255, 255, 0.25);
   color: #ffffff;
 }
 

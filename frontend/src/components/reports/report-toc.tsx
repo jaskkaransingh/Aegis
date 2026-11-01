@@ -79,13 +79,13 @@ export function ReportToc({ activeSectionId }: ReportTocProps) {
   return (
     <nav
       aria-label="Table of Contents"
-      className="no-print sticky top-4 rounded-xl border border-slate-800 bg-slate-900/90 backdrop-blur-sm p-3.5 space-y-2 shadow-sm text-xs"
+      className="no-print sticky top-4 rounded-xl border border-white/10 bg-black/40 backdrop-blur-xl p-3.5 space-y-2 shadow-sm text-xs"
     >
-      <div className="flex items-center justify-between pb-2 border-b border-slate-800/80">
-        <span className="font-mono text-[10px] tracking-wider uppercase font-semibold text-slate-400">
+      <div className="flex items-center justify-between pb-2 border-b border-white/10">
+        <span className="font-mono text-[10px] tracking-wider uppercase font-semibold text-white/50">
           Table of Contents
         </span>
-        <span className="font-mono text-[10px] text-slate-500">10 Sections</span>
+        <span className="font-mono text-[10px] text-white/40">10 Sections</span>
       </div>
 
       <ul className="space-y-0.5">
@@ -99,28 +99,28 @@ export function ReportToc({ activeSectionId }: ReportTocProps) {
                 onClick={(e) => scrollToSection(e, sec.id)}
                 className={`group flex items-center justify-between px-2.5 py-1.5 rounded-lg transition-colors font-medium ${
                   isActive
-                    ? "bg-violet-600/15 text-violet-300 font-semibold border border-violet-500/30"
-                    : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
+                    ? "bg-white/10 text-white font-semibold border border-white/20"
+                    : "text-white/60 hover:text-white hover:bg-white/5"
                 }`}
               >
                 <div className="flex items-center gap-2 truncate">
                   <span
                     className={`font-mono text-[10px] w-4 text-center ${
-                      isActive ? "text-violet-400 font-bold" : "text-slate-500"
+                      isActive ? "text-[#22c55e] font-bold" : "text-white/40"
                     }`}
                   >
                     {sec.number}.
                   </span>
                   <Icon
                     className={`w-3.5 h-3.5 shrink-0 ${
-                      isActive ? "text-violet-400" : "text-slate-500 group-hover:text-slate-400"
+                      isActive ? "text-[#22c55e]" : "text-white/50 group-hover:text-white"
                     }`}
                   />
                   <span className="truncate">{sec.title}</span>
                 </div>
                 <ChevronRight
                   className={`w-3 h-3 shrink-0 transition-transform ${
-                    isActive ? "text-violet-400 translate-x-0.5" : "text-slate-600 opacity-0 group-hover:opacity-100"
+                    isActive ? "text-[#22c55e] translate-x-0.5" : "text-white/30 opacity-0 group-hover:opacity-100"
                   }`}
                 />
               </a>

@@ -48,8 +48,8 @@ function getStatusBadge(status: HypothesisStatus) {
     default:
       return {
         label: "UNDER EVALUATION",
-        bg: "bg-violet-950/60 border-violet-700/60 text-violet-300",
-        icon: <HelpCircle className="w-3 h-3 text-violet-400" />,
+        bg: "bg-white/10 border-white/20 text-white",
+        icon: <HelpCircle className="w-3 h-3 text-white" />,
       };
   }
 }
@@ -72,16 +72,16 @@ export function HypothesisCard({
       onClick={onSelect}
       className={`flex flex-col rounded-2xl border p-4 transition-all duration-200 cursor-pointer select-none text-xs relative ${
         isSelected
-          ? "bg-slate-900/95 border-violet-500 shadow-xl shadow-violet-500/10 ring-1 ring-violet-500"
+          ? "bg-black/60 backdrop-blur-xl border-white/50 shadow-xl shadow-white/5 ring-1 ring-white/50"
           : isComparing
-          ? "bg-slate-900/95 border-cyan-500/70 shadow-lg shadow-cyan-500/10 ring-1 ring-cyan-500/40"
-          : "bg-slate-900/80 border-slate-800 hover:border-slate-700 hover:bg-slate-900 shadow-md"
+          ? "bg-black/55 backdrop-blur-xl border-emerald-500/60 shadow-lg ring-1 ring-emerald-500/40"
+          : "bg-black/40 backdrop-blur-xl border-white/10 hover:border-white/25 hover:bg-black/50 shadow-md"
       }`}
     >
       {/* Top Header Row */}
       <div className="flex items-start justify-between gap-2 mb-2.5">
         <div className="flex items-center gap-2 overflow-hidden">
-          <span className="font-mono text-xs font-bold text-slate-100 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+          <span className="font-mono text-xs font-bold text-white bg-white/10 px-2 py-0.5 rounded border border-white/15 text-white">
             {hypothesis.id}
           </span>
           <span
@@ -89,8 +89,8 @@ export function HypothesisCard({
               hypothesis.origin === "Demo"
                 ? "bg-amber-950/40 border-amber-800/40 text-amber-300"
                 : hypothesis.origin === "AI-generated"
-                ? "bg-violet-950/40 border-violet-800/40 text-violet-300"
-                : "bg-cyan-950/40 border-cyan-800/40 text-cyan-300"
+                ? "bg-white/10 border-white/20 text-white"
+                : "bg-emerald-950/40 border-emerald-500/40 text-[#22c55e]"
             }`}
           >
             {hypothesis.origin}
@@ -107,34 +107,34 @@ export function HypothesisCard({
       </div>
 
       {/* Title */}
-      <h3 className="text-sm font-bold text-slate-100 tracking-tight mb-1.5">
+      <h3 className="text-sm font-bold text-white tracking-tight mb-1.5">
         {hypothesis.title}
       </h3>
 
       {/* Suspected Service Pill */}
       {hypothesis.suspectedService && (
         <div className="flex items-center gap-1.5 mb-2.5">
-          <Server className="w-3 h-3 text-slate-400" />
-          <span className="text-[11px] font-mono text-slate-400">Suspected Service:</span>
-          <span className="text-[11px] font-mono font-semibold text-slate-200 bg-slate-950 px-1.5 py-0.2 rounded border border-slate-800">
+          <Server className="w-3 h-3 text-white/60" />
+          <span className="text-[11px] font-mono text-white/60">Suspected Service:</span>
+          <span className="text-[11px] font-mono font-semibold text-slate-200 bg-white/10 px-1.5 py-0.5 rounded border border-white/15 text-white">
             {hypothesis.suspectedService}
           </span>
         </div>
       )}
 
       {/* Concise Explanation */}
-      <p className="text-slate-300 text-xs leading-relaxed line-clamp-3 mb-3 flex-1 font-sans">
+      <p className="text-white/80 text-xs leading-relaxed line-clamp-2 mb-3 flex-1 font-sans">
         {hypothesis.explanation}
       </p>
 
       {/* Confidence Score Bar */}
-      <div className="mb-3 p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80">
+      <div className="mb-3 p-2.5 rounded-xl bg-black/40 border border-white/10">
         <div className="flex items-center justify-between text-[11px] mb-1.5">
-          <span className="text-slate-400 font-mono text-[10px] uppercase tracking-wider">
+          <span className="text-white/60 font-mono text-[10px] uppercase tracking-wider">
             Assessed Confidence
           </span>
           <div className="flex items-center gap-1">
-            <span className="font-mono font-bold text-slate-100">
+            <span className="font-mono font-bold text-white">
               {confidencePercent !== null ? `${confidencePercent}%` : "Not assessed"}
             </span>
             {hypothesis.origin === "Demo" && (
@@ -144,7 +144,7 @@ export function HypothesisCard({
         </div>
 
         {confidencePercent !== null ? (
-          <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+          <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
             <div
               className={`h-full rounded-full transition-all duration-300 ${
                 confidencePercent >= 75
@@ -157,14 +157,14 @@ export function HypothesisCard({
             />
           </div>
         ) : (
-          <div className="text-[10px] text-slate-500 italic">No confidence calculated</div>
+          <div className="text-[10px] text-white/50 italic">No confidence calculated</div>
         )}
       </div>
 
       {/* Citations Metric Strip */}
-      <div className="grid grid-cols-3 gap-2 py-2 px-2.5 mb-3 rounded-xl bg-slate-950/60 border border-slate-800/60 text-center font-mono">
+      <div className="grid grid-cols-3 gap-2 py-2 px-2.5 mb-3 rounded-xl bg-black/40 border border-white/10 text-center font-mono">
         <div>
-          <span className="block text-[9px] uppercase tracking-wider text-slate-500">
+          <span className="block text-[9px] uppercase tracking-wider text-white/50">
             Supporting
           </span>
           <span className="text-xs font-bold text-emerald-400 flex items-center justify-center gap-0.5 mt-0.5">
@@ -173,7 +173,7 @@ export function HypothesisCard({
           </span>
         </div>
         <div>
-          <span className="block text-[9px] uppercase tracking-wider text-slate-500">
+          <span className="block text-[9px] uppercase tracking-wider text-white/50">
             Contradicting
           </span>
           <span className="text-xs font-bold text-rose-400 flex items-center justify-center gap-0.5 mt-0.5">
@@ -182,7 +182,7 @@ export function HypothesisCard({
           </span>
         </div>
         <div>
-          <span className="block text-[9px] uppercase tracking-wider text-slate-500">
+          <span className="block text-[9px] uppercase tracking-wider text-white/50">
             Gaps / Unknowns
           </span>
           <span className="text-xs font-bold text-amber-400 flex items-center justify-center gap-0.5 mt-0.5">
@@ -193,7 +193,7 @@ export function HypothesisCard({
       </div>
 
       {/* Footer Actions */}
-      <div className="flex items-center justify-between pt-2 border-t border-slate-800/80 text-[11px]">
+      <div className="flex items-center justify-between pt-2 border-t border-white/10 text-[11px]">
         <button
           type="button"
           onClick={(e) => {
@@ -202,8 +202,8 @@ export function HypothesisCard({
           }}
           className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border font-medium transition-colors ${
             isComparing
-              ? "bg-cyan-950/70 border-cyan-600 text-cyan-300"
-              : "bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700"
+              ? "bg-emerald-950/60 border-emerald-500/40 text-[#22c55e]"
+              : "bg-black/40 border-white/10 text-white/70 hover:text-white hover:border-white/20"
           }`}
           title="Select this hypothesis for side-by-side comparison"
         >
@@ -211,7 +211,7 @@ export function HypothesisCard({
           <span>{isComparing ? "In Comparison" : "Compare"}</span>
         </button>
 
-        <span className="text-violet-400 hover:text-violet-300 font-medium flex items-center gap-1">
+        <span className="text-white hover:text-white font-medium flex items-center gap-1">
           <span>Inspect Details</span>
           <ArrowRight className="w-3 h-3" />
         </span>

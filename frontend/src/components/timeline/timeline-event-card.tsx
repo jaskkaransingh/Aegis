@@ -42,21 +42,21 @@ export function TimelineEventCard({
   const getServiceColor = (service: string) => {
     switch (service) {
       case "postgresql-database":
-        return "text-blue-400 bg-blue-950/40 border-blue-900/60";
+        return "text-white bg-white/10 border-white/20";
       case "appointment-service":
-        return "text-violet-400 bg-violet-950/40 border-violet-900/60";
+        return "text-white bg-white/10 border-white/20";
       case "hospital-records-service":
         return "text-emerald-400 bg-emerald-950/40 border-emerald-900/60";
       case "payment-service":
         return "text-amber-400 bg-amber-950/40 border-amber-900/60";
       case "api-gateway":
-        return "text-cyan-400 bg-cyan-950/40 border-cyan-900/60";
+        return "text-white bg-white/10 border-white/20";
       case "notification-service":
         return "text-fuchsia-400 bg-fuchsia-950/40 border-fuchsia-900/60";
       case "auth-service":
         return "text-indigo-400 bg-indigo-950/40 border-indigo-900/60";
       default:
-        return "text-slate-400 bg-slate-900 border-slate-800";
+        return "text-white/60 bg-black/40 border-white/10";
     }
   };
 
@@ -90,8 +90,8 @@ export function TimelineEventCard({
       onClick={() => onSelect(event)}
       className={`rounded-xl border transition cursor-pointer text-xs ${
         isSelected
-          ? "border-violet-500/80 bg-violet-950/20 shadow-md shadow-violet-950/40"
-          : "border-slate-800/80 bg-slate-900/40 hover:bg-slate-900/80 hover:border-slate-700/80"
+          ? "border-white/50 bg-white/[0.06] shadow-md shadow-white/5"
+          : "border-white/10 bg-black/40/40 hover:bg-black/40/80 hover:border-white/20/80"
       }`}
     >
       {/* Compact Event Row */}
@@ -100,7 +100,7 @@ export function TimelineEventCard({
         <div className="flex items-center gap-2.5 flex-wrap">
           {/* Timeline ID if available */}
           {timelineMeta?.timeline_id && (
-            <span className="text-[10px] font-mono font-bold text-slate-500 bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800">
+            <span className="text-[10px] font-mono font-bold text-white/50 bg-black/40 px-1.5 py-0.5 rounded border border-white/10">
               {timelineMeta.timeline_id}
             </span>
           )}
@@ -110,19 +110,19 @@ export function TimelineEventCard({
             type="button"
             onClick={handleCopyId}
             title="Click to copy canonical event ID"
-            className="group/id flex items-center gap-1 font-mono text-slate-200 font-semibold hover:text-violet-300 transition"
+            className="group/id flex items-center gap-1 font-mono text-white/90 font-semibold hover:text-white transition"
           >
             <span>{event.id}</span>
             {copied ? (
               <Check className="h-3 w-3 text-emerald-400" />
             ) : (
-              <Copy className="h-3 w-3 text-slate-600 group-hover/id:text-slate-400" />
+              <Copy className="h-3 w-3 text-slate-600 group-hover/id:text-white/60" />
             )}
           </button>
 
           {/* Time Display */}
-          <div className="flex items-center gap-1 font-mono text-slate-300 bg-slate-950/60 px-2 py-0.5 rounded border border-slate-800/60">
-            <Clock className="h-3 w-3 text-slate-500" />
+          <div className="flex items-center gap-1 font-mono text-white/80 bg-black/40 px-2 py-0.5 rounded border border-white/10">
+            <Clock className="h-3 w-3 text-white/50" />
             <span>{formatTimeConcise(displayTimestamp)}</span>
             {timestampMode === "corrected" && event.clock_correction_applied && (
               <span className="text-[10px] text-amber-400 font-semibold ml-0.5">
@@ -155,7 +155,7 @@ export function TimelineEventCard({
           />
 
           {/* Event Type */}
-          <span className="text-[11px] font-mono text-slate-400 bg-slate-950/80 px-2 py-0.5 rounded border border-slate-800/80">
+          <span className="text-[11px] font-mono text-white/60 bg-black/40/80 px-2 py-0.5 rounded border border-white/10">
             {event.event_type}
           </span>
         </div>
@@ -165,7 +165,7 @@ export function TimelineEventCard({
           {/* Uncertainty Half-width Interval */}
           {hasUncertainty && (
             <span
-              className="px-1.5 py-0.5 rounded bg-slate-950 text-slate-400 border border-slate-800 text-[10px]"
+              className="px-1.5 py-0.5 rounded bg-black/40 text-white/60 border border-white/10 text-[10px]"
               title={`Timing uncertainty interval: ±${event.uncertainty_seconds}s`}
             >
               ±{event.uncertainty_seconds}s
@@ -185,8 +185,8 @@ export function TimelineEventCard({
 
           {/* Distributed Trace ID */}
           {event.trace_id && (
-            <span className="px-1.5 py-0.5 rounded bg-slate-950 text-violet-300 border border-violet-900/40 text-[10px] flex items-center gap-1">
-              <GitBranch className="h-2.5 w-2.5 text-violet-400" />
+            <span className="px-1.5 py-0.5 rounded bg-black/40 text-white border border-white/20 text-[10px] flex items-center gap-1">
+              <GitBranch className="h-2.5 w-2.5 text-white" />
               <span>{event.trace_id}</span>
             </span>
           )}
@@ -208,7 +208,7 @@ export function TimelineEventCard({
               e.stopPropagation();
               setIsExpanded(!isExpanded);
             }}
-            className="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition ml-1"
+            className="p-1 rounded hover:bg-slate-800 text-white/60 hover:text-white/90 transition ml-1"
             title={isExpanded ? "Collapse inline details" : "Expand inline details"}
           >
             {isExpanded ? (
@@ -221,33 +221,33 @@ export function TimelineEventCard({
       </div>
 
       {/* Message Preview */}
-      <div className="px-3 pb-3 sm:px-4 text-xs text-slate-300 leading-relaxed font-sans">
+      <div className="px-3 pb-3 sm:px-4 text-xs text-white/80 leading-relaxed font-sans">
         <p className="line-clamp-2">{event.message}</p>
       </div>
 
       {/* Expanded Inline Drawer */}
       {isExpanded && (
-        <div className="border-t border-slate-800/80 bg-slate-950/70 p-4 space-y-3 font-mono text-[11px]">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-slate-400">
+        <div className="border-t border-white/10 bg-black/40 p-4 space-y-3 font-mono text-[11px]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-white/60">
             <div>
-              <span className="text-slate-500 block text-[10px]">Raw Timestamp</span>
-              <span className="text-slate-200">{event.original_timestamp || "N/A"}</span>
+              <span className="text-white/50 block text-[10px]">Raw Timestamp</span>
+              <span className="text-white/90">{event.original_timestamp || "N/A"}</span>
             </div>
             <div>
-              <span className="text-slate-500 block text-[10px]">Corrected Timestamp</span>
-              <span className="text-violet-300">{event.corrected_datetime || "N/A"}</span>
+              <span className="text-white/50 block text-[10px]">Corrected Timestamp</span>
+              <span className="text-white">{event.corrected_datetime || "N/A"}</span>
             </div>
             <div>
-              <span className="text-slate-500 block text-[10px]">Offset Applied</span>
-              <span className="text-slate-200">
+              <span className="text-white/50 block text-[10px]">Offset Applied</span>
+              <span className="text-white/90">
                 {event.clock_correction_applied
                   ? `${event.offset_applied_seconds} seconds`
                   : "0.0s (In Sync)"}
               </span>
             </div>
             <div>
-              <span className="text-slate-500 block text-[10px]">Uncertainty Interval</span>
-              <span className="text-slate-200">
+              <span className="text-white/50 block text-[10px]">Uncertainty Interval</span>
+              <span className="text-white/90">
                 [{event.time_interval_start?.slice(11, 23)} - {event.time_interval_end?.slice(11, 23)}]
               </span>
             </div>
@@ -270,8 +270,8 @@ export function TimelineEventCard({
           {/* Full Metadata Payload */}
           {event.metadata && Object.keys(event.metadata).length > 0 && (
             <div>
-              <span className="text-slate-500 text-[10px] block mb-1">Telemetry Metadata:</span>
-              <pre className="p-2 rounded bg-slate-900 border border-slate-800 text-[10px] text-slate-300 overflow-x-auto">
+              <span className="text-white/50 text-[10px] block mb-1">Telemetry Metadata:</span>
+              <pre className="p-2 rounded bg-black/40 border border-white/10 text-[10px] text-white/80 overflow-x-auto">
                 {JSON.stringify(event.metadata, null, 2)}
               </pre>
             </div>

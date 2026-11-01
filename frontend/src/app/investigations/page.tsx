@@ -145,7 +145,7 @@ export default function InvestigationsDirectoryPage() {
                 {/* Card Top: ID & Severity */}
                 <div className="space-y-2.5">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-bold text-[#b29aff]">
+                    <span className="text-xs font-mono font-bold text-white">
                       {inv.id}
                     </span>
                     <AegisBadge
@@ -159,7 +159,7 @@ export default function InvestigationsDirectoryPage() {
                   </div>
 
                   {/* Incident Title */}
-                  <h3 className="text-sm font-semibold text-white group-hover:text-[#7adcf5] transition-colors leading-snug">
+                  <h3 className="text-sm font-semibold text-white group-hover:text-white transition-colors leading-snug">
                     {inv.incidentTitle}
                   </h3>
 
@@ -178,7 +178,7 @@ export default function InvestigationsDirectoryPage() {
 
                   <Link
                     href={`/investigations/${inv.id}`}
-                    className="inline-flex items-center gap-1 text-[#7adcf5] hover:text-white font-medium group-hover:translate-x-0.5 transition-transform"
+                    className="inline-flex items-center gap-1 text-white/80 hover:text-white font-medium group-hover:translate-x-0.5 transition-transform"
                   >
                     <span>Enter Workspace</span>
                     <ArrowRight className="h-3 w-3" />

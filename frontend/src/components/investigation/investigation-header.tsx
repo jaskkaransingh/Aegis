@@ -29,28 +29,28 @@ export function InvestigationHeader({
   return (
     <div className="space-y-3">
       {/* Breadcrumb Navigation */}
-      <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs font-mono text-slate-400">
+      <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs font-mono text-white/60">
         <Link
           href="/"
-          className="hover:text-slate-200 transition flex items-center gap-1 text-slate-400"
+          className="hover:text-white/90 transition flex items-center gap-1 text-white/60"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           <span>Command Center</span>
         </Link>
         <ChevronRight className="h-3 w-3 text-slate-600" />
-        <Link href="/investigations" className="hover:text-slate-200 transition">
+        <Link href="/investigations" className="hover:text-white/90 transition">
           Investigations
         </Link>
         <ChevronRight className="h-3 w-3 text-slate-600" />
-        <span className="text-slate-200 font-semibold">{incidentId}</span>
+        <span className="text-white/90 font-semibold">{incidentId}</span>
       </nav>
 
       {/* Main Header Banner */}
-      <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 shadow-sm">
+      <div className="rounded-xl border border-white/10 bg-black/40/60 p-5 shadow-sm">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="space-y-2">
             <div className="flex items-center gap-2.5 flex-wrap">
-              <span className="font-mono text-sm font-bold text-violet-400 bg-violet-950/60 px-2 py-0.5 rounded border border-violet-800/60">
+              <span className="font-mono text-sm font-bold text-white bg-white/10 px-2 py-0.5 rounded border border-white/20 text-white">
                 {incidentId}
               </span>
               <StatusBadge label={severity} variant="critical" />
@@ -71,12 +71,12 @@ export function InvestigationHeader({
             </div>
 
             <div>
-              <h1 className="text-xl font-bold tracking-tight text-slate-100">
+              <h1 className="text-xl font-bold tracking-tight text-white">
                 {incidentTitle}
               </h1>
-              <p className="text-xs text-slate-400 mt-0.5 flex items-center gap-2">
+              <p className="text-xs text-white/60 mt-0.5 flex items-center gap-2">
                 <span>Target Environment:</span>
-                <span className="font-mono text-slate-200 font-medium">{environment}</span>
+                <span className="font-mono text-white/90 font-medium">{environment}</span>
               </p>
             </div>
           </div>
@@ -88,14 +88,14 @@ export function InvestigationHeader({
                 type="button"
                 onClick={onRefresh}
                 disabled={isRefreshing}
-                className="px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800/80 text-slate-200 hover:bg-slate-700/80 hover:text-white transition disabled:opacity-50"
+                className="px-3 py-1.5 rounded-lg border border-white/20 bg-slate-800/80 text-white/90 hover:bg-slate-700/80 hover:text-white transition disabled:opacity-50"
               >
                 {isRefreshing ? "Refreshing..." : "Probe Backend"}
               </button>
             )}
             <Link
               href="/"
-              className="px-3 py-1.5 rounded-lg border border-slate-800 bg-slate-900 text-slate-400 hover:text-slate-200 transition flex items-center gap-1"
+              className="px-3 py-1.5 rounded-lg border border-white/10 bg-black/40 text-white/60 hover:text-white/90 transition flex items-center gap-1"
             >
               <span>Back to Command Center</span>
             </Link>

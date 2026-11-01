@@ -15,8 +15,8 @@ export default function NotFound() {
         </p>
       </div>
       <Link
-        href="/"
-        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-xs font-medium transition-colors shadow-lg shadow-violet-600/20"
+        href="/command-center"
+        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white hover:bg-slate-200 text-black text-xs font-mono font-medium transition-colors shadow-lg shadow-white/10 border border-white"
       >
         <ArrowLeft className="w-4 h-4" />
         <span>Return to Command Center</span>

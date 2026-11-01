@@ -35,10 +35,10 @@ export function HypothesisToolbar({
     filters.sortBy !== "id";
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-slate-900/90 border border-slate-800 shadow-md backdrop-blur-sm text-xs">
+    <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-black/45 backdrop-blur-xl border border-white/10 shadow-md text-xs">
       {/* Search Bar */}
       <div className="relative flex-1 min-w-[200px] max-w-sm">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/60" />
         <input
           type="text"
           value={filters.searchQuery}
@@ -46,13 +46,13 @@ export function HypothesisToolbar({
             onFilterChange({ ...filters, searchQuery: e.target.value })
           }
           placeholder="Search hypotheses, IDs, or services..."
-          className="w-full pl-8 pr-7 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-violet-500 text-xs transition-colors"
+          className="w-full pl-8 pr-7 py-1.5 rounded-lg bg-black/40 border border-white/10 text-white placeholder:text-white/50 focus:outline-none focus:border-white/40 text-xs transition-colors"
         />
         {filters.searchQuery && (
           <button
             type="button"
             onClick={() => onFilterChange({ ...filters, searchQuery: "" })}
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200"
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-white/60 hover:text-white"
           >
             <X className="w-3 h-3" />
           </button>
@@ -62,9 +62,9 @@ export function HypothesisToolbar({
       {/* Filters Group */}
       <div className="flex flex-wrap items-center gap-2">
         {/* Status Filter */}
-        <div className="flex items-center gap-1.5 bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1">
-          <Filter className="w-3 h-3 text-slate-400" />
-          <span className="text-slate-400 text-[11px]">Status:</span>
+        <div className="flex items-center gap-1.5 bg-black/40 border border-white/10 rounded-lg px-2.5 py-1">
+          <Filter className="w-3 h-3 text-white/60" />
+          <span className="text-white/60 text-[11px]">Status:</span>
           <select
             value={filters.statusFilter}
             onChange={(e) =>
@@ -73,7 +73,7 @@ export function HypothesisToolbar({
                 statusFilter: e.target.value as "ALL" | HypothesisStatus,
               })
             }
-            className="bg-transparent text-slate-200 focus:outline-none cursor-pointer text-[11px]"
+            className="bg-transparent text-white focus:outline-none cursor-pointer text-[11px]"
           >
             <option value="ALL" className="bg-slate-900">All Statuses</option>
             <option value="UNDER_EVALUATION" className="bg-slate-900">Under Evaluation</option>
@@ -85,8 +85,8 @@ export function HypothesisToolbar({
 
         {/* Service Filter */}
         {availableServices.length > 0 && (
-          <div className="flex items-center gap-1.5 bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1">
-            <span className="text-slate-400 text-[11px]">Service:</span>
+          <div className="flex items-center gap-1.5 bg-black/40 border border-white/10 rounded-lg px-2.5 py-1">
+            <span className="text-white/60 text-[11px]">Service:</span>
             <select
               value={filters.serviceFilter}
               onChange={(e) =>
@@ -95,7 +95,7 @@ export function HypothesisToolbar({
                   serviceFilter: e.target.value,
                 })
               }
-              className="bg-transparent text-slate-200 focus:outline-none cursor-pointer text-[11px]"
+              className="bg-transparent text-white focus:outline-none cursor-pointer text-[11px]"
             >
               <option value="ALL" className="bg-slate-900">All Services</option>
               {availableServices.map((svc) => (
@@ -108,9 +108,9 @@ export function HypothesisToolbar({
         )}
 
         {/* Sort Selector */}
-        <div className="flex items-center gap-1.5 bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1">
-          <ArrowUpDown className="w-3 h-3 text-slate-400" />
-          <span className="text-slate-400 text-[11px]">Sort:</span>
+        <div className="flex items-center gap-1.5 bg-black/40 border border-white/10 rounded-lg px-2.5 py-1">
+          <ArrowUpDown className="w-3 h-3 text-white/60" />
+          <span className="text-white/60 text-[11px]">Sort:</span>
           <select
             value={filters.sortBy}
             onChange={(e) =>
@@ -119,7 +119,7 @@ export function HypothesisToolbar({
                 sortBy: e.target.value as "id" | "confidence" | "supporting_count",
               })
             }
-            className="bg-transparent text-slate-200 focus:outline-none cursor-pointer text-[11px]"
+            className="bg-transparent text-white focus:outline-none cursor-pointer text-[11px]"
           >
             <option value="id" className="bg-slate-900">Hypothesis ID</option>
             <option value="confidence" className="bg-slate-900">Confidence Score</option>
@@ -132,7 +132,7 @@ export function HypothesisToolbar({
           <button
             type="button"
             onClick={onResetFilters}
-            className="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-slate-800 bg-slate-950 text-slate-400 hover:text-slate-200 hover:border-slate-700 transition-colors"
+            className="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-slate-800 bg-slate-950 text-white/60 hover:text-white hover:border-slate-700 transition-colors"
           >
             <RotateCcw className="w-3 h-3" />
             <span className="text-[11px]">Reset</span>
@@ -142,12 +142,12 @@ export function HypothesisToolbar({
 
       {/* Counter */}
       {hasActiveFilters && (
-        <div className="w-full flex items-center justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-800/60">
+        <div className="w-full flex items-center justify-between text-[11px] text-white/60 pt-1 border-t border-slate-800/60">
           <span>
-            Showing <strong className="text-slate-200">{totalVisible}</strong> of{" "}
-            <strong className="text-slate-200">{totalAvailable}</strong> hypotheses
+            Showing <strong className="text-white">{totalVisible}</strong> of{" "}
+            <strong className="text-white">{totalAvailable}</strong> hypotheses
           </span>
-          <span className="text-violet-400">Filters Active</span>
+          <span className="text-white font-semibold">Filters Active</span>
         </div>
       )}
     </div>

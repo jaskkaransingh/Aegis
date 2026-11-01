@@ -25,13 +25,13 @@ export function CriticalIncidentPanel() {
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-mono font-bold text-sm text-slate-100">
+              <span className="font-mono font-bold text-sm text-white">
                 {inc.id}
               </span>
               <StatusBadge label={inc.severity} variant="critical" />
               <StatusBadge label={inc.status} variant="violet" />
             </div>
-            <h2 className="text-base font-semibold text-slate-100 mt-1">
+            <h2 className="text-base font-semibold text-white mt-1">
               {inc.title}
             </h2>
           </div>
@@ -46,36 +46,36 @@ export function CriticalIncidentPanel() {
 
       {/* Incident Description */}
       <div className="py-4">
-        <p className="text-xs text-slate-300 leading-relaxed font-sans">
+        <p className="text-xs text-white/80 leading-relaxed font-sans">
           {inc.description}
         </p>
 
         {/* Metadata Grid */}
         <div className="mt-3.5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs">
-          <div className="flex items-center gap-2 text-slate-400 font-mono text-[11px] bg-slate-900/60 px-3 py-2 rounded-lg border border-slate-800/60">
-            <MapPin className="h-3.5 w-3.5 text-slate-500 shrink-0" />
-            <span className="text-slate-500">Env:</span>
-            <span className="text-slate-200 truncate">{inc.environment}</span>
+          <div className="flex items-center gap-2 text-white/60 font-mono text-[11px] bg-black/40/60 px-3 py-2 rounded-lg border border-white/10">
+            <MapPin className="h-3.5 w-3.5 text-white/50 shrink-0" />
+            <span className="text-white/50">Env:</span>
+            <span className="text-white/90 truncate">{inc.environment}</span>
           </div>
 
-          <div className="flex items-center gap-2 text-slate-400 font-mono text-[11px] bg-slate-900/60 px-3 py-2 rounded-lg border border-slate-800/60">
-            <Clock className="h-3.5 w-3.5 text-slate-500 shrink-0" />
-            <span className="text-slate-500">Detected:</span>
-            <span className="text-slate-200 truncate">{inc.initialReportedTime}</span>
+          <div className="flex items-center gap-2 text-white/60 font-mono text-[11px] bg-black/40/60 px-3 py-2 rounded-lg border border-white/10">
+            <Clock className="h-3.5 w-3.5 text-white/50 shrink-0" />
+            <span className="text-white/50">Detected:</span>
+            <span className="text-white/90 truncate">{inc.initialReportedTime}</span>
           </div>
 
-          <div className="flex items-center gap-2 text-slate-400 font-mono text-[11px] bg-slate-900/60 px-3 py-2 rounded-lg border border-slate-800/60">
-            <Layers className="h-3.5 w-3.5 text-slate-500 shrink-0" />
-            <span className="text-slate-500">Evidence Count:</span>
-            <span className="text-violet-300 font-bold">{inc.evidenceCount} Events</span>
+          <div className="flex items-center gap-2 text-white/60 font-mono text-[11px] bg-black/40/60 px-3 py-2 rounded-lg border border-white/10">
+            <Layers className="h-3.5 w-3.5 text-white/50 shrink-0" />
+            <span className="text-white/50">Evidence Count:</span>
+            <span className="text-white font-bold">{inc.evidenceCount} Events</span>
           </div>
         </div>
       </div>
 
       {/* Affected Services & Action */}
-      <div className="pt-3.5 border-t border-slate-800/80 flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div className="pt-3.5 border-t border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-[11px] font-mono text-slate-400 flex items-center gap-1.5 shrink-0">
+          <span className="text-[11px] font-mono text-white/60 flex items-center gap-1.5 shrink-0">
             <ShieldAlert className="h-3.5 w-3.5 text-amber-400" />
             Affected Services:
           </span>
@@ -83,7 +83,7 @@ export function CriticalIncidentPanel() {
             {inc.affectedServices.map((srv) => (
               <span
                 key={srv}
-                className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-900/90 text-slate-300 border border-slate-800"
+                className="text-[10px] font-mono px-2 py-0.5 rounded bg-black/40/90 text-white/80 border border-white/10"
               >
                 {srv}
               </span>
@@ -93,7 +93,7 @@ export function CriticalIncidentPanel() {
 
         <Link
           href={`/investigations/${inc.investigationId}`}
-          className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 text-white font-medium text-xs transition shadow-sm shadow-violet-950/60 shrink-0"
+          className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-white hover:bg-slate-200 text-black font-semibold font-medium text-xs transition shadow-sm shadow-white/5 shrink-0"
         >
           <span>Open Investigation Workspace</span>
           <ArrowRight className="h-3.5 w-3.5" />

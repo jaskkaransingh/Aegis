@@ -50,12 +50,12 @@ function getSeverityBadge(severity: string) {
       };
     case "INFO":
       return {
-        bg: "bg-blue-950/60 border-blue-700/50 text-blue-300",
-        dot: "bg-blue-400",
+        bg: "bg-white/[0.06] border-white/15 text-white/80",
+        dot: "bg-white/70",
       };
     default:
       return {
-        bg: "bg-slate-900 border-slate-700 text-slate-400",
+        bg: "bg-black/40 border-white/20 text-white/60",
         dot: "bg-slate-400",
       };
   }
@@ -82,25 +82,25 @@ export function EvidenceList({
 
   if (isLoading) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center min-h-[400px] p-8 rounded-2xl bg-slate-900/60 border border-slate-800">
-        <div className="w-10 h-10 rounded-full border-2 border-violet-500 border-t-transparent animate-spin mb-3" />
-        <span className="text-xs font-mono text-slate-400">Loading evidence logs...</span>
+      <div className="flex-1 flex flex-col items-center justify-center min-h-[400px] p-8 rounded-2xl bg-black/40 backdrop-blur-xl border border-white/10">
+        <div className="w-10 h-10 rounded-full border-2 border-white border-t-transparent animate-spin mb-3" />
+        <span className="text-xs font-mono text-white/60">Loading evidence logs...</span>
       </div>
     );
   }
 
   if (error && records.length === 0) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center min-h-[400px] p-8 rounded-2xl bg-slate-900/60 border border-slate-800 text-center">
+      <div className="flex-1 flex flex-col items-center justify-center min-h-[400px] p-8 rounded-2xl bg-black/40 backdrop-blur-xl border border-white/10 text-center">
         <div className="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mb-3">
           <AlertOctagon className="w-6 h-6 text-rose-400" />
         </div>
-        <h4 className="text-sm font-semibold text-slate-200 mb-1">Failed to load evidence</h4>
-        <p className="text-xs text-slate-400 max-w-sm mb-4">{error}</p>
+        <h4 className="text-sm font-semibold text-white/90 mb-1">Failed to load evidence</h4>
+        <p className="text-xs text-white/60 max-w-sm mb-4">{error}</p>
         <button
           type="button"
           onClick={onRetry}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-xs font-medium transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-slate-200 text-black font-semibold text-xs transition-colors"
         >
           <RotateCcw className="w-3.5 h-3.5" />
           <span>Retry Connection</span>
@@ -111,18 +111,18 @@ export function EvidenceList({
 
   if (records.length === 0) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center min-h-[400px] p-8 rounded-2xl bg-slate-900/60 border border-slate-800 text-center">
-        <div className="w-12 h-12 rounded-2xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-center mb-3">
-          <FileSearch className="w-6 h-6 text-slate-400" />
+      <div className="flex-1 flex flex-col items-center justify-center min-h-[400px] p-8 rounded-2xl bg-black/40 backdrop-blur-xl border border-white/10 text-center">
+        <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center mb-3">
+          <FileSearch className="w-6 h-6 text-white/60" />
         </div>
-        <h4 className="text-sm font-semibold text-slate-200 mb-1">No matching evidence found</h4>
-        <p className="text-xs text-slate-400 max-w-sm mb-4">
+        <h4 className="text-sm font-semibold text-white/90 mb-1">No matching evidence found</h4>
+        <p className="text-xs text-white/60 max-w-sm mb-4">
           No log or telemetry records match your current search and filter parameters.
         </p>
         <button
           type="button"
           onClick={onResetFilters}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-slate-700 transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-medium border border-white/20 transition-colors"
         >
           <RotateCcw className="w-3.5 h-3.5" />
           <span>Reset Filters</span>
@@ -132,9 +132,9 @@ export function EvidenceList({
   }
 
   return (
-    <div className="flex-1 flex flex-col rounded-2xl bg-slate-900/80 border border-slate-800 shadow-md backdrop-blur-sm overflow-hidden min-h-[500px]">
+    <div className="flex-1 flex flex-col rounded-2xl bg-black/45 backdrop-blur-xl border border-white/10 shadow-md overflow-hidden min-h-[500px]">
       {/* Table Header Row */}
-      <div className="grid grid-cols-12 gap-2 px-4 py-2.5 bg-slate-950/80 border-b border-slate-800/80 text-[10px] font-mono uppercase tracking-wider text-slate-400 select-none">
+      <div className="grid grid-cols-12 gap-2 px-4 py-2.5 bg-black/40 border-b border-white/10 text-[10px] font-mono uppercase tracking-wider text-white/60 select-none">
         <div className="col-span-2">Event ID</div>
         <div className="col-span-2">
           {timestampMode === "corrected" ? "Time (Corrected UTC)" : "Time (Raw Clock)"}
@@ -145,7 +145,7 @@ export function EvidenceList({
       </div>
 
       {/* Virtual / Dense Evidence List */}
-      <div className="flex-1 overflow-y-auto divide-y divide-slate-800/50">
+      <div className="flex-1 overflow-y-auto divide-y divide-white/5">
         {records.map((rec) => {
           const isSelected = selectedRecordId === rec.id;
           const sevConfig = getSeverityBadge(rec.severity);
@@ -158,19 +158,19 @@ export function EvidenceList({
               onClick={() => onSelectRecord(rec.id)}
               className={`grid grid-cols-12 gap-2 px-4 py-2.5 items-center cursor-pointer text-xs transition-colors select-none group ${
                 isSelected
-                  ? "bg-violet-950/40 border-l-2 border-violet-500 shadow-inner"
-                  : "hover:bg-slate-800/40 border-l-2 border-transparent"
+                  ? "bg-white/[0.08] border-l-2 border-white shadow-inner"
+                  : "hover:bg-white/[0.04] border-l-2 border-transparent"
               }`}
             >
               {/* Event ID with copy */}
               <div className="col-span-2 flex items-center gap-1.5 overflow-hidden">
-                <span className="font-mono font-semibold text-slate-200 group-hover:text-violet-300 truncate">
+                <span className="font-mono font-semibold text-white/90 group-hover:text-white truncate">
                   {rec.id}
                 </span>
                 <button
                   type="button"
                   onClick={(e) => copyToClipboard(rec.id, e)}
-                  className="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-slate-200 transition-opacity p-0.5"
+                  className="opacity-0 group-hover:opacity-100 text-white/60 hover:text-white/90 transition-opacity p-0.5"
                   title="Copy Canonical Event ID"
                 >
                   {copiedId === rec.id ? (
@@ -182,7 +182,7 @@ export function EvidenceList({
               </div>
 
               {/* Timestamp */}
-              <div className="col-span-2 flex flex-col font-mono text-[11px] text-slate-300">
+              <div className="col-span-2 flex flex-col font-mono text-[11px] text-white/80">
                 <span>{formatTimeOnly(displayTs)}</span>
                 {rec.clock_correction_applied && (
                   <span className="text-[9px] text-amber-400 font-sans flex items-center gap-0.5">
@@ -194,7 +194,7 @@ export function EvidenceList({
 
               {/* Service */}
               <div className="col-span-2 truncate">
-                <span className="text-[11px] font-medium text-slate-300 bg-slate-950/80 px-2 py-0.5 rounded border border-slate-800 truncate block">
+                <span className="text-[11px] font-medium text-white/80 bg-black/40 px-2 py-0.5 rounded border border-white/10 truncate block">
                   {rec.service}
                 </span>
               </div>
@@ -212,14 +212,14 @@ export function EvidenceList({
               {/* Message, Category & Trace Badges */}
               <div className="col-span-5 flex items-center justify-between gap-2 overflow-hidden">
                 <div className="flex-1 truncate">
-                  <span className="text-slate-300 font-sans truncate text-[11px] block">
+                  <span className="text-white/80 font-sans truncate text-[11px] block">
                     {rec.message}
                   </span>
                 </div>
 
                 <div className="flex items-center gap-1.5 shrink-0">
                   {/* Category Pill */}
-                  <span className="text-[10px] font-mono text-slate-400 bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800">
+                  <span className="text-[10px] font-mono text-white/60 bg-black/40 px-1.5 py-0.5 rounded border border-white/10">
                     {rec.event_type}
                   </span>
 
@@ -227,7 +227,7 @@ export function EvidenceList({
                   {rec.trace_id && (
                     <span
                       title={`Trace: ${rec.trace_id}`}
-                      className="p-1 rounded bg-cyan-950/60 border border-cyan-800/50 text-cyan-400"
+                      className="p-1 rounded bg-cyan-950/60 border border-cyan-800/50 text-white"
                     >
                       <FileCode className="w-3 h-3" />
                     </span>
@@ -250,11 +250,11 @@ export function EvidenceList({
       </div>
 
       {/* Footer Status Strip */}
-      <div className="px-4 py-2 bg-slate-950/90 border-t border-slate-800/80 text-[11px] text-slate-400 flex items-center justify-between font-mono">
+      <div className="px-4 py-2 bg-black/40/90 border-t border-white/10 text-[11px] text-white/60 flex items-center justify-between font-mono">
         <span>
-          Showing <strong className="text-slate-200">{records.length}</strong> canonical evidence record(s)
+          Showing <strong className="text-white/90">{records.length}</strong> canonical evidence record(s)
         </span>
-        <span className="text-[10px] text-slate-400 font-sans">
+        <span className="text-[10px] text-white/60 font-sans">
           Click any record to inspect forensic payload & provenance
         </span>
       </div>

@@ -28,13 +28,13 @@ export function ReportPreview({ report }: ReportPreviewProps) {
   const isDemo = report.metadata.dataSource === "demo";
 
   return (
-    <article className="report-document space-y-10 rounded-2xl border border-slate-800 bg-slate-950/70 p-6 md:p-10 shadow-xl font-sans text-slate-200">
+    <article className="report-document space-y-10 rounded-2xl border border-white/10 bg-black/45 backdrop-blur-xl p-6 md:p-10 shadow-xl font-sans text-slate-200">
       {/* Document Header Banner */}
-      <div className="border-b border-slate-800/90 pb-8 space-y-4">
+      <div className="border-b border-white/10 pb-8 space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="font-mono text-xs uppercase tracking-wider text-violet-400 font-semibold">
+              <span className="font-mono text-xs uppercase tracking-wider text-white font-semibold">
                 AEGIS Forensic Investigation Report
               </span>
               <span className="text-slate-600">•</span>
@@ -57,14 +57,14 @@ export function ReportPreview({ report }: ReportPreviewProps) {
             >
               {isDemo ? "DEMO REPORT (PREVIEW)" : "LIVE FORENSIC REPORT"}
             </span>
-            <span className="px-3 py-1 rounded-full text-xs font-mono bg-slate-900 border border-slate-800 text-slate-300">
+            <span className="px-3 py-1 rounded-full text-xs font-mono bg-black/40 border border-white/10 text-slate-300">
               v{report.metadata.version}
             </span>
           </div>
         </div>
 
         {/* Metadata Strip */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-xl bg-slate-900/60 border border-slate-800/60 text-xs">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-xl bg-black/40 border border-white/10 text-xs">
           <div>
             <div className="text-slate-500 font-mono text-[10px] uppercase">Incident ID</div>
             <div className="font-mono font-semibold text-slate-200 mt-0.5">
@@ -83,7 +83,7 @@ export function ReportPreview({ report }: ReportPreviewProps) {
           </div>
           <div>
             <div className="text-slate-500 font-mono text-[10px] uppercase">Evidence Items</div>
-            <div className="font-mono font-semibold text-violet-300 mt-0.5">
+            <div className="font-mono font-semibold text-[#22c55e] mt-0.5">
               {report.section3EvidenceInventory.length} Verified Records
             </div>
           </div>
@@ -106,8 +106,8 @@ export function ReportPreview({ report }: ReportPreviewProps) {
       {/* SECTION 1: EXECUTIVE SUMMARY */}
       {/* ========================================================================= */}
       <section id="section-1" className="report-section scroll-mt-20 space-y-4">
-        <div className="flex items-center gap-2.5 pb-2 border-b border-slate-800">
-          <div className="p-1 rounded bg-violet-950/80 border border-violet-700/60 text-violet-400">
+        <div className="flex items-center gap-2.5 pb-2 border-b border-white/10">
+          <div className="p-1 rounded bg-white/10 border border-white/20 text-white">
             <FileText className="w-4 h-4" />
           </div>
           <h2 className="text-lg font-bold text-slate-100 font-mono">
@@ -120,7 +120,7 @@ export function ReportPreview({ report }: ReportPreviewProps) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
-          <div className="p-4 rounded-xl bg-slate-900/50 border border-slate-800 space-y-1.5">
+          <div className="p-4 rounded-xl bg-black/40 border border-white/10 space-y-1.5">
             <div className="text-xs font-mono font-semibold uppercase text-slate-400">
               Observed Impact
             </div>
@@ -129,7 +129,7 @@ export function ReportPreview({ report }: ReportPreviewProps) {
             </p>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-900/50 border border-slate-800 space-y-1.5">
+          <div className="p-4 rounded-xl bg-black/40 border border-white/10 space-y-1.5">
             <div className="text-xs font-mono font-semibold uppercase text-slate-400">
               Epistemic Status
             </div>
@@ -150,8 +150,8 @@ export function ReportPreview({ report }: ReportPreviewProps) {
       {/* SECTION 2: INCIDENT OVERVIEW */}
       {/* ========================================================================= */}
       <section id="section-2" className="report-section scroll-mt-20 space-y-4">
-        <div className="flex items-center gap-2.5 pb-2 border-b border-slate-800">
-          <div className="p-1 rounded bg-violet-950/80 border border-violet-700/60 text-violet-400">
+        <div className="flex items-center gap-2.5 pb-2 border-b border-white/10">
+          <div className="p-1 rounded bg-white/10 border border-white/20 text-white">
             <AlertTriangle className="w-4 h-4" />
           </div>
           <h2 className="text-lg font-bold text-slate-100 font-mono">
@@ -160,21 +160,21 @@ export function ReportPreview({ report }: ReportPreviewProps) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
+          <div className="p-4 rounded-xl bg-black/40 border border-white/10 space-y-1">
             <span className="text-[10px] font-mono uppercase text-slate-500">Incident Identifier</span>
             <div className="font-mono font-bold text-slate-100">{report.section2IncidentOverview.incidentId}</div>
           </div>
-          <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
+          <div className="p-4 rounded-xl bg-black/40 border border-white/10 space-y-1">
             <span className="text-[10px] font-mono uppercase text-slate-500">Target Environment</span>
             <div className="font-medium text-slate-200">{report.section2IncidentOverview.environment}</div>
           </div>
-          <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
+          <div className="p-4 rounded-xl bg-black/40 border border-white/10 space-y-1">
             <span className="text-[10px] font-mono uppercase text-slate-500">Initial Detection Time</span>
             <div className="font-mono text-slate-200">{report.section2IncidentOverview.detectionTimestamp}</div>
           </div>
         </div>
 
-        <div className="p-4 rounded-xl bg-slate-900/40 border border-slate-800 space-y-2">
+        <div className="p-4 rounded-xl bg-black/40 border border-white/10 space-y-2">
           <span className="text-xs font-mono font-semibold uppercase text-slate-400">Initial Symptoms</span>
           <p className="text-xs text-slate-300 leading-relaxed">
             {report.section2IncidentOverview.initialSymptoms}
@@ -189,7 +189,7 @@ export function ReportPreview({ report }: ReportPreviewProps) {
             {report.section2IncidentOverview.affectedServices.map((svc) => (
               <span
                 key={svc}
-                className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 font-mono text-xs text-slate-300"
+                className="px-2.5 py-1 rounded-lg bg-black/40 border border-white/10 font-mono text-xs text-slate-300"
               >
                 {svc}
               </span>
@@ -202,9 +202,9 @@ export function ReportPreview({ report }: ReportPreviewProps) {
       {/* SECTION 3: EVIDENCE INVENTORY */}
       {/* ========================================================================= */}
       <section id="section-3" className="report-section scroll-mt-20 space-y-4">
-        <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+        <div className="flex items-center justify-between pb-2 border-b border-white/10">
           <div className="flex items-center gap-2.5">
-            <div className="p-1 rounded bg-violet-950/80 border border-violet-700/60 text-violet-400">
+            <div className="p-1 rounded bg-white/10 border border-white/20 text-white">
               <Database className="w-4 h-4" />
             </div>
             <h2 className="text-lg font-bold text-slate-100 font-mono">
@@ -220,10 +220,10 @@ export function ReportPreview({ report }: ReportPreviewProps) {
           Each record below has been ingested, verified, and mapped to canonical telemetry events. Click any event ID to inspect full provenance in the Evidence Explorer.
         </p>
 
-        <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/60">
+        <div className="overflow-x-auto rounded-xl border border-white/10 bg-black/40">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b border-slate-800 bg-slate-900/90 text-[11px] font-mono uppercase text-slate-400">
+              <tr className="border-b border-white/10 bg-black/40/90 text-[11px] font-mono uppercase text-slate-400">
                 <th className="py-2.5 px-3">Evidence ID</th>
                 <th className="py-2.5 px-3">Corrected Timestamp</th>
                 <th className="py-2.5 px-3">Source Service</th>
@@ -240,7 +240,7 @@ export function ReportPreview({ report }: ReportPreviewProps) {
                     <td className="py-2.5 px-3 whitespace-nowrap">
                       <Link
                         href={`/evidence?event=${item.id}`}
-                        className="inline-flex items-center gap-1 font-bold text-violet-400 hover:text-violet-300 hover:underline"
+                        className="inline-flex items-center gap-1 font-bold text-white hover:text-[#22c55e] hover:underline"
                         title="Inspect in Evidence Explorer"
                       >
                         <span>{item.id}</span>
@@ -282,8 +282,8 @@ export function ReportPreview({ report }: ReportPreviewProps) {
       {/* SECTION 4: TIMELINE OF EVENTS */}
       {/* ========================================================================= */}
       <section id="section-4" className="report-section scroll-mt-20 space-y-4">
-        <div className="flex items-center gap-2.5 pb-2 border-b border-slate-800">
-          <div className="p-1 rounded bg-violet-950/80 border border-violet-700/60 text-violet-400">
+        <div className="flex items-center gap-2.5 pb-2 border-b border-white/10">
+          <div className="p-1 rounded bg-white/10 border border-white/20 text-white">
             <Clock className="w-4 h-4" />
           </div>
           <h2 className="text-lg font-bold text-slate-100 font-mono">
@@ -295,10 +295,10 @@ export function ReportPreview({ report }: ReportPreviewProps) {
           Chronological sequence reconstructed after applying clock drift correction models. Corrected timestamps resolve apparent causality inversions.
         </p>
 
-        <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/60">
+        <div className="overflow-x-auto rounded-xl border border-white/10 bg-black/40">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b border-slate-800 bg-slate-900/90 text-[11px] font-mono uppercase text-slate-400">
+              <tr className="border-b border-white/10 bg-black/40/90 text-[11px] font-mono uppercase text-slate-400">
                 <th className="py-2.5 px-3">Order</th>
                 <th className="py-2.5 px-3">Event Ref</th>
                 <th className="py-2.5 px-3">Raw Timestamp</th>
@@ -317,7 +317,7 @@ export function ReportPreview({ report }: ReportPreviewProps) {
                   <td className="py-2.5 px-3 whitespace-nowrap">
                     <Link
                       href={`/timeline?event=${item.eventId}`}
-                      className="inline-flex items-center gap-1 font-semibold text-violet-400 hover:text-violet-300 hover:underline"
+                      className="inline-flex items-center gap-1 font-semibold text-white hover:text-[#22c55e] hover:underline"
                     >
                       <span>{item.eventId}</span>
                       <ExternalLink className="w-3 h-3 opacity-60 no-print" />
@@ -349,8 +349,8 @@ export function ReportPreview({ report }: ReportPreviewProps) {
       {/* SECTION 5: SERVICE IMPACT */}
       {/* ========================================================================= */}
       <section id="section-5" className="report-section scroll-mt-20 space-y-4">
-        <div className="flex items-center gap-2.5 pb-2 border-b border-slate-800">
-          <div className="p-1 rounded bg-violet-950/80 border border-violet-700/60 text-violet-400">
+        <div className="flex items-center gap-2.5 pb-2 border-b border-white/10">
+          <div className="p-1 rounded bg-white/10 border border-white/20 text-white">
             <Layers className="w-4 h-4" />
           </div>
           <h2 className="text-lg font-bold text-slate-100 font-mono">
@@ -374,7 +374,7 @@ export function ReportPreview({ report }: ReportPreviewProps) {
             return (
               <div
                 key={svc.serviceId}
-                className="p-4 rounded-xl border border-slate-800 bg-slate-900/60 space-y-2.5 flex flex-col justify-between"
+                className="p-4 rounded-xl border border-white/10 bg-black/40 space-y-2.5 flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-start justify-between gap-2">
@@ -390,7 +390,7 @@ export function ReportPreview({ report }: ReportPreviewProps) {
                   </div>
                 </div>
 
-                <div className="space-y-1.5 pt-2 border-t border-slate-800/60 text-xs">
+                <div className="space-y-1.5 pt-2 border-t border-white/10 text-xs">
                   <div className="text-[10px] font-mono text-slate-400 uppercase">
                     Linked Evidence ({svc.evidenceIds.length}):
                   </div>
@@ -400,7 +400,7 @@ export function ReportPreview({ report }: ReportPreviewProps) {
                         <Link
                           key={eid}
                           href={`/evidence?event=${eid}`}
-                          className="px-1.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 font-mono text-[10px] text-violet-300 hover:underline"
+                          className="px-1.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 font-mono text-[10px] text-[#22c55e] hover:underline"
                         >
                           {eid}
                         </Link>
@@ -426,8 +426,8 @@ export function ReportPreview({ report }: ReportPreviewProps) {
       {/* SECTION 6: HYPOTHESES & ASSESSMENT */}
       {/* ========================================================================= */}
       <section id="section-6" className="report-section scroll-mt-20 space-y-4">
-        <div className="flex items-center gap-2.5 pb-2 border-b border-slate-800">
-          <div className="p-1 rounded bg-violet-950/80 border border-violet-700/60 text-violet-400">
+        <div className="flex items-center gap-2.5 pb-2 border-b border-white/10">
+          <div className="p-1 rounded bg-white/10 border border-white/20 text-white">
             <Sparkles className="w-4 h-4" />
           </div>
           <h2 className="text-lg font-bold text-slate-100 font-mono">
@@ -449,15 +449,15 @@ export function ReportPreview({ report }: ReportPreviewProps) {
                 key={h.id}
                 className={`p-4 md:p-5 rounded-xl border transition-colors ${
                   isLeading
-                    ? "bg-violet-950/20 border-violet-700/60"
+                    ? "bg-white/5 border-white/25 shadow-[0_0_15px_rgba(255,255,255,0.08)]"
                     : isDisproven
-                    ? "bg-slate-900/40 border-slate-800/60 opacity-80"
-                    : "bg-slate-900/60 border-slate-800"
+                    ? "bg-black/40 border-white/10 opacity-70"
+                    : "bg-black/30 border-white/10"
                 }`}
               >
-                <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-800/80">
+                <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-white/10">
                   <div className="flex items-center gap-2">
-                    <span className="font-mono text-xs font-bold text-violet-400">[{h.id}]</span>
+                    <span className="font-mono text-xs font-bold text-white">[{h.id}]</span>
                     <h3 className="font-semibold text-sm text-slate-100">{h.title}</h3>
                   </div>
 
@@ -486,7 +486,7 @@ export function ReportPreview({ report }: ReportPreviewProps) {
                 </p>
 
                 {/* Evidence citations */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3 pt-3 border-t border-slate-800/60 text-xs">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3 pt-3 border-t border-white/10 text-xs">
                   <div>
                     <span className="text-[10px] font-mono uppercase font-semibold text-emerald-400 block mb-1">
                       Supporting Evidence ({h.supportingEvidenceIds.length}):
@@ -548,8 +548,8 @@ export function ReportPreview({ report }: ReportPreviewProps) {
       {/* SECTION 7: ROOT-CAUSE ASSESSMENT */}
       {/* ========================================================================= */}
       <section id="section-7" className="report-section scroll-mt-20 space-y-4">
-        <div className="flex items-center gap-2.5 pb-2 border-b border-slate-800">
-          <div className="p-1 rounded bg-violet-950/80 border border-violet-700/60 text-violet-400">
+        <div className="flex items-center gap-2.5 pb-2 border-b border-white/10">
+          <div className="p-1 rounded bg-white/10 border border-white/20 text-white">
             <ShieldCheck className="w-4 h-4" />
           </div>
           <h2 className="text-lg font-bold text-slate-100 font-mono">
@@ -557,10 +557,10 @@ export function ReportPreview({ report }: ReportPreviewProps) {
           </h2>
         </div>
 
-        <div className="p-5 rounded-xl border border-violet-700/50 bg-violet-950/20 space-y-3.5">
+        <div className="p-5 rounded-xl border border-white/20 bg-white/[0.03] space-y-3.5">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <span className="font-mono text-[10px] uppercase tracking-wider text-violet-400 font-semibold block">
+              <span className="font-mono text-[10px] uppercase tracking-wider text-white font-semibold block">
                 Primary Root Cause Classification
               </span>
               <div className="flex items-center gap-2 mt-0.5">
@@ -588,7 +588,7 @@ export function ReportPreview({ report }: ReportPreviewProps) {
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800/60 space-y-1.5">
+          <div className="pt-2 border-t border-white/10 space-y-1.5">
             <span className="text-[10px] font-mono uppercase font-semibold text-slate-400 block">
               Contributing Cascade Factors:
             </span>
@@ -599,7 +599,7 @@ export function ReportPreview({ report }: ReportPreviewProps) {
             </ul>
           </div>
 
-          <div className="p-3 rounded-lg bg-slate-900/80 border border-slate-800 text-[11px] text-slate-400 space-y-1">
+          <div className="p-3 rounded-lg bg-black/40/80 border border-white/10 text-[11px] text-slate-400 space-y-1">
             <div className="flex items-center gap-1.5 font-mono text-[10px] uppercase font-semibold text-slate-300">
               <ShieldAlert className="w-3.5 h-3.5 text-amber-400" />
               <span>Epistemic Integrity Notice</span>
@@ -613,8 +613,8 @@ export function ReportPreview({ report }: ReportPreviewProps) {
       {/* SECTION 8: COUNTERFACTUAL ANALYSIS */}
       {/* ========================================================================= */}
       <section id="section-8" className="report-section scroll-mt-20 space-y-4">
-        <div className="flex items-center gap-2.5 pb-2 border-b border-slate-800">
-          <div className="p-1 rounded bg-violet-950/80 border border-violet-700/60 text-violet-400">
+        <div className="flex items-center gap-2.5 pb-2 border-b border-white/10">
+          <div className="p-1 rounded bg-white/10 border border-white/20 text-white">
             <Layers className="w-4 h-4" />
           </div>
           <h2 className="text-lg font-bold text-slate-100 font-mono">
@@ -622,7 +622,7 @@ export function ReportPreview({ report }: ReportPreviewProps) {
           </h2>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 text-xs text-slate-300 space-y-1">
+        <div className="p-3.5 rounded-xl bg-black/40/80 border border-white/10 text-xs text-slate-300 space-y-1">
           <div className="flex items-center gap-2 font-mono text-[11px] text-amber-300 font-semibold">
             <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
             <span>Simulation Engine Status: Offline</span>
@@ -636,10 +636,10 @@ export function ReportPreview({ report }: ReportPreviewProps) {
           {report.section8Counterfactual.scenarios.map((sc, idx) => (
             <div
               key={idx}
-              className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2 flex flex-col justify-between"
+              className="p-4 rounded-xl bg-black/40 border border-white/10 space-y-2 flex flex-col justify-between"
             >
               <div>
-                <span className="font-mono text-[10px] uppercase text-violet-400 font-semibold block">
+                <span className="font-mono text-[10px] uppercase text-white font-semibold block">
                   Scenario #{idx + 1}
                 </span>
                 <h4 className="font-semibold text-xs text-slate-200 mt-0.5">{sc.name}</h4>
@@ -648,7 +648,7 @@ export function ReportPreview({ report }: ReportPreviewProps) {
                 </div>
               </div>
 
-              <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800/80 text-[11px] space-y-1">
+              <div className="p-2.5 rounded-lg bg-black/50 border border-white/10 text-[11px] space-y-1">
                 <span className="font-mono text-[10px] text-slate-500 uppercase block">Hypothetical Intervention:</span>
                 <p className="text-slate-300">{sc.action}</p>
                 <span className="font-mono text-[10px] text-slate-500 uppercase block mt-1">Assumptions:</span>
@@ -663,8 +663,8 @@ export function ReportPreview({ report }: ReportPreviewProps) {
       {/* SECTION 9: UNCERTAINTY & LIMITATIONS */}
       {/* ========================================================================= */}
       <section id="section-9" className="report-section scroll-mt-20 space-y-4">
-        <div className="flex items-center gap-2.5 pb-2 border-b border-slate-800">
-          <div className="p-1 rounded bg-violet-950/80 border border-violet-700/60 text-violet-400">
+        <div className="flex items-center gap-2.5 pb-2 border-b border-white/10">
+          <div className="p-1 rounded bg-white/10 border border-white/20 text-white">
             <HelpCircle className="w-4 h-4" />
           </div>
           <h2 className="text-lg font-bold text-slate-100 font-mono">
@@ -673,7 +673,7 @@ export function ReportPreview({ report }: ReportPreviewProps) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
+          <div className="p-4 rounded-xl bg-black/40 border border-white/10 space-y-2">
             <span className="text-xs font-mono font-semibold uppercase text-amber-400 block">
               Telemetry & Instrumentation Gaps
             </span>
@@ -684,8 +684,8 @@ export function ReportPreview({ report }: ReportPreviewProps) {
             </ul>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
-            <span className="text-xs font-mono font-semibold uppercase text-violet-400 block">
+          <div className="p-4 rounded-xl bg-black/40 border border-white/10 space-y-2">
+            <span className="text-xs font-mono font-semibold uppercase text-white block">
               Unresolved Analytical Areas
             </span>
             <ul className="list-disc pl-4 space-y-1 text-xs text-slate-300">
@@ -696,7 +696,7 @@ export function ReportPreview({ report }: ReportPreviewProps) {
           </div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-slate-900/40 border border-slate-800 text-xs text-slate-400">
+        <div className="p-3.5 rounded-xl bg-black/40 border border-white/10 text-xs text-slate-400">
           <strong className="text-slate-300">Simulation Status: </strong>
           {report.section9Limitations.simulationStatus}
         </div>
@@ -706,8 +706,8 @@ export function ReportPreview({ report }: ReportPreviewProps) {
       {/* SECTION 10: RECOMMENDED NEXT STEPS */}
       {/* ========================================================================= */}
       <section id="section-10" className="report-section scroll-mt-20 space-y-4">
-        <div className="flex items-center gap-2.5 pb-2 border-b border-slate-800">
-          <div className="p-1 rounded bg-violet-950/80 border border-violet-700/60 text-violet-400">
+        <div className="flex items-center gap-2.5 pb-2 border-b border-white/10">
+          <div className="p-1 rounded bg-white/10 border border-white/20 text-white">
             <CheckCircle2 className="w-4 h-4" />
           </div>
           <h2 className="text-lg font-bold text-slate-100 font-mono">
@@ -721,11 +721,11 @@ export function ReportPreview({ report }: ReportPreviewProps) {
             return (
               <div
                 key={idx}
-                className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col md:flex-row md:items-start justify-between gap-3 text-xs"
+                className="p-4 rounded-xl bg-black/40 border border-white/10 flex flex-col md:flex-row md:items-start justify-between gap-3 text-xs"
               >
                 <div className="space-y-1.5 flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="font-mono text-[10px] uppercase text-violet-400 font-semibold">
+                    <span className="font-mono text-[10px] uppercase text-white font-semibold">
                       {rec.category}
                     </span>
                     <span className="text-slate-600">•</span>
@@ -733,7 +733,7 @@ export function ReportPreview({ report }: ReportPreviewProps) {
                       className={`px-2 py-0.2 rounded text-[10px] font-mono font-bold ${
                         isHigh
                           ? "bg-rose-950/60 border border-rose-800 text-rose-300"
-                          : "bg-blue-950/60 border border-blue-800 text-blue-300"
+                          : "bg-emerald-950/60 border border-emerald-500/40 text-[#22c55e]"
                       }`}
                     >
                       {rec.priority} PRIORITY
@@ -756,7 +756,7 @@ export function ReportPreview({ report }: ReportPreviewProps) {
       </section>
 
       {/* Document Footer */}
-      <footer className="border-t border-slate-800/80 pt-6 mt-12 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 font-mono">
+      <footer className="border-t border-white/10 pt-6 mt-12 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 font-mono">
         <div>
           AEGIS Autonomous Evidence-Grounded Investigation System • Confidential Incident Post-Mortem
         </div>

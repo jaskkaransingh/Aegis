@@ -29,28 +29,28 @@ export function TimelineHeader({
   return (
     <div className="space-y-4">
       {/* Breadcrumbs */}
-      <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs font-mono text-slate-400">
-        <Link href="/" className="hover:text-slate-200 transition flex items-center gap-1">
+      <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs font-mono text-white/60">
+        <Link href="/" className="hover:text-white/90 transition flex items-center gap-1">
           <ArrowLeft className="h-3.5 w-3.5" />
           <span>Command Center</span>
         </Link>
         <ChevronRight className="h-3 w-3 text-slate-600" />
-        <Link href={`/investigations/${incidentId}`} className="hover:text-slate-200 transition">
+        <Link href={`/investigations/${incidentId}`} className="hover:text-white/90 transition">
           {incidentId} Workspace
         </Link>
         <ChevronRight className="h-3 w-3 text-slate-600" />
-        <span className="text-slate-200 font-semibold">Timeline Explorer</span>
+        <span className="text-white/90 font-semibold">Timeline Explorer</span>
       </nav>
 
       {/* Main Title & Mode Switcher Bar */}
-      <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 shadow-sm space-y-4">
+      <div className="rounded-xl border border-white/10 bg-black/40/60 p-5 shadow-sm space-y-4">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2.5 flex-wrap">
-              <span className="font-mono text-sm font-bold text-violet-400 bg-violet-950/60 px-2 py-0.5 rounded border border-violet-800/60">
+              <span className="font-mono text-sm font-bold text-white bg-white/10 px-2 py-0.5 rounded border border-white/20">
                 {incidentId}
               </span>
-              <span className="text-xs font-mono text-slate-300">
+              <span className="text-xs font-mono text-white/80">
                 {incidentTitle}
               </span>
 
@@ -68,9 +68,9 @@ export function TimelineHeader({
               )}
             </div>
 
-            <h1 className="text-xl font-bold tracking-tight text-slate-100 flex items-center gap-2.5">
+            <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2.5">
               <span>Timeline Explorer</span>
-              <span className="text-xs font-mono font-normal text-slate-400 bg-slate-800/70 px-2 py-0.5 rounded border border-slate-700/60">
+              <span className="text-xs font-mono font-normal text-white/60 bg-slate-800/70 px-2 py-0.5 rounded border border-white/10">
                 {filteredEventsCount} / {totalEvents} Events
               </span>
             </h1>
@@ -88,7 +88,7 @@ export function TimelineHeader({
                 type="button"
                 onClick={onRefresh}
                 disabled={isRefreshing}
-                className="px-3 py-1.5 rounded-lg border border-slate-800 bg-slate-900 text-xs font-mono text-slate-300 hover:bg-slate-800 hover:text-white transition disabled:opacity-50"
+                className="px-3 py-1.5 rounded-lg border border-white/10 bg-black/40 text-xs font-mono text-white/80 hover:bg-slate-800 hover:text-white transition disabled:opacity-50"
               >
                 {isRefreshing ? "Refreshing..." : "Re-sync"}
               </button>
@@ -97,12 +97,12 @@ export function TimelineHeader({
         </div>
 
         {/* Dynamic Clock Skew Context Explainer */}
-        <div className="pt-3 border-t border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] font-mono">
-          <div className="flex items-center gap-2 text-slate-400">
-            <Clock className="h-3.5 w-3.5 text-violet-400 shrink-0" />
+        <div className="pt-3 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] font-mono">
+          <div className="flex items-center gap-2 text-white/60">
+            <Clock className="h-3.5 w-3.5 text-white shrink-0" />
             {timestampMode === "corrected" ? (
               <span>
-                <strong className="text-violet-300 font-semibold">Active Mode: Corrected Timestamps. </strong>
+                <strong className="text-white font-semibold">Active Mode: Corrected Timestamps. </strong>
                 Service clock drift is neutralized (Payment Service: -42.00s UTC offset). Sequence reflects chronological reality.
               </span>
             ) : (
@@ -113,8 +113,8 @@ export function TimelineHeader({
             )}
           </div>
 
-          <div className="text-slate-500 shrink-0">
-            Reference Standard: <span className="text-slate-300">UTC (PTP / Chrony)</span>
+          <div className="text-white/50 shrink-0">
+            Reference Standard: <span className="text-white/80">UTC (PTP / Chrony)</span>
           </div>
         </div>
       </div>

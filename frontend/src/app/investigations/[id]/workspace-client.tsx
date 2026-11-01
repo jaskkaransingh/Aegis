@@ -168,7 +168,7 @@ export function InvestigationWorkspaceClient({ id }: WorkspaceClientProps) {
                 onClick={() => setSelectedService(isSelected ? null : serviceId)}
                 className={`px-3 py-1.5 rounded-lg border text-xs font-mono transition-all flex items-center gap-2 ${
                   isSelected
-                    ? "bg-[#7adcf5] text-black border-[#7adcf5] font-semibold shadow-[0_0_12px_rgba(122,220,245,0.4)]"
+                    ? "bg-white text-black border-white font-semibold shadow-[0_0_12px_rgba(255,255,255,0.4)]"
                     : isServiceActiveInSelectedEvent
                     ? "bg-white/15 border-white/40 text-white font-medium"
                     : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:text-white"
@@ -177,10 +177,10 @@ export function InvestigationWorkspaceClient({ id }: WorkspaceClientProps) {
                 <span
                   className={`h-1.5 w-1.5 rounded-full ${
                     serviceId.includes("database")
-                      ? "bg-[#f27886]"
+                      ? "bg-[#ef4444]"
                       : serviceId.includes("appointment") || serviceId.includes("gateway")
-                      ? "bg-[#f2c66d]"
-                      : "bg-[#7adcf5]"
+                      ? "bg-[#f59e0b]"
+                      : "bg-[#22c55e]"
                   }`}
                 />
                 <span>{serviceId}</span>
@@ -198,7 +198,7 @@ export function InvestigationWorkspaceClient({ id }: WorkspaceClientProps) {
             <span className="text-xs font-mono uppercase tracking-widest text-white/40">
               LAYER B // EVIDENCE PROGRESSION ({displayEvents.length} RECORDS)
             </span>
-            <span className="text-[10px] font-mono text-[#76d6a4]">
+            <span className="text-[10px] font-mono text-[#22c55e]">
               CLOCK DRIFT CALIBRATED
             </span>
           </div>
@@ -217,7 +217,7 @@ export function InvestigationWorkspaceClient({ id }: WorkspaceClientProps) {
                   }}
                   className={`p-3.5 rounded-xl border transition-all cursor-pointer ${
                     isSelected
-                      ? "bg-white/15 border-white/40 shadow-lg scale-[1.01]"
+                      ? "bg-white/15 border-white/50 shadow-lg scale-[1.01]"
                       : "bg-[#0b0e17]/80 border-white/5 hover:border-white/20 hover:bg-[#101522]"
                   }`}
                 >
@@ -225,12 +225,12 @@ export function InvestigationWorkspaceClient({ id }: WorkspaceClientProps) {
                     <div className="flex items-center gap-2">
                       <span
                         className={`h-2 w-2 rounded-full ${
-                          isCritical ? "bg-[#f27886] animate-pulse" : "bg-[#f2c66d]"
+                          isCritical ? "bg-[#ef4444] animate-pulse" : "bg-[#f59e0b]"
                         }`}
                       />
                       <span className="font-bold text-white">{evt.id}</span>
                       <span className="text-white/40">•</span>
-                      <span className="text-[#7adcf5]">{evt.service}</span>
+                      <span className="text-white/80">{evt.service}</span>
                     </div>
 
                     <span className="text-[10px] text-white/40 font-mono">
@@ -280,7 +280,7 @@ export function InvestigationWorkspaceClient({ id }: WorkspaceClientProps) {
               <div className="grid grid-cols-2 gap-3 text-xs font-mono pt-1">
                 <div className="p-2.5 rounded bg-white/[0.03] border border-white/5 space-y-0.5">
                   <div className="text-[9px] uppercase text-white/40">Service Origin</div>
-                  <div className="text-[#7adcf5] font-semibold truncate">{selectedEvent.service}</div>
+                  <div className="text-white font-semibold truncate">{selectedEvent.service}</div>
                 </div>
 
                 <div className="p-2.5 rounded bg-white/[0.03] border border-white/5 space-y-0.5">
@@ -292,14 +292,14 @@ export function InvestigationWorkspaceClient({ id }: WorkspaceClientProps) {
 
                 <div className="p-2.5 rounded bg-white/[0.03] border border-white/5 space-y-0.5">
                   <div className="text-[9px] uppercase text-white/40">Skew Offset</div>
-                  <div className="text-[#76d6a4] font-semibold">
+                  <div className="text-[#22c55e] font-semibold">
                     {selectedEvent.uncertainty_seconds ? `±${selectedEvent.uncertainty_seconds}s` : "0.00ms"}
                   </div>
                 </div>
 
                 <div className="p-2.5 rounded bg-white/[0.03] border border-white/5 space-y-0.5">
                   <div className="text-[9px] uppercase text-white/40">Trace Correlated</div>
-                  <div className="text-[#b29aff] font-semibold truncate">
+                  <div className="text-white/80 font-semibold truncate">
                     {selectedEvent.trace_id ? selectedEvent.trace_id.slice(0, 12) + "..." : "trace-auth-421"}
                   </div>
                 </div>
@@ -309,7 +309,7 @@ export function InvestigationWorkspaceClient({ id }: WorkspaceClientProps) {
               <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs font-mono">
                 <Link
                   href={`/evidence?id=${selectedEvent.id}`}
-                  className="text-[#7adcf5] hover:underline flex items-center gap-1"
+                  className="text-white/80 hover:text-white hover:underline flex items-center gap-1"
                 >
                   <span>Inspect in Evidence Vault</span>
                   <ExternalLink className="h-3 w-3" />
@@ -341,8 +341,8 @@ export function InvestigationWorkspaceClient({ id }: WorkspaceClientProps) {
           {/* 1. Observed Facts */}
           <AegisSurface elevation="card" border="default" className="p-4 space-y-2 bg-[#0b0e17]/90 border-emerald-500/30">
             <div className="flex items-center justify-between text-xs font-mono">
-              <span className="font-bold text-[#76d6a4]">[OBSERVED FACTS]</span>
-              <CheckCircle2 className="h-3.5 w-3.5 text-[#76d6a4]" />
+              <span className="font-bold text-[#22c55e]">[OBSERVED FACTS]</span>
+              <CheckCircle2 className="h-3.5 w-3.5 text-[#22c55e]" />
             </div>
             <p className="text-xs text-white/80 leading-relaxed font-sans">
               PostgreSQL connection pool reached 100/100 limit. 20 worker threads held by unindexed schema migration query.
@@ -350,10 +350,10 @@ export function InvestigationWorkspaceClient({ id }: WorkspaceClientProps) {
           </AegisSurface>
 
           {/* 2. Supported Inferences */}
-          <AegisSurface elevation="card" border="default" className="p-4 space-y-2 bg-[#0b0e17]/90 border-violet-500/30">
+          <AegisSurface elevation="card" border="default" className="p-4 space-y-2 bg-[#0b0e17]/90 border-white/20">
             <div className="flex items-center justify-between text-xs font-mono">
-              <span className="font-bold text-[#b29aff]">[INFERENCES]</span>
-              <Activity className="h-3.5 w-3.5 text-[#b29aff]" />
+              <span className="font-bold text-white">[INFERENCES]</span>
+              <Activity className="h-3.5 w-3.5 text-white/80" />
             </div>
             <p className="text-xs text-white/80 leading-relaxed font-sans">
               Worker starvation in auth-service cascaded 504 Gateway Timeouts to civic-api-gateway after 4,210ms timeout.
@@ -361,10 +361,10 @@ export function InvestigationWorkspaceClient({ id }: WorkspaceClientProps) {
           </AegisSurface>
 
           {/* 3. Competing Hypotheses */}
-          <AegisSurface elevation="card" border="default" className="p-4 space-y-2 bg-[#0b0e17]/90 border-cyan-500/30">
+          <AegisSurface elevation="card" border="default" className="p-4 space-y-2 bg-[#0b0e17]/90 border-white/20">
             <div className="flex items-center justify-between text-xs font-mono">
-              <span className="font-bold text-[#7adcf5]">[HYPOTHESES]</span>
-              <Lightbulb className="h-3.5 w-3.5 text-[#7adcf5]" />
+              <span className="font-bold text-white/90">[HYPOTHESES]</span>
+              <Lightbulb className="h-3.5 w-3.5 text-white/80" />
             </div>
             <p className="text-xs text-white/80 leading-relaxed font-sans">
               Theory A (DB Pool Exhaustion) supported by 4 spans. Theory B (Network Partition) refuted by TCP ping telemetry.
@@ -374,8 +374,8 @@ export function InvestigationWorkspaceClient({ id }: WorkspaceClientProps) {
           {/* 4. Unresolved Questions */}
           <AegisSurface elevation="card" border="default" className="p-4 space-y-2 bg-[#0b0e17]/90 border-amber-500/30">
             <div className="flex items-center justify-between text-xs font-mono">
-              <span className="font-bold text-[#f2c66d]">[UNRESOLVED]</span>
-              <AlertTriangle className="h-3.5 w-3.5 text-[#f2c66d]" />
+              <span className="font-bold text-[#f59e0b]">[UNRESOLVED]</span>
+              <AlertTriangle className="h-3.5 w-3.5 text-[#f59e0b]" />
             </div>
             <p className="text-xs text-white/80 leading-relaxed font-sans">
               Upstream client retry jitter boundary: why did client backoff exceed 500ms during automated container restarts?

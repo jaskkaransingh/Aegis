@@ -51,13 +51,13 @@ export function AffectedServicesList() {
   function getTierIcon(tier: string) {
     switch (tier) {
       case "data_persistence":
-        return <Database className="h-3.5 w-3.5 text-cyan-400" />;
+        return <Database className="h-3.5 w-3.5 text-white" />;
       case "security":
         return <Shield className="h-3.5 w-3.5 text-amber-400" />;
       case "integration":
-        return <Radio className="h-3.5 w-3.5 text-violet-400" />;
+        return <Radio className="h-3.5 w-3.5 text-white" />;
       default:
-        return <Server className="h-3.5 w-3.5 text-slate-400" />;
+        return <Server className="h-3.5 w-3.5 text-white/60" />;
     }
   }
 
@@ -76,17 +76,17 @@ export function AffectedServicesList() {
   }
 
   return (
-    <div className="rounded-xl border border-slate-800/80 bg-slate-900/50 p-5 shadow-sm space-y-3">
-      <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
+    <div className="rounded-xl border border-white/10 bg-black/40/50 p-5 shadow-sm space-y-3">
+      <div className="flex items-center justify-between pb-3 border-b border-white/10">
         <div className="flex items-center gap-2">
-          <Activity className="h-4 w-4 text-violet-400" />
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-200 font-mono">
+          <Activity className="h-4 w-4 text-white" />
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-white/90 font-mono">
             Infrastructure &amp; Services Status
           </h3>
         </div>
         <div className="flex items-center gap-2 text-[10px] font-mono">
-          <span className="text-slate-400">Total: {services.length}</span>
-          <span className="px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700/60">
+          <span className="text-white/60">Total: {services.length}</span>
+          <span className="px-1.5 py-0.5 rounded bg-slate-800 text-white/60 border border-white/20/60">
             {isLive ? "CATALOG: VERIFIED BACKEND" : "DEMO DATASET"}
           </span>
         </div>
@@ -99,22 +99,22 @@ export function AffectedServicesList() {
             className="py-2.5 flex flex-col md:flex-row md:items-center justify-between gap-2 text-xs"
           >
             <div className="flex items-start gap-2.5 min-w-0 flex-1">
-              <div className="h-6 w-6 rounded bg-slate-800/70 border border-slate-700/60 flex items-center justify-center shrink-0 mt-0.5">
+              <div className="h-6 w-6 rounded bg-slate-800/70 border border-white/20/60 flex items-center justify-center shrink-0 mt-0.5">
                 {getTierIcon(srv.tier)}
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-semibold text-slate-200 truncate">
+                  <span className="font-semibold text-white/90 truncate">
                     {srv.name}
                   </span>
-                  <span className="text-[10px] font-mono text-slate-500 bg-slate-950 px-1.5 py-0.2 rounded border border-slate-800">
+                  <span className="text-[10px] font-mono text-white/50 bg-black/40 px-1.5 py-0.2 rounded border border-white/10">
                     {srv.id}
                   </span>
-                  <span className="text-[10px] font-mono text-slate-400 uppercase">
+                  <span className="text-[10px] font-mono text-white/60 uppercase">
                     [{srv.tier}]
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-400 mt-0.5 line-clamp-1">
+                <p className="text-[11px] text-white/60 mt-0.5 line-clamp-1">
                   {srv.description}
                 </p>
                 {srv.observedSymptom && (

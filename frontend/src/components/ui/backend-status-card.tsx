@@ -30,18 +30,18 @@ export function BackendStatusCard() {
   }
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 shadow-sm">
-      <div className="flex items-center justify-between pb-4 border-b border-slate-800/80">
+    <div className="rounded-xl border border-white/10 bg-black/40/60 p-5 shadow-sm">
+      <div className="flex items-center justify-between pb-4 border-b border-white/10">
         <div className="flex items-center gap-2.5">
-          <div className="h-8 w-8 rounded-lg bg-violet-600/10 border border-violet-500/20 flex items-center justify-center text-violet-400">
+          <div className="h-8 w-8 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center text-white">
             <Server className="h-4 w-4" />
           </div>
           <div>
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-300 font-mono">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-white/80 font-mono">
               Backend Connectivity Probe
             </h3>
-            <p className="text-[11px] text-slate-400">
-              Target: <span className="font-mono text-slate-300">{config.apiBaseUrl}</span>
+            <p className="text-[11px] text-white/60">
+              Target: <span className="font-mono text-white/80">{config.apiBaseUrl}</span>
             </p>
           </div>
         </div>
@@ -50,7 +50,7 @@ export function BackendStatusCard() {
           type="button"
           onClick={handleCheckHealth}
           disabled={loading}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-violet-600 hover:bg-violet-500 text-white transition disabled:opacity-50 disabled:cursor-not-allowed shadow-sm shadow-violet-900/40"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-white hover:bg-slate-200 text-black font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed shadow-sm shadow-white/5"
         >
           <RefreshCw className={`h-3 w-3 ${loading ? "animate-spin" : ""}`} />
           <span>{loading ? "Probing..." : "Test Health"}</span>
@@ -59,8 +59,8 @@ export function BackendStatusCard() {
 
       <div className="mt-4">
         {loading && (
-          <div className="p-3 rounded-lg bg-slate-950/50 border border-slate-800/80 text-xs text-slate-400 font-mono flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-violet-400 animate-ping" />
+          <div className="p-3 rounded-lg bg-black/40/50 border border-white/10 text-xs text-white/60 font-mono flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-white animate-ping" />
             Connecting to GET /api/health...
           </div>
         )}
@@ -71,21 +71,21 @@ export function BackendStatusCard() {
               <CheckCircle2 className="h-4 w-4 shrink-0" />
               <span>Backend Connected Successfully</span>
             </div>
-            <div className="grid grid-cols-2 gap-2 mt-2.5 font-mono text-[11px] text-slate-300">
+            <div className="grid grid-cols-2 gap-2 mt-2.5 font-mono text-[11px] text-white/80">
               <div>
-                <span className="text-slate-500">Service: </span>
+                <span className="text-white/50">Service: </span>
                 <span>{healthData.service}</span>
               </div>
               <div>
-                <span className="text-slate-500">Version: </span>
+                <span className="text-white/50">Version: </span>
                 <span>{healthData.version}</span>
               </div>
               <div>
-                <span className="text-slate-500">Status: </span>
+                <span className="text-white/50">Status: </span>
                 <span className="text-emerald-400">{healthData.status}</span>
               </div>
               <div>
-                <span className="text-slate-500">Environment: </span>
+                <span className="text-white/50">Environment: </span>
                 <span>{healthData.environment}</span>
               </div>
             </div>
@@ -98,16 +98,16 @@ export function BackendStatusCard() {
               <XCircle className="h-4 w-4 shrink-0" />
               <span>Backend Unreachable or Returned Error</span>
             </div>
-            <p className="mt-1.5 text-[11px] text-slate-400 font-mono leading-relaxed">
+            <p className="mt-1.5 text-[11px] text-white/60 font-mono leading-relaxed">
               {error}
             </p>
           </div>
         )}
 
         {!loading && !healthData && !error && (
-          <div className="p-3 rounded-lg bg-slate-950/40 border border-slate-800/60 text-[11px] text-slate-400 flex items-center justify-between">
+          <div className="p-3 rounded-lg bg-black/40/40 border border-white/10 text-[11px] text-white/60 flex items-center justify-between">
             <span>Click &quot;Test Health&quot; to probe the FastAPI backend service.</span>
-            <ArrowRight className="h-3.5 w-3.5 text-slate-500" />
+            <ArrowRight className="h-3.5 w-3.5 text-white/50" />
           </div>
         )}
       </div>

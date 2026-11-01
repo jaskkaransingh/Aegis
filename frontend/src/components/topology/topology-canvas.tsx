@@ -64,14 +64,14 @@ function TopologyFlowInner({
 
   if (nodes.length === 0) {
     return (
-      <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center bg-slate-950/70 border border-slate-800 rounded-2xl">
+      <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center bg-black/40 border border-white/10 rounded-2xl">
         <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mb-3">
           <AlertCircle className="w-6 h-6 text-amber-400" />
         </div>
-        <h4 className="text-base font-semibold text-slate-200 mb-1">
+        <h4 className="text-base font-semibold text-white/90 mb-1">
           No services match active filters
         </h4>
-        <p className="text-xs text-slate-400 max-w-sm mb-4">
+        <p className="text-xs text-white/60 max-w-sm mb-4">
           Adjust your status, category, or search filters to restore nodes on the dependency graph canvas.
         </p>
       </div>
@@ -79,7 +79,7 @@ function TopologyFlowInner({
   }
 
   return (
-    <div className="w-full h-full relative rounded-2xl overflow-hidden bg-slate-950/80 border border-slate-800 shadow-inner">
+    <div className="w-full h-full relative rounded-2xl overflow-hidden bg-black/35 backdrop-blur-xl border border-white/10 shadow-inner">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -97,7 +97,7 @@ function TopologyFlowInner({
       >
         <Background color="#334155" gap={24} size={1} />
         <Controls
-          className="!bg-slate-900/90 !border !border-slate-800 !rounded-xl !shadow-xl !fill-slate-300 [&>button]:!bg-slate-900 [&>button]:!border-b [&>button]:!border-slate-800 [&>button:hover]:!bg-slate-800"
+          className="!bg-black/45 backdrop-blur-xl !border !border-white/10 !rounded-xl !shadow-xl !fill-slate-300 [&>button]:!bg-slate-900 [&>button]:!border-b [&>button]:!border-white/10 [&>button:hover]:!bg-slate-800"
         />
         <MiniMap
           nodeStrokeWidth={2}
@@ -109,7 +109,7 @@ function TopologyFlowInner({
             return "#64748b";
           }}
           maskColor="rgba(15, 23, 42, 0.75)"
-          className="!bg-slate-900/90 !border !border-slate-800 !rounded-xl !shadow-xl overflow-hidden hidden sm:block"
+          className="!bg-black/45 backdrop-blur-xl !border !border-white/10 !rounded-xl !shadow-xl overflow-hidden hidden sm:block"
         />
       </ReactFlow>
     </div>

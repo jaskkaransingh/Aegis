@@ -60,7 +60,7 @@ export function VisualServiceLanes({
         <div>
           <span className="text-xs font-mono font-semibold tracking-wider text-white flex items-center gap-2">
             <span>SERVICE CHRONOLOGY LANES</span>
-            <span className="text-[10px] px-1.5 py-0.2 rounded bg-white/10 text-[#7adcf5]">
+            <span className="text-[10px] px-1.5 py-0.2 rounded bg-white/10 text-white font-medium">
               {timestampMode === "corrected" ? "CORRECTED TIMESTAMPS" : "RAW TELEMETRY"}
             </span>
           </span>
@@ -71,13 +71,13 @@ export function VisualServiceLanes({
 
         <div className="flex items-center gap-3 text-[10px] font-mono text-white/50">
           <span className="flex items-center gap-1">
-            <span className="h-2 w-2 rounded-full bg-[#f27886]" /> Critical
+            <span className="h-2 w-2 rounded-full bg-[#ef4444]" /> Critical
           </span>
           <span className="flex items-center gap-1">
-            <span className="h-2 w-2 rounded-full bg-[#f2c66d]" /> Warning
+            <span className="h-2 w-2 rounded-full bg-[#f59e0b]" /> Warning
           </span>
           <span className="flex items-center gap-1">
-            <span className="h-2 w-2 rounded-full bg-[#7adcf5]" /> Telemetry
+            <span className="h-2 w-2 rounded-full bg-[#22c55e]" /> Nominal Telemetry
           </span>
         </div>
       </div>
@@ -147,10 +147,10 @@ export function VisualServiceLanes({
                               : "h-3 w-3 hover:ring-2 hover:ring-white/50"
                           } ${
                             isCritical
-                              ? "bg-[#f27886] shadow-[0_0_8px_#f27886]"
+                              ? "bg-[#ef4444] shadow-[0_0_8px_#ef4444]"
                               : ev.severity === "warning" || ev.severity === "WARNING"
-                              ? "bg-[#f2c66d] shadow-[0_0_6px_#f2c66d]"
-                              : "bg-[#7adcf5] shadow-[0_0_6px_#7adcf5]"
+                              ? "bg-[#f59e0b] shadow-[0_0_6px_#f59e0b]"
+                              : "bg-[#22c55e] shadow-[0_0_6px_#22c55e]"
                           }`}
                         />
                       </button>

@@ -90,22 +90,22 @@ export function EvidenceVaultCanvas({
     scene.add(coreMesh);
     disposables.push(coreGeo, coreMat);
 
-    // 2. Core Wireframe Overlay: Tactile Violet Hairlines
+    // 2. Core Wireframe Overlay: Platinum Hairlines
     const coreWireGeo = new THREE.IcosahedronGeometry(1.68, 0);
     const coreWireMat = new THREE.MeshBasicMaterial({
-      color: 0x9875ff,
+      color: 0xffffff,
       wireframe: true,
       transparent: true,
-      opacity: 0.45,
+      opacity: 0.35,
     });
     const coreWireMesh = new THREE.Mesh(coreWireGeo, coreWireMat);
     scene.add(coreWireMesh);
     disposables.push(coreWireGeo, coreWireMat);
 
-    // 3. Outer Nested Polyhedron: Dodecahedral Lattice (Cyan)
+    // 3. Outer Nested Polyhedron: Dodecahedral Lattice (Platinum Silver)
     const latticeGeo = new THREE.DodecahedronGeometry(2.35, 0);
     const latticeMat = new THREE.MeshBasicMaterial({
-      color: 0x7adcf5,
+      color: 0xe2e8f0,
       wireframe: true,
       transparent: true,
       opacity: 0.22,
@@ -129,9 +129,9 @@ export function EvidenceVaultCanvas({
 
     const ring2Geo = new THREE.TorusGeometry(3.5, 0.012, 16, 100);
     const ring2Mat = new THREE.MeshBasicMaterial({
-      color: 0x9875ff,
+      color: 0xffffff,
       transparent: true,
-      opacity: 0.28,
+      opacity: 0.25,
     });
     const ring2Mesh = new THREE.Mesh(ring2Geo, ring2Mat);
     ring2Mesh.rotation.x = -Math.PI / 4;
@@ -165,10 +165,10 @@ export function EvidenceVaultCanvas({
     ];
 
     rawNodeData.forEach((data, idx) => {
-      let nodeColor = 0x8d9ab1;
-      if (data.role === "anomaly") nodeColor = 0xf2c66d;
-      if (data.role === "service") nodeColor = 0x7adcf5;
-      if (data.role === "evidence") nodeColor = 0xb29aff;
+      let nodeColor = 0x94a3b8;
+      if (data.role === "anomaly") nodeColor = 0xef4444; // Enterprise Red
+      if (data.role === "service") nodeColor = 0xffffff; // Platinum
+      if (data.role === "evidence") nodeColor = 0x22c55e; // Enterprise Green
 
       const nodeMat = new THREE.MeshStandardMaterial({
         color: nodeColor,
@@ -200,7 +200,7 @@ export function EvidenceVaultCanvas({
     const lineGeo = new THREE.BufferGeometry();
     lineGeo.setAttribute("position", new THREE.BufferAttribute(linePositions, 3));
     const lineMat = new THREE.LineBasicMaterial({
-      color: 0x7adcf5,
+      color: 0x22c55e,
       transparent: true,
       opacity: 0.45,
     });
@@ -209,7 +209,7 @@ export function EvidenceVaultCanvas({
     disposables.push(lineGeo, lineMat);
 
     // 7. Lighting
-    const keyLight = new THREE.PointLight(0x9875ff, 3.5, 30);
+    const keyLight = new THREE.PointLight(0xffffff, 3.5, 30);
     keyLight.position.set(5, 5, 6);
     scene.add(keyLight);
 

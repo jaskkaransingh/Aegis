@@ -26,14 +26,14 @@ export function CounterfactualHeader({
   scenarioStatus,
 }: CounterfactualHeaderProps) {
   return (
-    <div className="space-y-3 pb-3 border-b border-slate-800/80">
+    <div className="space-y-3 pb-3 border-b border-white/10">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2.5">
-            <div className="p-1.5 rounded-lg bg-violet-950/70 border border-violet-700/50 text-violet-400">
+            <div className="p-1.5 rounded-lg bg-white/10 border border-white/20 text-white">
               <FlaskConical className="w-5 h-5" />
             </div>
-            <h1 className="text-xl font-bold text-slate-100 tracking-tight font-mono">
+            <h1 className="text-xl font-bold text-white tracking-tight font-mono">
               Counterfactual Lab
             </h1>
             <span
@@ -46,7 +46,7 @@ export function CounterfactualHeader({
               {isLive ? "LIVE DATA" : "DEMO DATA"}
             </span>
           </div>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-white/60 mt-1">
             Explore alternative incident scenarios and assess hypothetical interventions against the observed cascade.
           </p>
         </div>
@@ -54,10 +54,10 @@ export function CounterfactualHeader({
         {/* Status Indicators & Action */}
         <div className="flex flex-wrap items-center gap-3">
           {/* Incident Context */}
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-black/40 border border-white/10 text-xs">
             <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
-            <span className="font-mono text-slate-400 text-[11px]">Incident:</span>
-            <span className="font-semibold text-slate-200">INC-2026-0881</span>
+            <span className="font-mono text-white/60 text-[11px]">Incident:</span>
+            <span className="font-semibold text-white/90">INC-2026-0881</span>
           </div>
 
           {/* Execution Status Badge */}
@@ -70,10 +70,10 @@ export function CounterfactualHeader({
             type="button"
             onClick={onRefresh}
             disabled={isLoading}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-200 disabled:opacity-50 transition-colors font-medium text-xs shadow-sm"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 text-white disabled:opacity-50 transition-colors font-medium text-xs shadow-sm"
             title="Reload baseline data"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? "animate-spin text-violet-400" : "text-slate-400"}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? "animate-spin text-white" : "text-white/60"}`} />
             <span>{isLoading ? "Syncing..." : "Refresh"}</span>
           </button>
         </div>

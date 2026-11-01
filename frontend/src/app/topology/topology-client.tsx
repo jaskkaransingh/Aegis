@@ -115,10 +115,10 @@ export function TopologyClient() {
   return (
     <div className="space-y-4">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-800/80">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-white/10">
         <div>
           <div className="flex items-center gap-2.5">
-            <h1 className="text-xl font-bold text-slate-100 tracking-tight">
+            <h1 className="text-xl font-bold text-white tracking-tight">
               Service Topology
             </h1>
             {summary && (
@@ -138,17 +138,17 @@ export function TopologyClient() {
               </span>
             )}
           </div>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-white/60 mt-0.5">
             Interactive service dependency graph distinguishing static architectural contracts from inferred failure propagation routes.
           </p>
         </div>
 
         {/* Current Incident Context Indicator */}
         <div className="flex items-center gap-3">
-          <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs">
+          <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-black/40 border border-white/10 text-xs">
             <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
-            <span className="font-mono text-slate-400 text-[11px]">Active Incident:</span>
-            <span className="font-medium text-slate-200">INC-2026-0881</span>
+            <span className="font-mono text-white/60 text-[11px]">Active Incident:</span>
+            <span className="font-medium text-white/90">INC-2026-0881</span>
           </div>
         </div>
       </div>
@@ -156,39 +156,39 @@ export function TopologyClient() {
       {/* Summary Strip */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {/* Total Services */}
-        <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 shadow-sm flex items-center justify-between">
+        <div className="p-3 rounded-xl bg-black/45 backdrop-blur-xl border border-white/10 shadow-sm flex items-center justify-between">
           <div>
-            <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-white/60">
               Total Services
             </span>
-            <div className="text-lg font-bold text-slate-100 mt-0.5">
+            <div className="text-lg font-bold text-white mt-0.5">
               {summary ? summary.totalServices : "—"}
             </div>
           </div>
-          <div className="p-2 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400">
+          <div className="p-2 rounded-lg bg-white/10 border border-white/20 text-white">
             <Layers className="w-4 h-4" />
           </div>
         </div>
 
         {/* Total Dependencies */}
-        <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 shadow-sm flex items-center justify-between">
+        <div className="p-3 rounded-xl bg-black/45 backdrop-blur-xl border border-white/10 shadow-sm flex items-center justify-between">
           <div>
-            <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-white/60">
               Dependencies
             </span>
-            <div className="text-lg font-bold text-slate-100 mt-0.5">
+            <div className="text-lg font-bold text-white mt-0.5">
               {summary ? summary.totalDependencies : "—"}
             </div>
           </div>
-          <div className="p-2 rounded-lg bg-violet-500/10 border border-violet-500/20 text-violet-400">
+          <div className="p-2 rounded-lg bg-white/10 border border-white/20 text-white">
             <Network className="w-4 h-4" />
           </div>
         </div>
 
         {/* Affected Services */}
-        <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 shadow-sm flex items-center justify-between">
+        <div className="p-3 rounded-xl bg-black/45 backdrop-blur-xl border border-white/10 shadow-sm flex items-center justify-between">
           <div>
-            <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-white/60">
               Affected Services
             </span>
             <div className="text-lg font-bold text-rose-400 mt-0.5">
@@ -201,12 +201,12 @@ export function TopologyClient() {
         </div>
 
         {/* Selected Service Focus */}
-        <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 shadow-sm flex items-center justify-between">
+        <div className="p-3 rounded-xl bg-black/45 backdrop-blur-xl border border-white/10 shadow-sm flex items-center justify-between">
           <div className="overflow-hidden">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-white/60">
               Selected Service
             </span>
-            <div className="text-xs font-semibold text-slate-100 truncate mt-1">
+            <div className="text-xs font-semibold text-white truncate mt-1">
               {selectedNode ? selectedNode.name : "None (Click any node)"}
             </div>
           </div>
@@ -214,13 +214,13 @@ export function TopologyClient() {
             <button
               type="button"
               onClick={handleDeselect}
-              className="p-1 rounded text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-colors"
+              className="p-1 rounded text-white/60 hover:text-white/90 hover:bg-slate-800 transition-colors"
               title="Clear selection"
             >
               <RotateCcw className="w-3.5 h-3.5" />
             </button>
           ) : (
-            <div className="p-2 rounded-lg bg-slate-800/60 border border-slate-700/40 text-slate-400">
+            <div className="p-2 rounded-lg bg-slate-800/60 border border-white/20/40 text-white/60">
               <Shield className="w-4 h-4" />
             </div>
           )}

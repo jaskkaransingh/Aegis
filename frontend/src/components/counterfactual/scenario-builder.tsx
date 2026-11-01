@@ -44,12 +44,12 @@ export function ScenarioBuilder({
   const targetType = currentScenario.targetType || "SERVICE";
 
   return (
-    <div className="flex flex-col rounded-2xl bg-slate-900/90 border border-slate-800 shadow-lg backdrop-blur-sm overflow-hidden text-xs text-slate-200">
+    <div className="flex flex-col rounded-2xl bg-black/45 backdrop-blur-xl border border-white/10 shadow-lg overflow-hidden text-xs text-white/90">
       {/* Header */}
-      <div className="p-3.5 border-b border-slate-800/80 bg-slate-950/60 flex items-center justify-between">
+      <div className="p-3.5 border-b border-white/10 bg-black/40 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-violet-400" />
-          <h2 className="text-xs font-mono uppercase tracking-wider font-bold text-slate-200">
+          <span className="w-2.5 h-2.5 rounded-full bg-white" />
+          <h2 className="text-xs font-mono uppercase tracking-wider font-bold text-white/90">
             Scenario Builder
           </h2>
         </div>
@@ -61,7 +61,7 @@ export function ScenarioBuilder({
       <div className="p-4 space-y-4 flex-1">
         {/* Scenario Name */}
         <div>
-          <label className="block text-[10px] font-mono uppercase tracking-wider text-slate-400 mb-1.5">
+          <label className="block text-[10px] font-mono uppercase tracking-wider text-white/60 mb-1.5">
             Scenario Name *
           </label>
           <input
@@ -69,7 +69,7 @@ export function ScenarioBuilder({
             value={currentScenario.name || ""}
             onChange={(e) => onChange({ ...currentScenario, name: e.target.value })}
             placeholder="e.g. Without PostgreSQL unindexed query lock"
-            className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-violet-500 text-xs transition-colors"
+            className="w-full px-3 py-2 rounded-xl bg-black/40 border border-white/10 text-white/90 placeholder:text-white/50 focus:outline-none focus:border-white/50 text-xs transition-colors"
           />
           {errors.name && (
             <p className="text-[11px] text-rose-400 mt-1 flex items-center gap-1 font-sans">
@@ -81,10 +81,10 @@ export function ScenarioBuilder({
 
         {/* Target Type Selector */}
         <div>
-          <label className="block text-[10px] font-mono uppercase tracking-wider text-slate-400 mb-1.5">
+          <label className="block text-[10px] font-mono uppercase tracking-wider text-white/60 mb-1.5">
             Intervention Target Type
           </label>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 p-1 rounded-xl bg-slate-950 border border-slate-800 font-mono text-[11px]">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 p-1 rounded-xl bg-black/40 border border-white/10 font-mono text-[11px]">
             {(["SERVICE", "EVENT", "CONFIGURATION", "DEPENDENCY"] as CounterfactualTargetType[]).map((type) => (
               <button
                 key={type}
@@ -115,8 +115,8 @@ export function ScenarioBuilder({
                 }}
                 className={`py-1.5 px-2 rounded-lg text-center font-medium transition-colors ${
                   targetType === type
-                    ? "bg-violet-600 text-white shadow-sm"
-                    : "text-slate-400 hover:text-slate-200"
+                    ? "bg-white text-black font-semibold shadow-sm"
+                    : "text-white/60 hover:text-white/90"
                 }`}
               >
                 {type}
@@ -127,7 +127,7 @@ export function ScenarioBuilder({
 
         {/* Target Entity Selector */}
         <div>
-          <label className="block text-[10px] font-mono uppercase tracking-wider text-slate-400 mb-1.5">
+          <label className="block text-[10px] font-mono uppercase tracking-wider text-white/60 mb-1.5">
             Target Selection *
           </label>
 
@@ -141,7 +141,7 @@ export function ScenarioBuilder({
                   targetLabel: e.target.value,
                 })
               }
-              className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-200 focus:outline-none focus:border-violet-500 text-xs cursor-pointer font-mono"
+              className="w-full px-3 py-2 rounded-xl bg-black/40 border border-white/10 text-white/90 focus:outline-none focus:border-white/50 text-xs cursor-pointer font-mono"
             >
               {baseline.affectedServices.map((svc) => (
                 <option key={svc} value={svc}>
@@ -160,7 +160,7 @@ export function ScenarioBuilder({
                   targetLabel: found ? `${found.id} (${found.service}): ${found.message.substring(0, 40)}...` : e.target.value,
                 });
               }}
-              className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-200 focus:outline-none focus:border-violet-500 text-xs cursor-pointer font-mono"
+              className="w-full px-3 py-2 rounded-xl bg-black/40 border border-white/10 text-white/90 focus:outline-none focus:border-white/50 text-xs cursor-pointer font-mono"
             >
               {baseline.events.slice(0, 15).map((ev) => (
                 <option key={ev.id} value={ev.id}>
@@ -178,7 +178,7 @@ export function ScenarioBuilder({
                   targetLabel: e.target.value,
                 })
               }
-              className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-200 focus:outline-none focus:border-violet-500 text-xs cursor-pointer font-mono"
+              className="w-full px-3 py-2 rounded-xl bg-black/40 border border-white/10 text-white/90 focus:outline-none focus:border-white/50 text-xs cursor-pointer font-mono"
             >
               <option value="appointment-service->postgresql-database">
                 appointment-service → postgresql-database (Synchronous DB)
@@ -200,7 +200,7 @@ export function ScenarioBuilder({
                   targetLabel: e.target.value,
                 })
               }
-              className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-200 focus:outline-none focus:border-violet-500 text-xs cursor-pointer font-mono"
+              className="w-full px-3 py-2 rounded-xl bg-black/40 border border-white/10 text-white/90 focus:outline-none focus:border-white/50 text-xs cursor-pointer font-mono"
             >
               <option value="CONFIG_BATCH_WORKERS">
                 Aggressive Worker Batching (PostgreSQL Archival)
@@ -224,7 +224,7 @@ export function ScenarioBuilder({
 
         {/* Hypothetical Action Selector */}
         <div>
-          <label className="block text-[10px] font-mono uppercase tracking-wider text-slate-400 mb-1.5">
+          <label className="block text-[10px] font-mono uppercase tracking-wider text-white/60 mb-1.5">
             Hypothetical Intervention Action
           </label>
           <select
@@ -235,7 +235,7 @@ export function ScenarioBuilder({
                 action: e.target.value as CounterfactualAction,
               })
             }
-            className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-200 focus:outline-none focus:border-violet-500 text-xs cursor-pointer font-mono"
+            className="w-full px-3 py-2 rounded-xl bg-black/40 border border-white/10 text-white/90 focus:outline-none focus:border-white/50 text-xs cursor-pointer font-mono"
           >
             <option value="ASSUME_HEALTHY">Assume target remained healthy (nominal latency)</option>
             <option value="PREVENT_EVENT">Assume target event was prevented from occurring</option>
@@ -247,7 +247,7 @@ export function ScenarioBuilder({
 
         {/* Assumption Description */}
         <div>
-          <label className="block text-[10px] font-mono uppercase tracking-wider text-slate-400 mb-1.5">
+          <label className="block text-[10px] font-mono uppercase tracking-wider text-white/60 mb-1.5">
             Hypothetical Assumption Details *
           </label>
           <textarea
@@ -257,7 +257,7 @@ export function ScenarioBuilder({
             }
             rows={3}
             placeholder="Describe the precise hypothesis (e.g. Assume the batch query used an index scan so row locks were held for <10ms instead of 78s)..."
-            className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-violet-500 text-xs font-sans transition-colors resize-none"
+            className="w-full px-3 py-2 rounded-xl bg-black/40 border border-white/10 text-white/90 placeholder:text-white/50 focus:outline-none focus:border-white/50 text-xs font-sans transition-colors resize-none"
           />
           {errors.assumptions && (
             <p className="text-[11px] text-rose-400 mt-1 flex items-center gap-1 font-sans">
@@ -269,8 +269,8 @@ export function ScenarioBuilder({
 
         {/* Computed Downstream Scope Preview */}
         {currentScenario.downstreamServices && currentScenario.downstreamServices.length > 0 && (
-          <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1.5">
-            <span className="block text-[10px] font-mono uppercase tracking-wider text-cyan-400 flex items-center gap-1">
+          <div className="p-3 rounded-xl bg-black/40 border border-white/10 space-y-1.5">
+            <span className="block text-[10px] font-mono uppercase tracking-wider text-[#22c55e] flex items-center gap-1">
               <Network className="w-3 h-3" />
               Computed Downstream Scope ({currentScenario.downstreamServices.length} Services)
             </span>
@@ -278,7 +278,7 @@ export function ScenarioBuilder({
               {currentScenario.downstreamServices.map((svc) => (
                 <span
                   key={svc}
-                  className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-cyan-950/40 text-cyan-300 border border-cyan-800/40"
+                  className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-emerald-950/40 text-[#22c55e] border border-emerald-500/40"
                 >
                   {svc}
                 </span>
@@ -289,11 +289,11 @@ export function ScenarioBuilder({
       </div>
 
       {/* Action Footer */}
-      <div className="p-3.5 border-t border-slate-800/80 bg-slate-950/60 flex items-center gap-2">
+      <div className="p-3.5 border-t border-white/10 bg-black/40 flex items-center gap-2">
         <button
           type="button"
           onClick={onSave}
-          className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-medium text-xs transition-colors shadow-md shadow-violet-600/20"
+          className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-white hover:bg-slate-200 text-black font-semibold font-medium text-xs transition-colors shadow-md shadow-white/10"
         >
           <Save className="w-3.5 h-3.5" />
           <span>Save as Local Draft</span>
@@ -301,7 +301,7 @@ export function ScenarioBuilder({
         <button
           type="button"
           onClick={onReset}
-          className="flex items-center gap-1 py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium text-xs border border-slate-700 transition-colors"
+          className="flex items-center gap-1 py-2 px-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium text-xs border border-white/20 transition-colors"
           title="Reset scenario configuration form"
         >
           <RotateCcw className="w-3.5 h-3.5" />

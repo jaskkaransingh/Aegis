@@ -7,21 +7,21 @@ export function TopologyLegend() {
   const [isExpanded, setIsExpanded] = useState(true);
 
   return (
-    <div className="absolute bottom-4 left-4 z-10 w-72 rounded-xl bg-slate-900/95 border border-slate-800 shadow-xl backdrop-blur-md text-xs text-slate-300">
+    <div className="absolute bottom-4 left-4 z-10 w-72 rounded-xl bg-black/55 backdrop-blur-2xl border border-white/10 shadow-xl text-xs text-white/80">
       {/* Header */}
       <button
         type="button"
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center justify-between px-3.5 py-2.5 text-left border-b border-slate-800/80 hover:bg-slate-800/40 rounded-t-xl transition-colors"
+        className="w-full flex items-center justify-between px-3.5 py-2.5 text-left border-b border-white/10 hover:bg-slate-800/40 rounded-t-xl transition-colors"
       >
-        <span className="flex items-center gap-1.5 font-semibold text-slate-200">
-          <Info className="w-3.5 h-3.5 text-violet-400" />
+        <span className="flex items-center gap-1.5 font-semibold text-white/90">
+          <Info className="w-3.5 h-3.5 text-white" />
           Graph Legend & Semantics
         </span>
         {isExpanded ? (
-          <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+          <ChevronDown className="w-3.5 h-3.5 text-white/60" />
         ) : (
-          <ChevronUp className="w-3.5 h-3.5 text-slate-400" />
+          <ChevronUp className="w-3.5 h-3.5 text-white/60" />
         )}
       </button>
 
@@ -29,7 +29,7 @@ export function TopologyLegend() {
         <div className="p-3.5 space-y-3">
           {/* Node Statuses */}
           <div>
-            <span className="block text-[10px] font-mono uppercase tracking-wider text-slate-400 mb-1.5">
+            <span className="block text-[10px] font-mono uppercase tracking-wider text-white/60 mb-1.5">
               Service Status
             </span>
             <div className="grid grid-cols-2 gap-1.5 text-[11px]">
@@ -53,8 +53,8 @@ export function TopologyLegend() {
           </div>
 
           {/* Relationship Types */}
-          <div className="pt-2 border-t border-slate-800/60">
-            <span className="block text-[10px] font-mono uppercase tracking-wider text-slate-400 mb-1.5">
+          <div className="pt-2 border-t border-white/10">
+            <span className="block text-[10px] font-mono uppercase tracking-wider text-white/60 mb-1.5">
               Relationship Edges (Caller → Callee)
             </span>
             <div className="space-y-1.5 text-[11px]">
@@ -70,8 +70,8 @@ export function TopologyLegend() {
           </div>
 
           {/* Epistemic Note */}
-          <div className="pt-2 border-t border-slate-800/60 flex items-start gap-1.5 text-[10px] text-slate-400 leading-relaxed bg-slate-950/40 p-2 rounded-lg border border-slate-800/50">
-            <HelpCircle className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" />
+          <div className="pt-2 border-t border-white/10 flex items-start gap-1.5 text-[10px] text-white/60 leading-relaxed bg-black/40 p-2 rounded-lg border border-white/10/50">
+            <HelpCircle className="w-3.5 h-3.5 text-white shrink-0 mt-0.5" />
             <span>
               <strong>AEGIS Evidence Grounding:</strong> Static dependencies establish architectural connectivity. Inferred edges require corroborated incident telemetry. Graph adjacency alone does not prove failure causation.
             </span>

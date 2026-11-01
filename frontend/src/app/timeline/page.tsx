@@ -248,7 +248,7 @@ export default function TimelineExplorerPage() {
   return (
     <Suspense
       fallback={
-        <div className="max-w-7xl mx-auto p-12 text-center text-xs font-mono text-slate-400">
+        <div className="max-w-7xl mx-auto p-12 text-center text-xs font-mono text-white/60">
           Loading Timeline Explorer...
         </div>
       }

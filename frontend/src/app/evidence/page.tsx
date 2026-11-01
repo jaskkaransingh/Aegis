@@ -11,7 +11,7 @@ export default function EvidencePage() {
     <Suspense
       fallback={
         <div className="flex h-96 w-full items-center justify-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-violet-500 border-t-transparent" />
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-white border-t-transparent" />
         </div>
       }
     >

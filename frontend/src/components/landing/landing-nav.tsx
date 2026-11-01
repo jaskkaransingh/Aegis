@@ -2,9 +2,12 @@
 
 import React from "react";
 import Link from "next/link";
-import { Shield, ArrowRight } from "lucide-react";
+import { Shield, ArrowRight, Lock, LogOut } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
 
 export function LandingNav() {
+  const { isAdmin, adminProfile, user, openLoginModal, logout } = useAuth();
+
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
@@ -71,6 +74,32 @@ export function LandingNav() {
 
       {/* Action Button (Right) */}
       <div className="pointer-events-auto flex items-center gap-3">
+        {isAdmin ? (
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-950/40 border border-emerald-500/40 text-xs font-mono text-[#22c55e]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#22c55e] animate-pulse" />
+            <span className="font-semibold text-[11px] truncate max-w-[120px]">
+              {adminProfile?.displayName || user?.email?.split("@")[0] || "ADMIN"}
+            </span>
+            <button
+              type="button"
+              onClick={() => logout()}
+              title="Sign Out"
+              className="text-white/40 hover:text-red-400 ml-1 transition-colors"
+            >
+              <LogOut className="w-3 h-3" />
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={openLoginModal}
+            className="hidden sm:flex px-3.5 py-1.5 rounded-full text-xs font-mono text-white/80 hover:text-white border border-white/15 bg-black/40 hover:bg-white/10 transition-all items-center gap-1.5"
+          >
+            <Lock className="w-3 h-3 text-white/60" />
+            <span>ADMIN LOGIN</span>
+          </button>
+        )}
+
         <Link
           href="/command-center"
           className="px-4 py-1.5 rounded-full text-xs font-mono text-white/90 border border-white/20 bg-white/5 hover:bg-white/15 hover:border-white/40 transition-all flex items-center gap-1.5 group"

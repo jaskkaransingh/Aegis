@@ -15,11 +15,24 @@ import {
   Cpu,
   Layers,
   Terminal,
+  Shield,
 } from "lucide-react";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { LandingNav } from "@/components/landing/landing-nav";
 import { AegisBadge } from "@/components/ui/aegis-badge";
 import { AegisSurface } from "@/components/ui/aegis-surface";
+import { useAuth } from "@/lib/auth-context";
+import { LandingAuthGate } from "@/components/auth/landing-auth-gate";
+
+import {
+  PostgresLogo,
+  FastApiLogo,
+  KubernetesLogo,
+  DockerLogo,
+  OpenTelemetryLogo,
+  KafkaLogo,
+  GrafanaLogo,
+} from "@/components/ui/tech-logos";
 
 // Dynamically import 3D Wormhole to ensure 100% client-side SSR safety
 const WormholeBackground = dynamic(
@@ -28,6 +41,7 @@ const WormholeBackground = dynamic(
 );
 
 export default function LandingPage() {
+  const { isAdmin } = useAuth();
   const [activeStage, setActiveStage] = useState<number>(0);
   const { scrollYProgress } = useScroll();
 
@@ -51,6 +65,31 @@ export default function LandingPage() {
       el.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  // If user is not logged in: Show landing page background ONLY (no landing page text) + clean Login Gate
+  if (!isAdmin) {
+    return (
+      <div className="relative min-h-screen text-[#f1f4fb] selection:bg-white/20 selection:text-white overflow-hidden bg-black font-sans">
+        {/* Full-Screen 3D Hyperboloid Wormhole Background ONLY */}
+        <WormholeBackground />
+
+        {/* Minimal Clean Top Brand */}
+        <header className="fixed top-0 left-0 right-0 z-30 h-20 px-6 lg:px-14 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="h-7 w-7 rounded-md bg-white/5 border border-white/15 flex items-center justify-center text-white shadow-sm">
+              <Shield className="h-4 w-4" />
+            </div>
+            <span className="font-mono font-bold text-sm tracking-wider text-white">
+              AEGIS
+            </span>
+          </div>
+        </header>
+
+        {/* Central Auth Gate with increased font size and no green AI accents */}
+        <LandingAuthGate />
+      </div>
+    );
+  }
 
   return (
     <div className="relative min-h-screen text-[#f1f4fb] selection:bg-white/20 selection:text-white overflow-x-hidden bg-black font-sans">
@@ -121,37 +160,39 @@ export default function LandingPage() {
           </motion.div>
         </div>
 
-        {/* Bottom Integration / Architecture Strip (matching reference image) */}
+        {/* Bottom Integration / Architecture Strip with Real SVG Logos */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.2, delay: 0.4 }}
-          className="w-full max-w-5xl mx-auto pt-6 border-t border-white/10 flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-[11px] font-mono text-white/50 select-none"
+          className="w-full max-w-5xl mx-auto pt-6 border-t border-white/10 flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs font-mono text-white/60 select-none"
         >
-          <div className="flex items-center gap-1.5 hover:text-white/80 transition-colors">
-            <Database className="h-3.5 w-3.5" />
+          <div className="flex items-center gap-2 hover:text-white transition-colors">
+            <PostgresLogo className="w-4 h-4 text-white/80" />
             <span>PostgreSQL</span>
           </div>
-          <div className="flex items-center gap-1.5 hover:text-white/80 transition-colors">
-            <Server className="h-3.5 w-3.5" />
+          <div className="flex items-center gap-2 hover:text-white transition-colors">
+            <FastApiLogo className="w-4 h-4 text-white/80" />
             <span>FastAPI</span>
           </div>
-          <div className="flex items-center gap-1.5 hover:text-white/80 transition-colors">
-            <Cpu className="h-3.5 w-3.5" />
+          <div className="flex items-center gap-2 hover:text-white transition-colors">
+            <KubernetesLogo className="w-4 h-4 text-white/80" />
             <span>Kubernetes</span>
           </div>
-          <div className="flex items-center gap-1.5 hover:text-white/80 transition-colors">
-            <Layers className="h-3.5 w-3.5" />
+          <div className="flex items-center gap-2 hover:text-white transition-colors">
+            <DockerLogo className="w-4 h-4 text-white/80" />
             <span>Docker</span>
           </div>
-          <div className="flex items-center gap-1.5 hover:text-white/80 transition-colors">
-            <Terminal className="h-3.5 w-3.5" />
+          <div className="flex items-center gap-2 hover:text-white transition-colors">
+            <OpenTelemetryLogo className="w-4 h-4 text-white/80" />
             <span>OpenTelemetry</span>
           </div>
-          <div className="flex items-center gap-1.5 hover:text-white/80 transition-colors">
+          <div className="flex items-center gap-2 hover:text-white transition-colors">
+            <KafkaLogo className="w-4 h-4 text-white/80" />
             <span>Kafka</span>
           </div>
-          <div className="flex items-center gap-1.5 hover:text-white/80 transition-colors">
+          <div className="flex items-center gap-2 hover:text-white transition-colors">
+            <GrafanaLogo className="w-4 h-4 text-white/80" />
             <span>Grafana</span>
           </div>
         </motion.div>
@@ -239,7 +280,7 @@ export default function LandingPage() {
             transition={{ duration: 0.6 }}
             className="lg:col-span-6 space-y-4"
           >
-            <div className="text-xs font-mono font-semibold uppercase tracking-widest text-[#7adcf5] flex items-center gap-2">
+            <div className="text-xs font-mono font-semibold uppercase tracking-widest text-white/90 flex items-center gap-2">
               <GitBranch className="h-3.5 w-3.5" />
               02 // CONNECT
             </div>
@@ -253,7 +294,7 @@ export default function LandingPage() {
             </p>
 
             <div className="flex items-center gap-2 pt-2">
-              <AegisBadge variant="cyan" dot size="sm">
+              <AegisBadge variant="neutral" dot size="sm">
                 TOPOLOGY: 3 TIERS LINKED
               </AegisBadge>
               <AegisBadge variant="neutral" size="sm">
@@ -271,19 +312,19 @@ export default function LandingPage() {
           >
             <AegisSurface elevation="card" border="default" className="p-6 space-y-4 bg-black/60 border-white/15">
               <div className="flex items-center justify-between pb-3 border-b border-white/10">
-                <span className="text-xs font-mono text-[#7adcf5]">
+                <span className="text-xs font-mono text-white/80">
                   TOPOLOGY CASCADE TRACE
                 </span>
-                <span className="text-[10px] font-mono text-[#76d6a4]">0.00ms CLOCK DRIFT</span>
+                <span className="text-[10px] font-mono text-[#22c55e]">0.00ms CLOCK DRIFT</span>
               </div>
 
               <div className="space-y-2.5 font-mono text-xs">
                 <div className="flex items-center justify-between p-3 rounded bg-black/70 border border-white/10">
                   <div className="flex items-center gap-2.5">
-                    <span className="h-2 w-2 rounded-full bg-[#f27886]" />
+                    <span className="h-2 w-2 rounded-full bg-[#ef4444]" />
                     <span className="text-white">api-gateway</span>
                   </div>
-                  <span className="text-[#f27886] text-[11px]">Cascading 504</span>
+                  <span className="text-[#ef4444] text-[11px]">Cascading 504</span>
                 </div>
 
                 <div className="flex justify-center text-white/40">
@@ -292,22 +333,22 @@ export default function LandingPage() {
 
                 <div className="flex items-center justify-between p-3 rounded bg-black/70 border border-white/10">
                   <div className="flex items-center gap-2.5">
-                    <span className="h-2 w-2 rounded-full bg-[#f2c66d]" />
+                    <span className="h-2 w-2 rounded-full bg-[#f59e0b]" />
                     <span className="text-white">auth-service</span>
                   </div>
-                  <span className="text-[#f2c66d] text-[11px]">Worker Starvation</span>
+                  <span className="text-[#f59e0b] text-[11px]">Worker Starvation</span>
                 </div>
 
                 <div className="flex justify-center text-white/40">
                   ↓ <span className="text-[10px] px-2">PROPAGATION (4ms)</span> ↓
                 </div>
 
-                <div className="flex items-center justify-between p-3 rounded bg-cyan-950/30 border border-cyan-500/40">
+                <div className="flex items-center justify-between p-3 rounded bg-red-950/20 border border-red-500/40">
                   <div className="flex items-center gap-2.5">
-                    <span className="h-2 w-2 rounded-full bg-[#7adcf5]" />
-                    <span className="text-[#7adcf5] font-semibold">postgres-patient-db</span>
+                    <span className="h-2 w-2 rounded-full bg-[#ef4444]" />
+                    <span className="text-[#ef4444] font-semibold">postgres-patient-db</span>
                   </div>
-                  <span className="text-[#7adcf5] text-[11px]">Row Lock Contention</span>
+                  <span className="text-[#ef4444] text-[11px]">Row Lock Contention</span>
                 </div>
               </div>
             </AegisSurface>
@@ -330,7 +371,7 @@ export default function LandingPage() {
             transition={{ duration: 0.6 }}
             className="lg:col-span-6 space-y-4"
           >
-            <div className="text-xs font-mono font-semibold uppercase tracking-widest text-[#9875ff] flex items-center gap-2">
+            <div className="text-xs font-mono font-semibold uppercase tracking-widest text-white/90 flex items-center gap-2">
               <Lightbulb className="h-3.5 w-3.5" />
               03 // INVESTIGATE
             </div>
@@ -344,7 +385,7 @@ export default function LandingPage() {
             </p>
 
             <div className="pt-2">
-              <AegisBadge variant="violet" dot size="sm">
+              <AegisBadge variant="neutral" dot size="sm">
                 HYPOTHESIS ARENA: 2 THEORIES EVALUATED
               </AegisBadge>
             </div>
@@ -357,19 +398,19 @@ export default function LandingPage() {
             transition={{ duration: 0.6 }}
             className="lg:col-span-6 space-y-3"
           >
-            <AegisSurface elevation="card" border="accent" className="p-4 space-y-2 bg-black/70 border-violet-500/40">
+            <AegisSurface elevation="card" border="accent" className="p-4 space-y-2 bg-black/70 border-white/20">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-semibold text-[#b29aff]">
+                <span className="text-xs font-mono font-semibold text-white">
                   THEORY A: DB Connection Pool Exhaustion
                 </span>
-                <span className="text-xs font-mono px-2 py-0.5 rounded bg-violet-950/80 text-[#b29aff] font-bold">
+                <span className="text-xs font-mono px-2 py-0.5 rounded bg-white/10 text-white font-bold border border-white/20">
                   86% CONFIDENCE
                 </span>
               </div>
               <p className="text-xs text-white/70">
                 Supported by 4 immutable database spans: worker threads held by unindexed schema migration lock.
               </p>
-              <div className="flex items-center gap-3 text-[11px] font-mono text-[#76d6a4] pt-1">
+              <div className="flex items-center gap-3 text-[11px] font-mono text-[#22c55e] pt-1">
                 <span>✓ 4 Supporting Records</span>
                 <span>✗ 0 Contradictions</span>
               </div>
@@ -452,8 +493,8 @@ export default function LandingPage() {
                   </p>
                 </div>
 
-                <div className="p-3 rounded bg-violet-950/20 border border-violet-500/30">
-                  <span className="font-mono text-[10px] uppercase font-bold text-[#b29aff] tracking-wider block mb-1">
+                <div className="p-3 rounded bg-white/[0.03] border border-white/15">
+                  <span className="font-mono text-[10px] uppercase font-bold text-white tracking-wider block mb-1">
                     [SUPPORTED INFERENCE]
                   </span>
                   <p className="text-white/90">

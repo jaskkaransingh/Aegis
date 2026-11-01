@@ -15,16 +15,16 @@ export function EvidenceVaultFallback({
   const getCoreAccent = () => {
     switch (stage) {
       case 1:
-        return "#f2c66d"; // Warning Amber for Detect
+        return "#f59e0b"; // Warning Amber for Detect
       case 2:
-        return "#7adcf5"; // Ice Cyan for Connect
+        return "#ffffff"; // Platinum for Connect
       case 3:
-        return "#9875ff"; // Tactile Violet for Investigate
+        return "#ef4444"; // Telemetric Red for Incident Investigate
       case 4:
-        return "#76d6a4"; // Resilient Emerald for Explain
+        return "#22c55e"; // Operational Green for Explain
       case 0:
       default:
-        return "#9875ff";
+        return "#ffffff"; // Platinum Base
     }
   };
 
@@ -128,42 +128,42 @@ export function EvidenceVaultFallback({
           />
         </g>
 
-        {/* Node 2: Service Dependency (Bottom Left) */}
+        {/* Node 2: Service Dependency (Bottom Left - Platinum) */}
         <g transform="translate(100, 270)">
           {stage >= 2 && (
-            <line x1="100" y1="-70" x2="0" y2="0" stroke="#7adcf5" strokeWidth="1.2" opacity="0.8" />
+            <line x1="100" y1="-70" x2="0" y2="0" stroke="#ffffff" strokeWidth="1.2" opacity="0.8" />
           )}
           <circle
             cx="0"
             cy="0"
             r={stage >= 2 ? "6" : "4"}
-            fill={stage >= 2 ? "#7adcf5" : "#36415b"}
+            fill={stage >= 2 ? "#ffffff" : "#36415b"}
           />
         </g>
 
-        {/* Node 3: Database / Spans (Top Left) */}
+        {/* Node 3: Database / Spans (Top Left - Enterprise Red for Root Cause) */}
         <g transform="translate(120, 110)">
           {stage >= 2 && (
-            <line x1="80" y1="90" x2="0" y2="0" stroke="#7adcf5" strokeWidth="1" opacity="0.6" />
+            <line x1="80" y1="90" x2="0" y2="0" stroke="#ef4444" strokeWidth="1" opacity="0.6" />
           )}
           <circle
             cx="0"
             cy="0"
             r={stage >= 2 ? "6" : "4"}
-            fill={stage >= 2 ? "#7adcf5" : "#36415b"}
+            fill={stage >= 2 ? "#ef4444" : "#36415b"}
           />
         </g>
 
-        {/* Node 4: Hypothesis Arena (Bottom Right) */}
+        {/* Node 4: Hypothesis Arena (Bottom Right - Enterprise Green for Verified Truth) */}
         <g transform="translate(290, 280)">
           {stage >= 3 && (
-            <line x1="-90" y1="-80" x2="0" y2="0" stroke="#9875ff" strokeWidth="1.2" opacity="0.8" />
+            <line x1="-90" y1="-80" x2="0" y2="0" stroke="#22c55e" strokeWidth="1.2" opacity="0.8" />
           )}
           <circle
             cx="0"
             cy="0"
             r={stage >= 3 ? "7" : "4"}
-            fill={stage >= 3 ? "#9875ff" : "#36415b"}
+            fill={stage >= 3 ? "#22c55e" : "#36415b"}
             className={stage >= 3 ? "animate-pulse" : ""}
           />
         </g>

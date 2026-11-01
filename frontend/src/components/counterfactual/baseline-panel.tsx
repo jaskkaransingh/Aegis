@@ -28,47 +28,49 @@ export function BaselinePanel({
   onSelectEvent,
 }: BaselinePanelProps) {
   return (
-    <div className="flex flex-col rounded-2xl bg-slate-900/90 border border-slate-800 shadow-lg backdrop-blur-sm overflow-hidden text-xs text-slate-200">
+    <div className="flex flex-col rounded-2xl bg-black/45 backdrop-blur-xl border border-white/10 shadow-lg overflow-hidden text-xs text-white">
       {/* Panel Header */}
-      <div className="p-3.5 border-b border-slate-800/80 bg-slate-950/60 flex items-center justify-between">
+      <div className="p-3.5 border-b border-white/10 bg-black/40 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-cyan-400" />
-          <h2 className="text-xs font-mono uppercase tracking-wider font-bold text-slate-200">
-            Observed Baseline Incident
+          <span className="w-2.5 h-2.5 rounded-full bg-[#ef4444] animate-pulse" />
+          <h2 className="text-xs font-mono uppercase tracking-wider font-bold text-white">
+            Observed Incident Telemetry // Ground Truth
           </h2>
         </div>
-        <span className="text-[10px] font-mono text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800/50">
-          Ground Truth Baseline
+        <span className="text-[10px] font-mono text-[#ef4444] bg-[#ef4444]/15 px-2 py-0.5 rounded border border-[#ef4444]/40 font-bold">
+          {baseline.incidentId}
         </span>
       </div>
 
-      {/* Incident Summary Card */}
-      <div className="p-4 space-y-3 border-b border-slate-800/60">
-        <div>
-          <div className="flex items-center justify-between text-[11px] mb-1">
-            <span className="font-mono text-slate-400 font-semibold">{baseline.incidentId}</span>
-            <span className="text-slate-500 font-mono text-[10px]">{baseline.events.length} Events Logged</span>
+      {/* Visual Telemetry Summary Strip */}
+      <div className="p-4 space-y-3 border-b border-white/10">
+        <div className="grid grid-cols-3 gap-2 text-center font-mono">
+          <div className="p-2.5 rounded-xl bg-black/40 border border-white/10">
+            <span className="text-[9px] uppercase text-white/50 block">Status</span>
+            <span className="text-xs font-bold text-[#ef4444] block mt-0.5">CRITICAL OUTAGE</span>
           </div>
-          <h3 className="text-sm font-bold text-slate-100 tracking-tight">
-            {baseline.title}
-          </h3>
-          <p className="text-xs text-slate-300 leading-relaxed mt-1 font-sans">
-            {baseline.summary}
-          </p>
+          <div className="p-2.5 rounded-xl bg-black/40 border border-white/10">
+            <span className="text-[9px] uppercase text-white/50 block">Blast Radius</span>
+            <span className="text-xs font-bold text-[#f59e0b] block mt-0.5">{baseline.affectedServices.length} SERVICES</span>
+          </div>
+          <div className="p-2.5 rounded-xl bg-black/40 border border-white/10">
+            <span className="text-[9px] uppercase text-white/50 block">Logged Events</span>
+            <span className="text-xs font-bold text-[#22c55e] block mt-0.5">{baseline.events.length} SPANS</span>
+          </div>
         </div>
 
-        {/* Affected Services */}
+        {/* Affected Services Visual Chips */}
         <div>
-          <span className="block text-[10px] font-mono uppercase tracking-wider text-slate-400 mb-1.5">
-            Affected Services ({baseline.affectedServices.length})
+          <span className="block text-[10px] font-mono uppercase tracking-wider text-white/60 mb-1.5">
+            Affected Infrastructure Nodes ({baseline.affectedServices.length})
           </span>
           <div className="flex flex-wrap gap-1.5">
             {baseline.affectedServices.map((svc) => (
               <span
                 key={svc}
-                className="px-2 py-0.5 rounded text-[11px] font-mono bg-slate-950 text-slate-300 border border-slate-800 flex items-center gap-1"
+                className="px-2 py-0.5 rounded text-[11px] font-mono bg-white/[0.06] text-white/90 border border-white/15 flex items-center gap-1.5"
               >
-                <Server className="w-2.5 h-2.5 text-slate-500" />
+                <Server className="w-2.5 h-2.5 text-white/50" />
                 <span>{svc}</span>
               </span>
             ))}
@@ -79,66 +81,59 @@ export function BaselinePanel({
       {/* Observed Events Stream */}
       <div className="p-3.5 space-y-2 flex-1">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">
-            Key Baseline Events (Click to target)
+          <span className="text-[10px] font-mono uppercase tracking-wider text-white/60">
+            Chronological Signals (Click to target intervention)
           </span>
           <Link
             href="/timeline"
-            className="text-[10px] text-violet-400 hover:text-violet-300 flex items-center gap-0.5 font-medium"
+            className="text-[10px] text-white/80 hover:text-white flex items-center gap-0.5 font-medium font-mono"
           >
             <span>Timeline</span>
             <ExternalLink className="w-2.5 h-2.5" />
           </Link>
         </div>
 
-        <div className="space-y-1.5 max-h-[360px] overflow-y-auto pr-1">
-          {baseline.events.slice(0, 10).map((ev) => {
+        <div className="space-y-1.5 max-h-[300px] overflow-y-auto pr-1">
+          {baseline.events.slice(0, 8).map((ev) => {
             const isSelected = selectedEventId === ev.id;
+            const isCritical = ev.severity === "CRITICAL";
             return (
               <div
                 key={ev.id}
                 onClick={() => onSelectEvent(ev)}
                 className={`p-2.5 rounded-xl border text-xs cursor-pointer transition-all select-none ${
                   isSelected
-                    ? "bg-cyan-950/40 border-cyan-500 text-slate-100 shadow-sm"
-                    : "bg-slate-950/60 border-slate-800 hover:border-slate-700 hover:bg-slate-900"
+                    ? "bg-white/10 border-white text-white shadow-md ring-1 ring-white/50"
+                    : "bg-black/30 border-white/10 hover:border-white/20 hover:bg-black/50"
                 }`}
               >
                 <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-1.5">
-                    <span className="font-mono font-bold text-cyan-300 text-[11px]">
+                    <span className="font-mono font-bold text-white text-[11px]">
                       {ev.id}
                     </span>
-                    <span className="text-[10px] font-mono text-slate-400 bg-slate-900 px-1.5 py-0.2 rounded border border-slate-800">
+                    <span className="text-[10px] font-mono text-white/70 bg-white/10 px-1.5 py-0.2 rounded border border-white/10">
                       {ev.service}
                     </span>
                   </div>
                   <span
                     className={`px-1.5 py-0.2 rounded text-[9px] font-mono font-bold ${
-                      ev.severity === "CRITICAL"
-                        ? "bg-rose-950/70 border border-rose-700 text-rose-300"
-                        : ev.severity === "ERROR"
-                        ? "bg-rose-950/50 border border-rose-600 text-rose-300"
-                        : "bg-amber-950/60 border border-amber-600 text-amber-300"
+                      isCritical
+                        ? "bg-[#ef4444]/15 border border-[#ef4444]/40 text-[#ef4444]"
+                        : "bg-[#f59e0b]/15 border border-[#f59e0b]/40 text-[#f59e0b]"
                     }`}
                   >
                     {ev.severity}
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-300 leading-relaxed font-sans line-clamp-2">
+                <p className="text-[11px] text-white/80 leading-relaxed font-sans line-clamp-1">
                   {ev.message}
                 </p>
-                <div className="flex items-center justify-between mt-1 pt-1 border-t border-slate-900 text-[10px] text-slate-500 font-mono">
-                  <span>{ev.timestamp.substring(11, 23)} UTC</span>
-                  <Link
-                    href={`/evidence?event=${encodeURIComponent(ev.id)}`}
-                    onClick={(e) => e.stopPropagation()}
-                    className="text-violet-400 hover:text-violet-300 flex items-center gap-0.5"
-                    title="Inspect in Evidence Explorer"
-                  >
-                    <span>Inspect</span>
-                    <ExternalLink className="w-2.5 h-2.5" />
-                  </Link>
+                <div className="flex items-center justify-between mt-1 pt-1 border-t border-white/10 text-[10px] text-white/50 font-mono">
+                  <span>{ev.timestamp.substring(11, 19)} UTC</span>
+                  <span className="text-white/60 hover:text-white flex items-center gap-0.5">
+                    Select Event Target →
+                  </span>
                 </div>
               </div>
             );
@@ -148,4 +143,3 @@ export function BaselinePanel({
     </div>
   );
 }
-

@@ -55,35 +55,35 @@ export function AegisBadge({
 
   switch (variant) {
     case "violet":
-      variantStyles =
-        "bg-[#21173c]/70 text-[#b29aff] border-[#9875ff]/35";
-      dotColor = "bg-[#9875ff]";
-      break;
     case "cyan":
+      // Platinum Enterprise Accent (Replaces AI violet/cyan)
       variantStyles =
-        "bg-[#102833]/70 text-[#7adcf5] border-[#7adcf5]/35";
-      dotColor = "bg-[#7adcf5]";
+        "bg-white/10 text-white border-white/20";
+      dotColor = "bg-white shadow-[0_0_6px_rgba(255,255,255,0.7)]";
       break;
     case "success":
+      // Telemetric Green (Healthy / Baseline / Verified)
       variantStyles =
-        "bg-[#112b20]/70 text-[#76d6a4] border-[#76d6a4]/35";
-      dotColor = "bg-[#76d6a4]";
+        "bg-[#052e16]/80 text-[#22c55e] border-[#22c55e]/40";
+      dotColor = "bg-[#22c55e] shadow-[0_0_6px_#22c55e]";
       break;
     case "warning":
+      // Telemetric Amber (Skew / Latency / Divergence)
       variantStyles =
-        "bg-[#332711]/70 text-[#f2c66d] border-[#f2c66d]/35";
-      dotColor = "bg-[#f2c66d]";
+        "bg-[#451a03]/80 text-[#f59e0b] border-[#f59e0b]/40";
+      dotColor = "bg-[#f59e0b]";
       break;
     case "danger":
+      // Telemetric Red (Critical failure / Outage / Anomaly)
       variantStyles =
-        "bg-[#33151a]/70 text-[#f27886] border-[#f27886]/35";
-      dotColor = "bg-[#f27886]";
+        "bg-[#450a0a]/80 text-[#ef4444] border-[#ef4444]/40";
+      dotColor = "bg-[#ef4444] shadow-[0_0_6px_#ef4444]";
       break;
     case "neutral":
     default:
       variantStyles =
-        "bg-[#101522] text-[#a3adc2] border-[#252d40]";
-      dotColor = "bg-[#727f98]";
+        "bg-[#101522] text-[#cbd5e1] border-[#252d40]";
+      dotColor = "bg-[#94a3b8]";
       break;
   }
 

@@ -15,7 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark scroll-smooth">
-      <body className="bg-[#07090f] text-[#f1f4fb] flex min-h-screen antialiased selection:bg-[#9875ff]/30 selection:text-white">
+      <body className="bg-[#07090f] text-[#f1f4fb] flex min-h-screen antialiased selection:bg-white/20 selection:text-white">
         <AppShell>{children}</AppShell>
       </body>
     </html>

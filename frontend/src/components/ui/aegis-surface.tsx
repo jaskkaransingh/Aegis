@@ -32,26 +32,26 @@ export function AegisSurface({
   className = "",
   ...props
 }: AegisSurfaceProps) {
-  // Elevation background & shadow mappings
+  // Elevation background & shadow mappings - frosted translucent glass allowing the 3D background wormhole to drift softly through
   let elevationStyles = "";
   switch (elevation) {
     case "base":
-      elevationStyles = "bg-[#07090f]";
+      elevationStyles = "bg-black/30 backdrop-blur-md";
       break;
     case "elevated":
-      elevationStyles = "bg-[#0b0e17] shadow-sm";
+      elevationStyles = "bg-black/35 backdrop-blur-lg border border-white/10";
       break;
     case "card":
       elevationStyles =
-        "bg-[#151b2a] shadow-[0_4px_20px_-2px_rgba(0,0,0,0.5)]";
+        "bg-black/45 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_-4px_rgba(0,0,0,0.5)]";
       break;
     case "glass":
       elevationStyles =
-        "bg-[#101522]/80 backdrop-blur-md shadow-[0_8px_32px_-4px_rgba(0,0,0,0.7)]";
+        "bg-black/25 backdrop-blur-2xl border border-white/15 shadow-[0_8px_32px_-4px_rgba(0,0,0,0.6)]";
       break;
     case "raised":
     default:
-      elevationStyles = "bg-[#101522] shadow-sm";
+      elevationStyles = "bg-black/40 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_-4px_rgba(0,0,0,0.5)]";
       break;
   }
 
@@ -62,24 +62,24 @@ export function AegisSurface({
       borderStyles = "border-0";
       break;
     case "subtle":
-      borderStyles = "border border-[#1b2232]";
+      borderStyles = "border border-white/5";
       break;
     case "strong":
-      borderStyles = "border border-[#36415b]";
+      borderStyles = "border border-white/20";
       break;
     case "accent":
-      borderStyles = "border border-[#9875ff]/40 shadow-[0_0_20px_-4px_rgba(152,117,255,0.2)]";
+      borderStyles = "border border-white/30 shadow-[0_0_20px_-4px_rgba(255,255,255,0.15)]";
       break;
     case "default":
     default:
-      borderStyles = "border border-[#252d40]";
+      borderStyles = "border border-white/10";
       break;
   }
 
   // Interactive hover classes
   const interactiveStyles = interactive
     ? "transition-all duration-200 ease-[cubic-bezier(0.0,0.0,0.2,1.0)] " +
-      "hover:bg-[#1a2233] hover:border-[#36415b] hover:shadow-[0_8px_24px_-4px_rgba(0,0,0,0.6)] cursor-pointer"
+      "hover:bg-white/[0.06] hover:border-white/25 hover:shadow-[0_8px_24px_-4px_rgba(0,0,0,0.6)] cursor-pointer"
     : "";
 
   return (

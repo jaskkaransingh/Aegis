@@ -80,7 +80,7 @@ export function InvestigationNavigation({
   ];
 
   return (
-    <div className="border-b border-slate-800">
+    <div className="border-b border-white/10">
       <div className="flex items-center gap-1 overflow-x-auto py-1 scrollbar-none">
         {tabs.map((tab) => {
           const Icon = tab.icon;
@@ -91,11 +91,11 @@ export function InvestigationNavigation({
               <Link
                 key={tab.id}
                 href={tab.href}
-                className="flex items-center gap-2 px-3.5 py-2 text-xs font-mono rounded-lg transition border border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
+                className="flex items-center gap-2 px-3.5 py-2 text-xs font-mono rounded-lg transition border border-transparent text-white/60 hover:text-white/90 hover:bg-slate-800/40"
               >
                 <Icon className="h-3.5 w-3.5" />
                 <span>{tab.label}</span>
-                <span className="text-[10px] text-slate-600 bg-slate-900 px-1.5 py-0.2 rounded border border-slate-800">
+                <span className="text-[10px] text-slate-600 bg-black/40 px-1.5 py-0.2 rounded border border-white/10">
                   {tab.status}
                 </span>
               </Link>
@@ -109,14 +109,14 @@ export function InvestigationNavigation({
               onClick={() => onTabChange(tab.id)}
               className={`flex items-center gap-2 px-3.5 py-2 text-xs font-mono rounded-lg transition border ${
                 isActive
-                  ? "bg-violet-950/40 text-violet-300 border-violet-800/60 shadow-sm"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 border-transparent"
+                  ? "bg-white/10 text-white/40 text-white border-violet-800/60 shadow-sm"
+                  : "text-white/60 hover:text-white/90 hover:bg-slate-800/40 border-transparent"
               }`}
             >
               <Icon className="h-3.5 w-3.5" />
               <span>{tab.label}</span>
               {tab.badge && (
-                <span className="text-[10px] bg-slate-800 text-slate-300 px-1.5 py-0.2 rounded">
+                <span className="text-[10px] bg-slate-800 text-white/80 px-1.5 py-0.2 rounded">
                   {tab.badge}
                 </span>
               )}
